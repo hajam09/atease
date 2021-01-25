@@ -10,7 +10,7 @@ class GeneralPractice(models.Model):
 	contactNumber = models.CharField(max_length=32)
 	openTimes = jsonfield.JSONField()
 
-class Profile(models.Model):
+class Patient(models.Model):
 	user = models.OneToOneField(User, on_delete=models.CASCADE)
 	dateOfBirth = models.DateField() 
 	address = jsonfield.JSONField()
@@ -20,6 +20,7 @@ class Profile(models.Model):
 	generalPractice = models.ForeignKey(GeneralPractice, on_delete=models.CASCADE)
 
 class Doctor(models.Model):
+	user = models.OneToOneField(User, on_delete=models.CASCADE)
 	name = models.CharField(max_length=32)
 	generalPractice = models.ForeignKey(GeneralPractice, on_delete=models.CASCADE)
 	workingHours = jsonfield.JSONField()
@@ -57,7 +58,3 @@ class MyCurrentMedication(models.Model):
 	desciption = models.TextField()
 	startDate = models.DateField() 
 	note = models.ForeignKey(Notes, on_delete=models.CASCADE)
-
-class HospitalAccount(models.Model):
-	name = models.CharField(max_length=32)
-	user = models.OneToOneField(User, on_delete=models.CASCADE)

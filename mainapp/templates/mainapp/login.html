@@ -1,0 +1,78 @@
+{% extends "mainapp/base.html" %}
+{% load static %}
+{% block content %}
+<style type="text/css">
+	.row{margin-top:50px;margin-bottom:50px}.masthead-text{height:300px}.form-control{height:45px}select:hover{color:#444645;background:#ddd}.login-or{position:relative;font-size:18px;color:#aaa;margin-top:20px;margin-bottom:20px;padding-top:10px;padding-bottom:10px}.span-or{display:block;position:absolute;left:50%;top:-2px;margin-left:-25px;background-color:#fff;width:50px;text-align:center}.hr-or{background-color:#cdcdcd;height:1px;margin-top:0!important;margin-bottom:0!important}#login-dp{min-width:250px;padding:14px 14px 0;overflow:hidden;background-color:rgba(255,255,255,.8)}#login-dp .help-block{font-size:12px}#login-dp .social-buttons{margin:12px 0}#login-dp .social-buttons a{width:49%}#login-dp .form-group{margin-bottom:10px}.btn-fb{color:#fff;background-color:#3b5998}.btn-fb:hover{color:#fff;background-color:#496ebc}.btn-tw{color:#fff;background-color:#55acee}.btn-tw:hover{color:#fff;background-color:#59b5fa}
+	@media(max-width:768px){#login-dp{background-color:inherit;color:#fff}#login-dp .bottom{background-color:inherit;border-top:0 none}}.progress{height:5px}.block-help{font-weight:300}.hide{display:none}
+</style>
+<div class="container">
+  <div class="row">
+    <div class="col-md-4"></div>
+    <div class="col-md-5">
+      <div class="card cardbox">
+        <div class="card-header" style="text-align: center">Login</div>
+        {% if message %}
+			<div style="color: black; text-align: center;" class="alert alert-success" role="alert">{{message}}</div>
+		{% endif %}
+        <div class="card-body">
+          <div class="form-group">
+            <form method="post">
+            	{% csrf_token %}
+            	<input type="text" name="LOGIN" hidden>
+              <div class="form-group">
+                <label class="sr-only">Email</label>
+                <input type="text" id="email" name="email" class="form-control"
+                  value="" placeholder="Email" required>
+              </div>
+              <div class="form-group">
+                <label class="sr-only">Password</label>
+                <div class="input-group">
+                  <input type="password" id="reg_userpassword" name="password" class="form-control" data-placement="bottom" data-toggle="popover" data-container="body"
+                    data-html="true" value="" placeholder="Password" required>
+                  <div class="input-group-append">
+                    <button class="btn btn-outline-secondary" type="button" id="button-append1" onclick="togglePassword();">
+                    <i class="fa fa-eye" aria-hidden="true"></i>
+                    </button>
+                  </div>
+                </div>
+                <!-- password remember & results -->
+                <div class="help-block text-right">
+                  <small><a href="#">Forgot Password</a></small>
+                </div>
+              </div>
+              <!-- Submit -->
+              <div class="form-group">
+                <button id="reg_submit" name="submit" type="submit" onclick="djangoLogin();" value="1" class="btn btn-block btn-primary">Login</button>
+                <div id="sign-up-popover" class="hide">
+                  <p>is empty</p>
+                </div>
+              </div>
+              <!-- Remember -->
+              <div class="form-check">
+                <input type="checkbox" id="reg_remember" name="user_remember" class="form-check-input" value="1">
+                <label class="form-check-label">Remember me</label>
+              </div>
+            {# </form> #}
+          </div>
+          <div class="login-or">
+            <hr class="hr-or">
+          </div>
+          <!-- Links -->
+          <div class="bottom text-center">
+            Don't have an account? <a href="#"><b>Click here</b></a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script type="text/javascript">
+
+function togglePassword() {
+		var element = document.getElementById('reg_userpassword');
+		element.type = (element.type == 'password' ? 'text' : 'password');
+	}
+
+</script>
+{% endblock %}
