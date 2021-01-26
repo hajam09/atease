@@ -114,7 +114,15 @@ def create_profile(request):
 
 @login_required
 def patient_profile(request):
-	return render(request,"mainapp/patient_profile.html", {})
+	try:
+		patient = Patient.objects.get(user=request.user)
+	except Patient.DoesNotExist:
+		raise e
+
+	context = {
+		"patient": patient
+	}
+	return render(request,"mainapp/patient_profile.html", context)
 
 @login_required
 def doctor_profile(request):
