@@ -3,16 +3,12 @@ from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import authenticate, logout as auth_logout, login as auth_login
 from django.http import HttpResponse
+from django.contrib.auth.decorators import login_required
 from http import HTTPStatus
 from .models import *
+from .utils import *
 
 def login(request):
-
-	"""
-	TODO: return to main page after login.
-	Redirect to forgetpassword page on the tempalte.
-	redirect to signup page on the template.
-	"""
 
 	if request.method == 'POST' and 'LOGIN' in request.POST:
 		username = request.POST['email']
@@ -24,7 +20,7 @@ def login(request):
 		user = authenticate(username=username, password=password)
 		if user:
 			auth_login(request, user)
-			# return redirect('tutoring:mainpage')
+			return redirect('mainapp:mainpage')
 		else:
 			context = {
 				"message": "Username or Password did not match!",
@@ -36,3 +32,90 @@ def login(request):
 def logout(request):
 	auth_logout(request)
 	return redirect('mainapp:login')
+
+def forgetpassword(request):
+	return render(request,"mainapp/forgetpassword.html", {})
+
+def signup(request):
+	return render(request,"mainapp/signup.html", {})
+
+def mainpage(request):
+	return render(request,"mainapp/mainpage.html", {})
+
+@login_required
+def create_profile(request):
+	if Patient.objects.filter(user=request.user).exists():
+		return redirect('mainapp:patient_profile')
+
+	if Doctor.objects.filter(user=request.user).exists():
+		return redirect('mainapp:doctor_profile')
+
+	if request.method == "POST" and "patient_profile" in request.POST:
+		# Patient cretates an account
+		date_of_birth = request.POST['date_of_birth']
+		mobile_number = request.POST['mobile_number']
+		nhs_number = request.POST['nhs_number']
+		blood_group = request.POST['blood_group']
+		list_of_gps = request.POST['list_of_gps']
+
+		country = Countries.objects.get(alpha=request.POST["country"])
+		location = {
+			"address_1": request.POST["address_1"].strip().title(),
+			"address_2": request.POST["address_2"].strip().title(),
+			"city": request.POST["city"].strip().title(),
+			"stateProvice": request.POST["stateProvice"].strip().title(),
+			"postalZip": request.POST["postalZip"].strip().upper(),
+			"country": {
+				"alpha": country.alpha,
+				"name": country.name
+			}
+		}
+
+		Patient.objects.create(
+			user = request.user,
+			dateOfBirth = date_of_birth,
+			address = location,
+			mobile = mobile_number,
+			nhsNumber = nhs_number,
+			bloodGroup = blood_group,
+			generalPractice = GeneralPractice.objects.get(id=list_of_gps)
+		)
+		# Patient object created
+		return redirect('mainapp:patient_profile')
+
+	if request.method == "POST" and "doctor_profile" in request.POST:
+		doctor_name = request.POST['doctor_name']
+		list_of_gps = request.POST['list_of_gps']
+		weekdays = ['monday', 'tuesday', 'wednesday', 'thursday', 'friday']
+		schedule = ['from', 'to']
+		workingHours = {}
+
+		for i in weekdays:
+			workingHours[i] = {
+				'from': request.POST[i+'_from'],
+				'to': request.POST[i+'_to']
+			}
+
+		Doctor.objects.create(
+			user = request.user,
+			name = doctor_name,
+			generalPractice = GeneralPractice.objects.get(id=list_of_gps),
+			workingHours = workingHours
+		)
+		# Doctor object created
+		return redirect('mainapp:doctor_profile')
+
+	context = {
+		"countries": Countries.objects.all(),
+		"gps": GeneralPractice.objects.all(),
+	}
+
+	return render(request,"mainapp/create_profile.html", context)
+
+@login_required
+def patient_profile(request):
+	return render(request,"mainapp/patient_profile.html", {})
+
+@login_required
+def doctor_profile(request):
+	return render(request,"mainapp/doctor_profile.html", {})

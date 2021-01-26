@@ -37,7 +37,7 @@
                 </div>
                 <!-- password remember & results -->
                 <div class="help-block text-right">
-                  <small><a href="#">Forgot Password</a></small>
+                  <small><a href="{% url 'mainapp:forgetpassword' %}">Forgot Password</a></small>
                 </div>
               </div>
               <!-- Submit -->
@@ -59,7 +59,7 @@
           </div>
           <!-- Links -->
           <div class="bottom text-center">
-            Don't have an account? <a href="#"><b>Click here</b></a>
+            Don't have an account? <a href="{% url 'mainapp:signup' %}"><b>Click here</b></a>
           </div>
         </div>
       </div>

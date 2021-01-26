@@ -1,0 +1,198 @@
+{% extends "mainapp/base.html" %}
+{% load static %}
+{% block content %}
+<div class="container">
+	<div class="row gutters-sm">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-body">
+                    <nav>
+                        <div class="nav nav-tabs" id="nav-tab" role="tablist">
+                            <a style="width: 50%;text-align: center;" href="#patient_profile_tab" data-toggle="tab" class="nav-item nav-link has-icon nav-link-faded active">
+                                
+                                &nbsp;&nbsp;
+                                <label class="side-bar-text">I am a Patient</label>
+                            </a>
+                            <a style="width: 50%;text-align: center;" href="#doctor_profile_tab" data-toggle="tab" class="nav-item nav-link has-icon nav-link-faded">
+                                
+                                &nbsp;&nbsp;
+                                <label class="side-bar-text">I am a Doctor</label>
+                            </a>
+                        </div>
+                    </nav>
+                </div>
+                <div class="card-body tab-content" id="nav-tabContent" style="color: black;">
+                    <div class="tab-pane fade show active" id="patient_profile_tab" role="tabpanel" aria-labelledby="nav-home-tab">
+                        <form method="post">
+							{% csrf_token %}
+							<input type="text" name="patient_profile" hidden>
+							<div class="form-group">
+								<h4 for="date_of_birth">Date Of Birth</h4>
+								<input type="date" class="form-control" id="date_of_birth" name="date_of_birth" required>
+							</div>
+							<hr>
+							<div class="form-group">
+								<h4 for="mobile_number">Mobile Number</h4>
+								<input type="text" class="form-control" id="mobile_number" name="mobile_number" required>
+							</div>
+							<hr>
+							<div class="form-group">
+								<h4 for="nhs_number">NHS Number</h4>
+								<input type="text" class="form-control" id="nhs_number" name="nhs_number" required>
+							</div>
+							<hr>
+							<div class="form-group">
+								<h4 for="blood_group">Blood Group</h4>
+								<select class="form-control" id="blood_group" name="blood_group">
+									<option value="A+" selected="selected">A+</option>
+									<option value="A-">A-</option>
+									<option value="B+">B+</option>
+									<option value="B-">B-</option>
+									<option value="O+">O+</option>
+									<option value="O-">O-</option>
+									<option value="AB+">AB+</option>
+									<option value="AB-">AB-</option>
+								</select>
+							</div>
+							<hr>
+							<div class="form-group">
+								<h4 for="list_of_gps">GP</h4>
+								<select class="form-control" id="list_of_gps" name="list_of_gps">
+									{% if gps %}
+										{% for gp in gps %}
+											<option value="{{gp.id}}">{{gp.name}}</option>
+										{% endfor %}
+									{% endif %}
+								</select>
+							</div>
+							<hr>
+							<div class="form-group">
+								<h4 for="address">Address</h4>
+								<div class="form-group">
+									<label for="address_1"><b>Address Line 1</b></label>
+									<input type="text" class="form-control" id="address_1"
+										name="address_1" placeholder="Address Line 1" required>
+								</div>
+								<div class="form-group">
+									<label for="address_2"><b>Address Line 2</b></label>
+									<input type="text" class="form-control" id="address_2"
+										name="address_2" placeholder="Address Line 2">
+								</div>
+								<div class="row">
+									<div class="col-6">
+										<div class="form-group">
+											<label for="city"><b>City</b></label>
+											<input type="text" class="form-control" id="city" name="city"
+												placeholder="City" required>
+										</div>
+									</div>
+									<div class="col-6">
+										<div class="form-group">
+											<label for="stateProvice"><b>State / Province</b></label>
+											<input type="text" class="form-control" id="stateProvice"
+												name="stateProvice" placeholder="State / Province">
+										</div>
+									</div>
+								</div>
+								<div class="row">
+									<div class="col-6">
+										<div class="form-group">
+											<label for="postalZip"><b>Postal / Zip Code</b></label>
+											<input type="text" class="form-control" id="postalZip"
+												name="postalZip" placeholder="Postal / Zip Code" required>
+										</div>
+									</div>
+									<div class="col-6">
+										<div class="form-group">
+											<label for="country"><b>Country</b></label>
+											<select class="form-control" id="country" name="country">
+												{% for country in countries %}
+													{% ifequal country.alpha "GB" %}
+														<option value="{{country.alpha}}" selected="selected">{{country.name}}</option>
+													{% else %}
+														<option value="{{country.alpha}}">{{country.name}}</option>
+													{% endifequal %}
+												{% endfor %}
+										</select>
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="form-group">
+								<button type="submit" class="btn btn-success btn-lg btn-block">Create Profile</button>
+							</div>
+						</form>
+                    </div>
+                    <div class="tab-pane fade" id="doctor_profile_tab" role="tabpanel" aria-labelledby="nav-profile-tab">
+                        <form method="post">
+                            {% csrf_token %}
+                            <input type="text" name="doctor_profile" hidden>
+                            <div class="form-group">
+								<h4 for="doctor_name">Name</h4>
+								<input type="text" class="form-control" id="doctor_name" name="doctor_name" required>
+							</div>
+							<hr>
+							<div class="form-group">
+								<h4 for="list_of_gps">GP</h4>
+								<select class="form-control" id="list_of_gps" name="list_of_gps">
+									{% if gps %}
+										{% for gp in gps %}
+											<option value="{{gp.id}}">{{gp.name}}</option>
+										{% endfor %}
+									{% endif %}
+								</select>
+							</div>
+							<hr>
+							<div class="form-group">
+								<h4 for="working_hours">Working Hours</h4>
+								<div class="row">
+									<div class="col-md-auto">
+										<div>
+											<label>Monday: </label>
+											From: <input type="time" name="monday_from" value="09:00">
+											To: <input type="time" name="monday_to" value="18:00">
+										</div>
+										<br>
+										<div>
+											<label>Tuesday: </label>
+											From: <input type="time" name="tuesday_from" value="09:00">
+											To: <input type="time" name="tuesday_to" value="18:00">
+										</div>
+										<br>
+										<div>
+											<label>Wednesday: </label>
+											From: <input type="time" name="wednesday_from" value="09:00">
+											To: <input type="time" name="wednesday_to" value="18:00">
+										</div>
+										<br>
+										<div>
+											<label>Thursday: </label>
+											From: <input type="time" name="thursday_from" value="09:00">
+											To: <input type="time" name="thursday_to" value="18:00">
+										</div>
+										<br>
+										<div>
+											<label>Friday: </label>
+											From: <input type="time" name="friday_from" value="09:00">
+											To: <input type="time" name="friday_to" value="18:00">
+										</div>
+									</div>
+								</div>
+							</div>
+							<hr>
+							<div class="form-group">
+								<button type="submit" class="btn btn-success btn-lg btn-block">Create Profile</button>
+							</div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+	$(document).ready(function() {
+    $('#list_of_gps').select2();
+});
+</script>
+{% endblock %}
