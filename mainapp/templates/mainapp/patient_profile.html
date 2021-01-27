@@ -59,6 +59,9 @@
       <li class="nav-item">
          <a class="nav-link" data-toggle="tab" href="#address" role="tab" aria-controls="address">My Address</a>
       </li>
+      <li class="nav-item">
+         <a class="nav-link" data-toggle="tab" href="#mymedicalrecords" role="tab" aria-controls="mymedicalrecords">My Medical Records</a>
+      </li>
    </ul>
    <div class="tab-content">
       <div class="tab-pane active" id="profile" role="tabpanel">
@@ -303,6 +306,49 @@
                         </div>
                      </div>
                      </form>
+                  </div>
+               </div>
+            </div>
+         </div>
+      </div>
+      <div class="tab-pane" id="mymedicalrecords" role="tabpanel">
+         <div class="card-body">
+            <div class="row">
+               <div class="col-md-12">
+                  <h4>My Medical Records</h4>
+                  <hr>
+               </div>
+            </div>
+            <div class="row">
+               <div class="col-md-12">
+                  
+                  <div class="form-group">
+                     <!-- List of uploaded documents -->
+                       {% if documents %}
+                           <ul>
+                               {% for document in documents %}
+                                   <li><a href="{{ document.document.url }}" download>{{ document.document.name }}</a></li>
+                               {% endfor %}
+                           </ul>
+                       {% else %}
+                           <p>No documents.</p>
+                       {% endif %}
+
+                       <!-- Upload form. Note enctype attribute! -->
+                       <form method="post" enctype="multipart/form-data">
+                           {% csrf_token %}
+                           <input type="text" name="UPLOADMYMEDICALRECORDDOCUMENTS" hidden>
+                           <p>{{ form.non_field_errors }}</p>
+
+                           <p>{{ form.docfile.label_tag }} {{ form.docfile.help_text }}</p>
+
+                           <p>
+                               {{ form.docfile.errors }}
+                               {{ form.docfile }}
+                           </p>
+
+                           <p><input type="submit" value="Upload"/></p>
+                       </form>
                   </div>
                </div>
             </div>

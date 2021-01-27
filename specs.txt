@@ -4,7 +4,7 @@ The system shall verify the email address when guest is registering a patient ac
 The system shall use facial authentication to verify user against hospital database when linking the account to chosen hospital.
 The system shall make sure all the updates are stored securely on a database.
 The system shall allow users to book and cancel appointment Core
-The system shall allow users to add their own medical records Core
+
 The system shall allow users to add medication to their profile Core
 The system shall allow user to create medical notes. Core
 The system shall display appropriate message if the user enters wrong URL.
@@ -21,5 +21,6 @@ TESTING NEEDED:
 The system shall allow guest to create a patient account.
 The system shall make sure that the user’s password is at least 8 characters long, include 1 special character, include at lease 1 uppercase and lowercase.
 The system shall store users to update their profile.
+The system shall allow users to add their own medical records
 
 DONE:

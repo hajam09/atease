@@ -7,6 +7,7 @@ from django.contrib.auth.decorators import login_required
 from http import HTTPStatus
 from .models import *
 from .utils import *
+from .forms import MyMedicalRecordsForm
 
 def login(request):
 
@@ -185,7 +186,21 @@ def patient_profile(request):
 		patient.save()
 		return redirect('mainapp:patient_profile')
 
+	# Handle file upload
+	if request.method == 'POST' and "UPLOADMYMEDICALRECORDDOCUMENTS" in request.POST:
+		form = MyMedicalRecordsForm(request.POST, request.FILES)
+		if form.is_valid():
+			newdoc = MyMedicalRecords(user=request.user,document = request.FILES['docfile'])
+			newdoc.save()
+
+			# Redirect to the document list after POST
+			return redirect('mainapp:patient_profile')
+	else:
+		form = MyMedicalRecordsForm() # A empty, unbound form
+
 	context = {
+		"documents": MyMedicalRecords.objects.all(),
+		'form': form,
 		"patient": patient,
 		"countries": Countries.objects.all(),
 	}
