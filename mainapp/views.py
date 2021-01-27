@@ -154,8 +154,40 @@ def patient_profile(request):
 	except Patient.DoesNotExist:
 		raise e
 
+	if request.method == "POST" and "UPDATEPATIENTPROFILE" in request.POST:
+		first_name = request.POST['first_name']
+		last_name = request.POST['last_name']
+		email = request.POST['email']
+		mobile = request.POST['mobile']
+
+		patient.mobile = mobile
+		patient.user.first_name = first_name
+		patient.user.last_name = last_name
+		patient.user.email = email
+		patient.save()
+		patient.user.save()
+		return redirect('mainapp:patient_profile')
+
+	if request.method == "POST" and "UPDATEPATIENTADDRESS" in request.POST:
+		country = Countries.objects.get(alpha=request.POST["country"])
+		location = {
+			"address_1": request.POST["address_1"].strip().title(),
+			"address_2": request.POST["address_2"].strip().title(),
+			"city": request.POST["city"].strip().title(),
+			"stateProvice": request.POST["stateProvice"].strip().title(),
+			"postalZip": request.POST["postalZip"].strip().upper(),
+			"country": {
+				"alpha": country.alpha,
+				"name": country.name
+			}
+		}
+		patient.address = location
+		patient.save()
+		return redirect('mainapp:patient_profile')
+
 	context = {
-		"patient": patient
+		"patient": patient,
+		"countries": Countries.objects.all(),
 	}
 	return render(request,"mainapp/patient_profile.html", context)
 

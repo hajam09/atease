@@ -57,7 +57,7 @@
          <a class="nav-link" data-toggle="tab" href="#appointments" role="tab" aria-controls="appointments">My Appointments</a>
       </li>
       <li class="nav-item">
-         <a class="nav-link" data-toggle="tab" href="#settings" role="tab" aria-controls="settings">Settings</a>
+         <a class="nav-link" data-toggle="tab" href="#address" role="tab" aria-controls="address">My Address</a>
       </li>
    </ul>
    <div class="tab-content">
@@ -73,6 +73,7 @@
                <div class="col-md-12">
                   <form method="post">
                      {% csrf_token %}
+                     <input type="text" name="UPDATEPATIENTPROFILE" hidden>
                      <div class="form-group row">
                         <label for="first_name" class="col-4 col-form-label">First Name</label> 
                         <div class="col-8">
@@ -222,7 +223,91 @@
          </div>
       </div>
       <div class="tab-pane" id="messages" role="tabpanel">.3..</div>
-      <div class="tab-pane" id="settings" role="tabpanel">.4..</div>
+      <div class="tab-pane" id="address" role="tabpanel">
+         <div class="card-body">
+            <div class="row">
+               <div class="col-md-12">
+                  <h4>My Address</h4>
+                  <hr>
+               </div>
+            </div>
+            <div class="row">
+               <div class="col-md-12">
+                  
+                  <div class="form-group">
+                     <form method="post">
+                        {% csrf_token %}
+                        <input type="text" name="UPDATEPATIENTADDRESS" hidden>
+                     
+                        <div class="form-group">
+                           <label for="address_1"><b>Address Line 1</b></label>
+                           <input type="text" class="form-control" id="address_1" name="address_1" placeholder="Address Line 1" value="{{patient.address.address_1}}" required>
+                        </div>
+                        <div class="form-group">
+                           <label for="address_2"><b>Address Line 2</b></label>
+                           <input type="text" class="form-control" id="address_2" name="address_2" placeholder="Address Line 2" value="{{patient.address.address_2}}">
+                        </div>
+                        <div class="row">
+                           <div class="col-6">
+                              <div class="form-group">
+                                 <label for="city"><b>City</b></label>
+                                 <input type="text" class="form-control" id="city" name="city" placeholder="City" value="{{patient.address.city}}" required>
+                              </div>
+                           </div>
+                           <div class="col-6">
+                              <div class="form-group">
+                                 <label for="stateProvice"><b>State / Province</b></label>
+                                 <input type="text" class="form-control" id="stateProvice"
+                                    name="stateProvice" placeholder="State / Province" value="{{patient.address.stateProvice}}">
+                              </div>
+                           </div>
+                        </div>
+                        <div class="row">
+                           <div class="col-6">
+                              <div class="form-group">
+                                 <label for="postalZip"><b>Postal / Zip Code</b></label>
+                                 <input type="text" class="form-control" id="postalZip"
+                                    name="postalZip" placeholder="Postal / Zip Code" value="{{patient.address.postalZip}}" required>
+                              </div>
+                           </div>
+                           <div class="col-6">
+                              <div class="form-group">
+                                 <label for="country"><b>Country</b></label>
+
+                                 <select class="form-control" id="country" name="country">
+                                    {% if patient.address.country %}
+                                       {% for country in countries %}
+                                          {% ifequal country.alpha patient.address.country.alpha %}
+                                             <option value="{{country.alpha}}" selected="selected">{{country.name}}</option>
+                                          {% else %}
+                                             <option value="{{country.alpha}}">{{country.name}}</option>
+                                          {% endifequal %}
+                                       {% endfor %}
+                                    {% else %}
+                                       {% for country in countries %}
+                                          {% ifequal country.alpha "GB" %}
+                                             <option value="{{country.alpha}}" selected="selected">{{country.name}}</option>
+                                          {% else %}
+                                             <option value="{{country.alpha}}">{{country.name}}</option>
+                                          {% endifequal %}
+                                       {% endfor %}
+                                    {% endif %}
+                                 </select>
+
+                              </div>
+                           </div>
+                        </div>
+                        <div class="form-group row">
+                        <div class="offset-4 col-8">
+                           <button name="submit" type="submit" class="btn btn-primary">Update My Profile</button>
+                        </div>
+                     </div>
+                     </form>
+                  </div>
+               </div>
+            </div>
+         </div>
+      </div>
    </div>
 </div>
 
