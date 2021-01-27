@@ -37,6 +37,41 @@ def forgetpassword(request):
 	return render(request,"mainapp/forgetpassword.html", {})
 
 def signup(request):
+
+	if request.method == 'POST' and 'SIGNUP' in request.POST:
+		firstname = request.POST['first_name']
+		lastname = request.POST['last_name']
+		email = request.POST['email']
+		password = request.POST['password']
+
+		if User.objects.filter(username=email).exists():
+			context = {
+				"message": "An account already exists for this email address!",
+				"email": email,
+				"firstname": firstname,
+				"lastname": lastname
+			}
+			return render(request,"mainapp/signup.html", context)
+		else:
+			if(len(password)<8 or any(letter.isalpha() for letter in password)==False or any(capital.isupper() for capital in password)==False or any(number.isdigit() for number in password)==False):
+				context = {
+					"message": "Your password is not strong enough.",
+					"email": email,
+					"firstname": firstname,
+					"lastname": lastname
+				}
+				return render(request,"mainapp/signup.html", context)
+
+			user = User.objects.create_user(username=email, email=email, password=password, first_name=firstname, last_name=lastname)
+			user.save()
+
+			context = {
+				"message": "Account created successfully.",
+			}
+
+			return render(request,"mainapp/signup.html", context)
+
+
 	return render(request,"mainapp/signup.html", {})
 
 def mainpage(request):
