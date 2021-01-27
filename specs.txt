@@ -14,13 +14,16 @@ The system shall provide health related article to the users Core
 The system shall allow users to search for common symptoms Core
 The system shall allow hospital(users) to add medical records to specific patient.
 The system shall allow hospital(users) to provide available appointments to patients.
-The system shall allow users to remove their medical records. Core
-The system shall allow users to delete unwanted medical record. Core
 
 TESTING NEEDED:
 The system shall allow guest to create a patient account.
 The system shall make sure that the user’s password is at least 8 characters long, include 1 special character, include at lease 1 uppercase and lowercase.
 The system shall store users to update their profile.
 The system shall allow users to add their own medical records
+
+// Aren't these same?
+The system shall allow users to remove their medical records.
+The system shall allow users to delete unwanted medical record.
+//
 
 DONE:

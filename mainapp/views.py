@@ -8,6 +8,7 @@ from http import HTTPStatus
 from .models import *
 from .utils import *
 from .forms import MyMedicalRecordsForm
+import json
 
 def login(request):
 
@@ -198,8 +199,17 @@ def patient_profile(request):
 	else:
 		form = MyMedicalRecordsForm() # A empty, unbound form
 
+	if request.is_ajax():
+		TASK = request.GET.get('TASK', None)
+
+		if TASK == 'deleteMyMedicalRecords':
+			document_id = request.GET.get('document_id', None)
+			instance = MyMedicalRecords.objects.get(id=document_id)
+			instance.delete()
+			return HttpResponse(json.dumps({}), content_type="application/json")
+
 	context = {
-		"documents": MyMedicalRecords.objects.all(),
+		"documents": MyMedicalRecords.objects.filter(user=request.user),
 		'form': form,
 		"patient": patient,
 		"countries": Countries.objects.all(),

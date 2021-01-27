@@ -327,7 +327,7 @@
                        {% if documents %}
                            <ul>
                                {% for document in documents %}
-                                   <li><a href="{{ document.document.url }}" download>{{ document.document.name }}</a></li>
+                                   <li><a href="{{ document.document.url }}" download>{{ document.document.name }}</a>&nbsp;&nbsp;&nbsp;&nbsp;<a href="" onclick="deleteMyMedicalRecords('{{document.id}}');">Delete</a></li>
                                {% endfor %}
                            </ul>
                        {% else %}
@@ -357,5 +357,18 @@
    </div>
 </div>
 
-<script type="text/javascript"></script>
+<script type="text/javascript">
+   function deleteMyMedicalRecords(document_id){
+      $.ajax({
+         data: {
+            'TASK': 'deleteMyMedicalRecords',
+            'document_id': document_id,
+         },
+         dataType: 'json',
+         success: function (response) {
+            
+         }
+      });
+   }
+</script>
 {% endblock %}
