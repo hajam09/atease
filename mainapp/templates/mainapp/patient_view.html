@@ -48,7 +48,7 @@
 <div class="container">
    <ul class="nav nav-tabs" id="myTab" role="tablist">
       <li class="nav-item">
-         <a class="nav-link active" data-toggle="tab" href="#profile" role="tab" aria-controls="profile">My Profile</a>
+         <a class="nav-link active" data-toggle="tab" href="#profile" role="tab" aria-controls="profile">Profile</a>
       </li>
       <li class="nav-item">
          <a class="nav-link" data-toggle="tab" href="#mygp" role="tab" aria-controls="mygp">My GP</a>
@@ -57,10 +57,10 @@
          <a class="nav-link" data-toggle="tab" href="#appointments" role="tab" aria-controls="appointments">My Appointments</a>
       </li>
       <li class="nav-item">
-         <a class="nav-link" data-toggle="tab" href="#address" role="tab" aria-controls="address">My Address</a>
+         <a class="nav-link" data-toggle="tab" href="#address" role="tab" aria-controls="address">Address</a>
       </li>
       <li class="nav-item">
-         <a class="nav-link" data-toggle="tab" href="#mymedicalrecords" role="tab" aria-controls="mymedicalrecords">My Medical Records</a>
+         <a class="nav-link" data-toggle="tab" href="#mymedicalrecords" role="tab" aria-controls="mymedicalrecords">Medical Records</a>
       </li>
    </ul>
    <div class="tab-content">
@@ -68,31 +68,28 @@
          <div class="card-body">
             <div class="row">
                <div class="col-md-12">
-                  <h4>My Profile</h4>
+                  <h4>Profile</h4>
                   <hr>
                </div>
             </div>
             <div class="row">
                <div class="col-md-12">
-                  <form method="post">
-                     {% csrf_token %}
-                     <input type="text" name="UPDATEPATIENTPROFILE" hidden>
                      <div class="form-group row">
                         <label for="first_name" class="col-4 col-form-label">First Name</label> 
                         <div class="col-8">
-                           <input id="first_name" name="first_name" placeholder="First Name" value="{{user.first_name}}" class="form-control here" type="text">
+                           <input value="{{patient.user.first_name}}" class="form-control here" disabled>
                         </div>
                      </div>
                      <div class="form-group row">
                         <label for="last_name" class="col-4 col-form-label">Last Name</label> 
                         <div class="col-8">
-                           <input id="last_name" name="last_name" placeholder="Last Name" value="{{user.last_name}}" class="form-control here" type="text">
+                           <input value="{{patient.user.last_name}}" class="form-control here" disabled>
                         </div>
                      </div>
                      <div class="form-group row">
                         <label for="email" class="col-4 col-form-label">Email</label> 
                         <div class="col-8">
-                           <input id="email" name="email" placeholder="Email" class="form-control here" value="{{user.email}}" type="text">
+                           <input value="{{patient.user.email}}" class="form-control here" disabled>
                            <small>Not Verified</small>
                         </div>
                      </div>
@@ -105,7 +102,7 @@
                      <div class="form-group row">
                         <label for="mobile" class="col-4 col-form-label">Mobile</label> 
                         <div class="col-8">
-                           <input id="mobile" name="mobile" placeholder="Mobile" value="{{patient.mobile}}" class="form-control here" type="text">
+                           <input value="{{patient.mobile}}" class="form-control here" disabled>
                         </div>
                      </div>
                      <div class="form-group row">
@@ -120,12 +117,6 @@
                            <input id="blood_group" name="blood_group" value="{{patient.blood_group}}" class="form-control here" disabled type="text">
                         </div>
                      </div>
-                     <div class="form-group row">
-                        <div class="offset-4 col-8">
-                           <button name="submit" type="submit" class="btn btn-primary">Update My Profile</button>
-                        </div>
-                     </div>
-                  </form>
                </div>
             </div>
          </div>
@@ -230,7 +221,7 @@
          <div class="card-body">
             <div class="row">
                <div class="col-md-12">
-                  <h4>My Address</h4>
+                  <h4>Address</h4>
                   <hr>
                </div>
             </div>
@@ -244,24 +235,23 @@
                      
                         <div class="form-group">
                            <label for="address_1"><b>Address Line 1</b></label>
-                           <input type="text" class="form-control" id="address_1" name="address_1" placeholder="Address Line 1" value="{{patient.address.address_1}}" required>
+                           <input type="text" class="form-control" value="{{patient.address.address_1}}" disabled>
                         </div>
                         <div class="form-group">
                            <label for="address_2"><b>Address Line 2</b></label>
-                           <input type="text" class="form-control" id="address_2" name="address_2" placeholder="Address Line 2" value="{{patient.address.address_2}}">
+                           <input type="text" class="form-control" value="{{patient.address.address_2}}" disabled>
                         </div>
                         <div class="row">
                            <div class="col-6">
                               <div class="form-group">
                                  <label for="city"><b>City</b></label>
-                                 <input type="text" class="form-control" id="city" name="city" placeholder="City" value="{{patient.address.city}}" required>
+                                 <input type="text" class="form-control" value="{{patient.address.city}}" disabled>
                               </div>
                            </div>
                            <div class="col-6">
                               <div class="form-group">
                                  <label for="stateProvice"><b>State / Province</b></label>
-                                 <input type="text" class="form-control" id="stateProvice"
-                                    name="stateProvice" placeholder="State / Province" value="{{patient.address.stateProvice}}">
+                                 <input type="text" class="form-control" value="{{patient.address.stateProvice}}" disabled>
                               </div>
                            </div>
                         </div>
@@ -269,41 +259,19 @@
                            <div class="col-6">
                               <div class="form-group">
                                  <label for="postalZip"><b>Postal / Zip Code</b></label>
-                                 <input type="text" class="form-control" id="postalZip"
-                                    name="postalZip" placeholder="Postal / Zip Code" value="{{patient.address.postalZip}}" required>
+                                 <input type="text" class="form-control" value="{{patient.address.postalZip}}" disabled>
                               </div>
                            </div>
                            <div class="col-6">
                               <div class="form-group">
                                  <label for="country"><b>Country</b></label>
 
-                                 <select class="form-control" id="country" name="country">
-                                    {% if patient.address.country %}
-                                       {% for country in countries %}
-                                          {% ifequal country.alpha patient.address.country.alpha %}
-                                             <option value="{{country.alpha}}" selected="selected">{{country.name}}</option>
-                                          {% else %}
-                                             <option value="{{country.alpha}}">{{country.name}}</option>
-                                          {% endifequal %}
-                                       {% endfor %}
-                                    {% else %}
-                                       {% for country in countries %}
-                                          {% ifequal country.alpha "GB" %}
-                                             <option value="{{country.alpha}}" selected="selected">{{country.name}}</option>
-                                          {% else %}
-                                             <option value="{{country.alpha}}">{{country.name}}</option>
-                                          {% endifequal %}
-                                       {% endfor %}
-                                    {% endif %}
-                                 </select>
+                                 <input type="text" class="form-control" value="{{patient.address.country.name}}" disabled>
 
                               </div>
                            </div>
                         </div>
                         <div class="form-group row">
-                        <div class="offset-4 col-8">
-                           <button name="submit" type="submit" class="btn btn-primary">Update My Profile</button>
-                        </div>
                      </div>
                      </form>
                   </div>
@@ -315,7 +283,7 @@
          <div class="card-body">
             <div class="row">
                <div class="col-md-12">
-                  <h4>My Medical Records</h4>
+                  <h4>Medical Records</h4>
                   <hr>
                </div>
             </div>

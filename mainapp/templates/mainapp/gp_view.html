@@ -1,0 +1,105 @@
+{% extends "mainapp/base.html" %}
+{% load static %}
+{% block content %}
+<style type="text/css">
+	
+
+#custom-search-input {
+        margin:0;
+        margin-top: 10px;
+        padding: 0;
+    }
+ 
+    #custom-search-input .search-query {
+        padding-right: 3px;
+        padding-right: 4px \9;
+        padding-left: 3px;
+        padding-left: 4px \9;
+        /* IE7-8 doesn't have border-radius, so don't indent the padding */
+ 
+        margin-bottom: 0;
+        -webkit-border-radius: 3px;
+        -moz-border-radius: 3px;
+        border-radius: 3px;
+    }
+ 
+    #custom-search-input button {
+        border: 0;
+        background: none;
+        /** belows styles are working good */
+        padding: 2px 5px;
+        margin-top: 2px;
+        position: relative;
+        left: -28px;
+        /* IE7-8 doesn't have border-radius, so don't indent the padding */
+        margin-bottom: 0;
+        -webkit-border-radius: 3px;
+        -moz-border-radius: 3px;
+        border-radius: 3px;
+        color:#D9230F;
+    }
+ 
+    .search-query:focus + button {
+        z-index: 3;   
+    }
+
+</style>
+<div class="container">
+	<nav>
+		<div class="nav nav-tabs" id="nav-tab" role="tablist">
+			<a class="nav-item nav-link active" id="nav-home-tab" data-toggle="tab" href="#nav-home" role="tab" aria-controls="nav-home" aria-selected="true">Patients</a>
+			<a class="nav-item nav-link" id="nav-profile-tab" data-toggle="tab" href="#nav-profile" role="tab" aria-controls="nav-profile" aria-selected="false">Opening Hours</a>
+			<a class="nav-item nav-link" id="nav-contact-tab" data-toggle="tab" href="#nav-contact" role="tab" aria-controls="nav-contact" aria-selected="false">Contact</a>
+		</div>
+	</nav>
+	<div class="tab-content" id="nav-tabContent">
+		<div class="tab-pane fade show active" id="nav-home" role="tabpanel" aria-labelledby="nav-home-tab">
+		<br><br>
+		<form method="post">
+			{% csrf_token %}
+			<input type="text" name="search_for_patients" hidden>
+			<div class="input-group">
+				<input class="form-control py-2 border-right-0 border" type="search" name="patient_name" placeholder="Search for patients" id="example-search-input">
+				<span class="input-group-append">
+					<input class="input-group-text bg-transparent" type="submit"></input>
+				</span>
+			</div>
+		</form>
+		<br>
+
+		{% if patients %}
+
+
+
+
+			<table class="table">
+				<thead class="thead-dark">
+					<tr>
+					<th scope="col">Name</th>
+					<th scope="col">Dob</th>
+					<th scope="col">Contact</th>
+					</tr>
+				</thead>
+				<tbody>
+					{% for p in patients %}
+					<tr>
+						<td><a href="{% url 'mainapp:patient_view' p.id %}">{{p.user.get_full_name}}</a></td>
+					<td>{{p.date_of_birth}}</td>
+					<td>{{p.mobile}}</td>
+					</tr>
+					{% endfor %}
+
+				</tbody>
+			</table>
+
+		
+
+		{% endif %}
+
+
+		</div>
+		<div class="tab-pane fade" id="nav-profile" role="tabpanel" aria-labelledby="nav-profile-tab">..4.</div>
+		<div class="tab-pane fade" id="nav-contact" role="tabpanel" aria-labelledby="nav-contact-tab">..65.</div>
+	</div>
+</div>
+{% endblock %}

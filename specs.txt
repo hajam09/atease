@@ -1,29 +1,58 @@
 TODO:
 
 The system shall verify the email address when guest is registering a patient account.
+The system shall display appropriate message if the user enters wrong URL.
 The system shall use facial authentication to verify user against hospital database when linking the account to chosen hospital.
 The system shall make sure all the updates are stored securely on a database.
-The system shall allow users to book and cancel appointment Core
 
-The system shall allow users to add medication to their profile Core
-The system shall allow user to create medical notes. Core
-The system shall display appropriate message if the user enters wrong URL.
-The system shall have a 24-hour live chat service for help. Optional
-The system shall allow users to contact their hospital Core
+* Redefine Models.
+THree user: Paitent, Doctor, and Recpetionsit.,
+* Create gp random number . DOctor enters number to show their working gp.
+* Patient makes requesty to the gp and receptionist accepts them.
+
+* Make request to join the GP and attach (documents).
+* ON new account creation, GP is emtpy. allow user to make request to join the GP.
+
+
+The system shall allow users to book and cancel appointment.
+\The system shall allow hospital(users) to provide available appointments to patients.
+* List all appointments as a list for the GP and the doctors.
+Use calender for the patients to view their schedule.
+
+
+
+The system shall allow GP doctors(users) to add medical records to specific patient.
+* In a GP create many-many records field for pateint and gps.
+* add patients to gp and add doctoes to gp.
+* Doctors can only see patients who are in the same GP.
+
+ - The system shall allow users to add medication to their profile
+ * Not doctor
+ * descrption - one to be taken a day or. ..
+ * Each medication has one note only.
+
+ - The system shall allow user to create medical notes.
+ * After an appointment, write summary of what happened or something.
+ * Use just Notes model for this.
+
+
+- The system shall have a 24-hour live chat service for help.
+* Message between the patient or receptionist on the GP.
+* Only to discuss service issues, like appointment bookings or altercation.
+
+
 The system shall provide health related article to the users Core
 The system shall allow users to search for common symptoms Core
-The system shall allow hospital(users) to add medical records to specific patient.
-The system shall allow hospital(users) to provide available appointments to patients.
+
+
 
 TESTING NEEDED:
 The system shall allow guest to create a patient account.
 The system shall make sure that the user’s password is at least 8 characters long, include 1 special character, include at lease 1 uppercase and lowercase.
 The system shall store users to update their profile.
 The system shall allow users to add their own medical records
-
-// Aren't these same?
 The system shall allow users to remove their medical records.
 The system shall allow users to delete unwanted medical record.
-//
+The system shall allow users to contact their GP.
 
 DONE:

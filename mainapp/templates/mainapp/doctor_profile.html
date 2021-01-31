@@ -1,4 +1,222 @@
 {% extends "mainapp/base.html" %}
 {% load static %}
 {% block content %}
+<style type="text/css">
+   .nav.nav-tabs {
+      float: left;
+      display: block;
+      margin-right: 20px;
+      border-bottom: 0;
+      border-right: 1px solid #ddd;
+      padding-right: 15px;
+   }
+
+   .nav-tabs .nav-link {
+      border: 1px solid transparent;
+      border-top-left-radius: .25rem;
+      border-top-right-radius: .25rem;
+   }
+
+   .nav-tabs .nav-link.active {
+      color: #495057;
+      background-color: #007bff !important;
+      border-color: transparent !important;
+   }
+
+   .nav-tabs .nav-link {
+      border: 1px solid transparent;
+      border-top-left-radius: 0rem!important;
+      border-top-right-radius: 0rem!important;
+   }
+
+   .tab-content>.active {
+      display: block;
+      min-height: 165px;
+   }
+
+   .nav.nav-tabs {
+      float: left;
+      display: block;
+      margin-right: 20px;
+      border-bottom: 0;
+      border-right: 1px solid transparent;
+      padding-right: 15px;
+   }
+</style>
+
+<div style="height:70px;"></div>
+<div class="container">
+   <ul class="nav nav-tabs" id="myTab" role="tablist">
+      <li class="nav-item">
+         <a class="nav-link active" data-toggle="tab" href="#profile" role="tab" aria-controls="profile">My Profile</a>
+      </li>
+      <li class="nav-item">
+         <a class="nav-link" data-toggle="tab" href="#mygp" role="tab" aria-controls="mygp">My GP</a>
+      </li>
+      <li class="nav-item">
+         <a class="nav-link" data-toggle="tab" href="#appointments" role="tab" aria-controls="appointments">My Appointments</a>
+      </li>
+      
+      
+   </ul>
+   <div class="tab-content">
+      <div class="tab-pane active" id="profile" role="tabpanel">
+         <div class="card-body">
+            <div class="row">
+               <div class="col-md-12">
+                  <h4>My Profile</h4>
+                  <hr>
+               </div>
+            </div>
+            <div class="row">
+               <div class="col-md-12">
+                  <form method="post">
+                     {% csrf_token %}
+                     <input type="text" name="_______" hidden>
+                     <div class="form-group row">
+                        <label for="first_name" class="col-4 col-form-label">First Name</label> 
+                        <div class="col-8">
+                           <input id="first_name" name="first_name" placeholder="First Name" value="{{user.first_name}}" class="form-control here" type="text">
+                        </div>
+                     </div>
+                     <div class="form-group row">
+                        <label for="last_name" class="col-4 col-form-label">Last Name</label> 
+                        <div class="col-8">
+                           <input id="last_name" name="last_name" placeholder="Last Name" value="{{user.last_name}}" class="form-control here" type="text">
+                        </div>
+                     </div>
+                     <div class="form-group row">
+                        <label for="email" class="col-4 col-form-label">Email</label> 
+                        <div class="col-8">
+                           <input id="email" name="email" placeholder="Email" class="form-control here" value="{{user.email}}" type="text">
+                           <small>Not Verified</small>
+                        </div>
+                     </div>
+                     
+                    
+                    
+                     <div class="form-group row">
+                        <div class="offset-4 col-8">
+                           <button name="submit" type="submit" class="btn btn-primary">Update My Profile</button>
+                        </div>
+                     </div>
+                  </form>
+               </div>
+            </div>
+         </div>
+      </div>
+      <div class="tab-pane" id="mygp" role="tabpanel">
+         <div class="card-body">
+            <div class="row">
+               <div class="col-md-12">
+                  <h4>My GP</h4>
+                  <hr>
+               </div>
+            </div>
+            <div class="row">
+               <div class="col-md-12">
+                  <h5>{{doctor.works_at.name}}</h5><a href="{% url 'mainapp:gp_view' %}">Click here to go to the GP</a>
+                  <div class="form-group row">
+                     <label class="col-4 col-form-label">Address Line 1</label> 
+                     <div class="col-8">
+                        <label class="col-4 col-form-label">{{doctor.works_at.address.address_1}}</label> 
+                     </div>
+                  </div>
+                  <div class="form-group row">
+                     <label class="col-4 col-form-label">Address Line 2</label> 
+                     <div class="col-8">
+                        <label class="col-4 col-form-label">{{doctor.works_at.address.address_2}}</label> 
+                     </div>
+                  </div>
+                  <div class="form-group row">
+                     <label class="col-4 col-form-label">City</label> 
+                     <div class="col-8">
+                        <label class="col-4 col-form-label">{{doctor.works_at.address.city}}</label> 
+                     </div>
+                  </div>
+                  <div class="form-group row">
+                     <label class="col-4 col-form-label">State / Province</label> 
+                     <div class="col-8">
+                        <label class="col-4 col-form-label">{{doctor.works_at.address.stateProvice}}</label> 
+                     </div>
+                  </div>
+                  <div class="form-group row">
+                     <label class="col-4 col-form-label">Zipcode</label> 
+                     <div class="col-8">
+                        <label class="col-4 col-form-label">{{doctor.works_at.address.postalZip}}</label> 
+                     </div>
+                  </div>
+                  <div class="form-group row">
+                     <label class="col-4 col-form-label">Country</label> 
+                     <div class="col-8">
+                        <label class="col-4 col-form-label">{{doctor.works_at.address.country.name}}</label> 
+                     </div>
+                  </div>
+                  <div class="form-group row">
+                     <label class="col-4 col-form-label">Contact Number</label> 
+                     <div class="col-8">
+                        <label class="col-4 col-form-label">{{doctor.works_at.contactNumber}}</label> 
+                     </div>
+                  </div>
+                  <hr>
+                  <h5>Opening Hours</h5>
+                  <table class="table">
+                     <thead class="thead-dark">
+                        <tr>
+                           <th scope="col">Weekday</th>
+                           <th scope="col">Open</th>
+                           <th scope="col">Close</th>
+                        </tr>
+                     </thead>
+                     <tbody>
+                        <tr>
+                           <td>Monday</td>
+                           <td>{{doctor.works_at.open_times.monday.from}}</td>
+                           <td>{{doctor.works_at.open_times.monday.to}}</td>
+                        </tr>
+                        <tr>
+                           <td>Tuesday</td>
+                           <td>{{doctor.works_at.open_times.tuesday.from}}</td>
+                           <td>{{doctor.works_at.open_times.tuesday.to}}</td>
+                        </tr>
+                        <tr>
+                           <td>Wednesday</td>
+                           <td>{{doctor.works_at.open_times.wednesday.from}}</td>
+                           <td>{{doctor.works_at.open_times.wednesday.to}}</td>
+                        </tr>
+                        <tr>
+                           <td>Thursday</td>
+                           <td>{{doctor.works_at.open_times.thursday.from}}</td>
+                           <td>{{doctor.works_at.open_times.thursday.to}}</td>
+                        </tr>
+                        <tr>
+                           <td>Friday</td>
+                           <td>{{doctor.works_at.open_times.monday.from}}</td>
+                           <td>{{doctor.works_at.open_times.monday.to}}</td>
+                        </tr>
+                     </tbody>
+                  </table>
+               </div>
+            </div>
+         </div>
+      </div>
+      <div class="tab-pane" id="messages" role="tabpanel">.3..</div>
+      
+   </div>
+</div>
+
+<script type="text/javascript">
+   function deleteMyMedicalRecords(document_id){
+      $.ajax({
+         data: {
+            'TASK': 'deleteMyMedicalRecords',
+            'document_id': document_id,
+         },
+         dataType: 'json',
+         success: function (response) {
+            
+         }
+      });
+   }
+</script>
 {% endblock %}

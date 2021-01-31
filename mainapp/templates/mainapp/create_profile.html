@@ -16,7 +16,7 @@
                             <a style="width: 50%;text-align: center;" href="#doctor_profile_tab" data-toggle="tab" class="nav-item nav-link has-icon nav-link-faded">
                                 
                                 &nbsp;&nbsp;
-                                <label class="side-bar-text">I am a Doctor</label>
+                                <label class="side-bar-text">I am a Staff</label>
                             </a>
                         </div>
                     </nav>
@@ -126,15 +126,19 @@
                     <div class="tab-pane fade" id="doctor_profile_tab" role="tabpanel" aria-labelledby="nav-profile-tab">
                         <form method="post">
                             {% csrf_token %}
-                            <input type="text" name="doctor_profile" hidden>
+                            <input type="text" name="staff_profile" hidden>
                             <div class="form-group">
-								<h4 for="doctor_name">Name</h4>
-								<input type="text" class="form-control" id="doctor_name" name="doctor_name" required>
+								<h4 for="list_of_gps">Role</h4>
+								<select class="form-control" name="role">
+									<option value="doctor">Doctor</option>
+									<option value="nurse">Nurse</option>
+									<option value="receptionist">Receptionist</option>
+								</select>
 							</div>
 							<hr>
 							<div class="form-group">
-								<h4 for="list_of_gps">GP</h4>
-								<select class="form-control" id="list_of_gps" name="list_of_gps">
+								<h4 for="list_of_gps">I work at</h4>
+								<select class="form-control" id="list_of_gps2" name="list_of_gps">
 									{% if gps %}
 										{% for gp in gps %}
 											<option value="{{gp.id}}">{{gp.name}}</option>
@@ -193,6 +197,7 @@
 <script type="text/javascript">
 	$(document).ready(function() {
     $('#list_of_gps').select2();
+    $('#list_of_gps2').select2();
 });
 </script>
 {% endblock %}

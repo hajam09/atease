@@ -7,7 +7,7 @@ from django.contrib.auth.decorators import login_required
 from http import HTTPStatus
 from .models import *
 from .utils import *
-from .forms import MyMedicalRecordsForm
+from .forms import MyMedicalRecordsForm, GPMedicalRecordsForm
 import json
 
 def login(request):
@@ -87,6 +87,12 @@ def create_profile(request):
 	if Doctor.objects.filter(user=request.user).exists():
 		return redirect('mainapp:doctor_profile')
 
+	if Nurse.objects.filter(user=request.user).exists():
+		return redirect('mainapp:nurse_profile')
+
+	if Receptionist.objects.filter(user=request.user).exists():
+		return redirect('mainapp:receptionist_profile')
+
 	if request.method == "POST" and "patient_profile" in request.POST:
 		# Patient cretates an account
 		date_of_birth = request.POST['date_of_birth']
@@ -110,18 +116,18 @@ def create_profile(request):
 
 		Patient.objects.create(
 			user = request.user,
-			dateOfBirth = date_of_birth,
+			date_of_birth = date_of_birth,
 			address = location,
 			mobile = mobile_number,
-			nhsNumber = nhs_number,
-			bloodGroup = blood_group,
-			generalPractice = GeneralPractice.objects.get(id=list_of_gps)
+			nhs_number = nhs_number,
+			blood_group = blood_group,
+			patient_at = GeneralPractice.objects.get(id=list_of_gps)
 		)
 		# Patient object created
 		return redirect('mainapp:patient_profile')
 
-	if request.method == "POST" and "doctor_profile" in request.POST:
-		doctor_name = request.POST['doctor_name']
+	if request.method == "POST" and "staff_profile" in request.POST:
+		role = request.POST['role']
 		list_of_gps = request.POST['list_of_gps']
 		weekdays = ['monday', 'tuesday', 'wednesday', 'thursday', 'friday']
 		schedule = ['from', 'to']
@@ -133,14 +139,29 @@ def create_profile(request):
 				'to': request.POST[i+'_to']
 			}
 
-		Doctor.objects.create(
-			user = request.user,
-			name = doctor_name,
-			generalPractice = GeneralPractice.objects.get(id=list_of_gps),
-			workingHours = workingHours
-		)
-		# Doctor object created
-		return redirect('mainapp:doctor_profile')
+		if role == 'doctor':
+			Doctor.objects.create(
+				user = request.user,
+				works_at = GeneralPractice.objects.get(id=list_of_gps),
+				working_hours = workingHours
+			)
+			return redirect('mainapp:doctor_profile')
+			
+		elif role == 'nurse':
+			Nurse.objects.create(
+				user = request.user,
+				works_at = GeneralPractice.objects.get(id=list_of_gps),
+				working_hours = workingHours
+			)
+
+			# return redirect('mainapp:doctor_profile')
+		elif role == 'receptionist':
+			Receptionist.objects.create(
+				user = request.user,
+				works_at = GeneralPractice.objects.get(id=list_of_gps),
+				working_hours = workingHours
+			)
+			# return redirect('mainapp:doctor_profile')
 
 	context = {
 		"countries": Countries.objects.all(),
@@ -218,4 +239,113 @@ def patient_profile(request):
 
 @login_required
 def doctor_profile(request):
-	return render(request,"mainapp/doctor_profile.html", {})
+	try:
+		doctor = Doctor.objects.get(user=request.user)
+	except Doctor.DoesNotExist:
+		raise e
+	context = {
+		"doctor": doctor
+	}
+	return render(request,"mainapp/doctor_profile.html", context)
+
+@login_required
+def nurse_profile(request):
+	return render(request,"mainapp/nurse_profile.html", {})
+
+@login_required
+def receptionist_profile(request):
+	return render(request,"mainapp/receptionist_profile.html", {})
+
+@login_required
+def gp_view(request):
+
+	if request.method == 'POST' and "search_for_patients" in request.POST:
+		patient_name = request.POST['patient_name']
+		patient_name = patient_name.split(" ")
+		first_name = ""
+		last_name = ""
+		print(patient_name)
+		
+		if len(patient_name) == 1:
+			first_name = patient_name[0]
+
+		if len(patient_name) == 2:
+			first_name = patient_name[0]
+			last_name = patient_name[1]
+		# Get all the patients within the gp of the authenticated user.
+
+		try:
+			account_object = Doctor.objects.get(user=request.user)
+		except:
+
+			try:
+				account_object = Nurse.objects.get(user=request.user)
+			except:
+				account_object = Receptionist.objects.get(user=request.user)
+
+		the_gp = None
+		if account_object:
+			the_gp = account_object.works_at
+
+			patients_of_this_gp = Patient.objects.filter(patient_at=the_gp, user__first_name__icontains=first_name) | Patient.objects.filter(patient_at=the_gp, user__last_name__icontains=last_name)
+
+
+		context = {
+			"patients": patients_of_this_gp
+		}
+
+		return render(request,"mainapp/gp_view.html", context)
+	return render(request,"mainapp/gp_view.html", {})
+
+def patient_view(request, patient_id):
+
+	try:
+		patient = Patient.objects.get(pk=patient_id)
+	except Patient.DoesNotExist:
+		raise e
+
+	try:
+		account_object = Doctor.objects.get(user=request.user)
+	except:
+
+		try:
+			account_object = Nurse.objects.get(user=request.user)
+		except:
+			account_object = Receptionist.objects.get(user=request.user)
+
+	if account_object:
+		users_work_place = account_object.works_at
+
+		if patient.patient_at != users_work_place:
+			# Patient is not of the staff gp.
+			return redirect('mainapp:gp_view')
+
+	# Handle file upload
+	if request.method == 'POST' and "UPLOADMYMEDICALRECORDDOCUMENTS" in request.POST:
+		form = MyMedicalRecordsForm(request.POST, request.FILES)
+		if form.is_valid():
+			newdoc = GPMedicalRecords(prescribed_by=account_object,prescribed_to=patient,document = request.FILES['docfile'])
+			newdoc.save()
+
+			# Redirect to the document list after POST
+			return redirect('mainapp:patient_view', patient_id=patient_id)
+	else:
+		form = MyMedicalRecordsForm() # A empty, unbound form
+
+	if request.is_ajax():
+		TASK = request.GET.get('TASK', None)
+
+		if TASK == 'deleteMyMedicalRecords':
+			document_id = request.GET.get('document_id', None)
+			instance = GPMedicalRecords.objects.get(id=document_id)
+			instance.delete()
+			return HttpResponse(json.dumps({}), content_type="application/json")
+
+	context = {
+		"patient": patient,
+		"countries": Countries.objects.all(),
+		"form": form,
+		"documents": GPMedicalRecords.objects.filter(prescribed_to=patient),
+	}
+
+	return render(request,"mainapp/patient_view.html", context)
