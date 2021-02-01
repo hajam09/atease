@@ -5,6 +5,8 @@ The system shall display appropriate message if the user enters wrong URL.
 The system shall use facial authentication to verify user against hospital database when linking the account to chosen hospital.
 The system shall make sure all the updates are stored securely on a database.
 
+
+* Receptionist of the Gp are only able to edit the opening hours.
 * Redefine Models.
 THree user: Paitent, Doctor, and Recpetionsit.,
 * Create gp random number . DOctor enters number to show their working gp.

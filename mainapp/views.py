@@ -208,6 +208,19 @@ def patient_profile(request):
 		patient.save()
 		return redirect('mainapp:patient_profile')
 
+	if request.method == 'POST' and "CREATENOTES" in request.POST:
+		title = request.POST["title"]
+		desciption = request.POST["desciption"]
+
+		Notes.objects.create(
+			user = request.user,
+			title = title,
+			desciption = desciption,
+		)
+
+		return redirect('mainapp:patient_profile')
+
+
 	# Handle file upload
 	if request.method == 'POST' and "UPLOADMYMEDICALRECORDDOCUMENTS" in request.POST:
 		form = MyMedicalRecordsForm(request.POST, request.FILES)
@@ -234,6 +247,7 @@ def patient_profile(request):
 		'form': form,
 		"patient": patient,
 		"countries": Countries.objects.all(),
+		"notes": Notes.objects.filter(user=request.user),
 	}
 	return render(request,"mainapp/patient_profile.html", context)
 

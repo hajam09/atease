@@ -2,373 +2,423 @@
 {% load static %}
 {% block content %}
 <style type="text/css">
-   .nav.nav-tabs {
-      float: left;
-      display: block;
-      margin-right: 20px;
-      border-bottom: 0;
-      border-right: 1px solid #ddd;
-      padding-right: 15px;
-   }
-
-   .nav-tabs .nav-link {
-      border: 1px solid transparent;
-      border-top-left-radius: .25rem;
-      border-top-right-radius: .25rem;
-   }
-
-   .nav-tabs .nav-link.active {
-      color: #495057;
-      background-color: #007bff !important;
-      border-color: transparent !important;
-   }
-
-   .nav-tabs .nav-link {
-      border: 1px solid transparent;
-      border-top-left-radius: 0rem!important;
-      border-top-right-radius: 0rem!important;
-   }
-
-   .tab-content>.active {
-      display: block;
-      min-height: 165px;
-   }
-
-   .nav.nav-tabs {
-      float: left;
-      display: block;
-      margin-right: 20px;
-      border-bottom: 0;
-      border-right: 1px solid transparent;
-      padding-right: 15px;
-   }
+    .nav.nav-tabs {
+    float: left;
+    display: block;
+    margin-right: 20px;
+    border-bottom: 0;
+    border-right: 1px solid #ddd;
+    padding-right: 15px;
+    }
+    .nav-tabs .nav-link {
+    border: 1px solid transparent;
+    border-top-left-radius: .25rem;
+    border-top-right-radius: .25rem;
+    }
+    .nav-tabs .nav-link.active {
+    color: #495057;
+    background-color: #007bff !important;
+    border-color: transparent !important;
+    }
+    .nav-tabs .nav-link {
+    border: 1px solid transparent;
+    border-top-left-radius: 0rem!important;
+    border-top-right-radius: 0rem!important;
+    }
+    .tab-content>.active {
+    display: block;
+    min-height: 165px;
+    }
+    .nav.nav-tabs {
+    float: left;
+    display: block;
+    margin-right: 20px;
+    border-bottom: 0;
+    border-right: 1px solid transparent;
+    padding-right: 15px;
+    }
 </style>
-
 <div style="height:70px;"></div>
 <div class="container">
-   <ul class="nav nav-tabs" id="myTab" role="tablist">
-      <li class="nav-item">
-         <a class="nav-link active" data-toggle="tab" href="#profile" role="tab" aria-controls="profile">My Profile</a>
-      </li>
-      <li class="nav-item">
-         <a class="nav-link" data-toggle="tab" href="#mygp" role="tab" aria-controls="mygp">My GP</a>
-      </li>
-      <li class="nav-item">
-         <a class="nav-link" data-toggle="tab" href="#appointments" role="tab" aria-controls="appointments">My Appointments</a>
-      </li>
-      <li class="nav-item">
-         <a class="nav-link" data-toggle="tab" href="#address" role="tab" aria-controls="address">My Address</a>
-      </li>
-      <li class="nav-item">
-         <a class="nav-link" data-toggle="tab" href="#mymedicalrecords" role="tab" aria-controls="mymedicalrecords">My Medical Records</a>
-      </li>
-   </ul>
-   <div class="tab-content">
-      <div class="tab-pane active" id="profile" role="tabpanel">
-         <div class="card-body">
-            <div class="row">
-               <div class="col-md-12">
-                  <h4>My Profile</h4>
-                  <hr>
-               </div>
+    <ul class="nav nav-tabs" id="myTab" role="tablist">
+        <li class="nav-item">
+            <a class="nav-link active" data-toggle="tab" href="#profile" role="tab" aria-controls="profile">My Profile</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" data-toggle="tab" href="#mygp" role="tab" aria-controls="mygp">My GP</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" data-toggle="tab" href="#appointments" role="tab" aria-controls="appointments">My Appointments</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" data-toggle="tab" href="#address" role="tab" aria-controls="address">My Address</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" data-toggle="tab" href="#mymedicalrecords" role="tab" aria-controls="mymedicalrecords">My Medical Records</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" data-toggle="tab" href="#mynotes" role="tab" aria-controls="mynotes">My Notes</a>
+        </li>
+    </ul>
+    <div class="tab-content">
+        <div class="tab-pane active" id="profile" role="tabpanel">
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-12">
+                        <h4>My Profile</h4>
+                        <hr>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        <form method="post">
+                            {% csrf_token %}
+                            <input type="text" name="UPDATEPATIENTPROFILE" hidden>
+                            <div class="form-group row">
+                                <label for="first_name" class="col-4 col-form-label">First Name</label> 
+                                <div class="col-8">
+                                    <input id="first_name" name="first_name" placeholder="First Name" value="{{user.first_name}}" class="form-control here" type="text">
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label for="last_name" class="col-4 col-form-label">Last Name</label> 
+                                <div class="col-8">
+                                    <input id="last_name" name="last_name" placeholder="Last Name" value="{{user.last_name}}" class="form-control here" type="text">
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label for="email" class="col-4 col-form-label">Email</label> 
+                                <div class="col-8">
+                                    <input id="email" name="email" placeholder="Email" class="form-control here" value="{{user.email}}" type="text">
+                                    <small>Not Verified</small>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label for="dob" class="col-4 col-form-label">Date of Birth</label> 
+                                <div class="col-8">
+                                    <input id="dob" name="dob" value="{{patient.date_of_birth}}" class="form-control here" disabled type="text">
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label for="mobile" class="col-4 col-form-label">Mobile</label> 
+                                <div class="col-8">
+                                    <input id="mobile" name="mobile" placeholder="Mobile" value="{{patient.mobile}}" class="form-control here" type="text">
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label for="nhs_number" class="col-4 col-form-label">NHS Number</label> 
+                                <div class="col-8">
+                                    <input id="nhs_number" name="nhs_number" value="{{patient.nhs_number}}" class="form-control here" disabled type="text">
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label for="blood_group" class="col-4 col-form-label">Blood Group</label> 
+                                <div class="col-8">
+                                    <input id="blood_group" name="blood_group" value="{{patient.blood_group}}" class="form-control here" disabled type="text">
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <div class="offset-4 col-8">
+                                    <button name="submit" type="submit" class="btn btn-primary">Update My Profile</button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
             </div>
-            <div class="row">
-               <div class="col-md-12">
-                  <form method="post">
-                     {% csrf_token %}
-                     <input type="text" name="UPDATEPATIENTPROFILE" hidden>
-                     <div class="form-group row">
-                        <label for="first_name" class="col-4 col-form-label">First Name</label> 
-                        <div class="col-8">
-                           <input id="first_name" name="first_name" placeholder="First Name" value="{{user.first_name}}" class="form-control here" type="text">
-                        </div>
-                     </div>
-                     <div class="form-group row">
-                        <label for="last_name" class="col-4 col-form-label">Last Name</label> 
-                        <div class="col-8">
-                           <input id="last_name" name="last_name" placeholder="Last Name" value="{{user.last_name}}" class="form-control here" type="text">
-                        </div>
-                     </div>
-                     <div class="form-group row">
-                        <label for="email" class="col-4 col-form-label">Email</label> 
-                        <div class="col-8">
-                           <input id="email" name="email" placeholder="Email" class="form-control here" value="{{user.email}}" type="text">
-                           <small>Not Verified</small>
-                        </div>
-                     </div>
-                     <div class="form-group row">
-                        <label for="dob" class="col-4 col-form-label">Date of Birth</label> 
-                        <div class="col-8">
-                           <input id="dob" name="dob" value="{{patient.date_of_birth}}" class="form-control here" disabled type="text">
-                        </div>
-                     </div>
-                     <div class="form-group row">
-                        <label for="mobile" class="col-4 col-form-label">Mobile</label> 
-                        <div class="col-8">
-                           <input id="mobile" name="mobile" placeholder="Mobile" value="{{patient.mobile}}" class="form-control here" type="text">
-                        </div>
-                     </div>
-                     <div class="form-group row">
-                        <label for="nhs_number" class="col-4 col-form-label">NHS Number</label> 
-                        <div class="col-8">
-                           <input id="nhs_number" name="nhs_number" value="{{patient.nhs_number}}" class="form-control here" disabled type="text">
-                        </div>
-                     </div>
-                     <div class="form-group row">
-                        <label for="blood_group" class="col-4 col-form-label">Blood Group</label> 
-                        <div class="col-8">
-                           <input id="blood_group" name="blood_group" value="{{patient.blood_group}}" class="form-control here" disabled type="text">
-                        </div>
-                     </div>
-                     <div class="form-group row">
-                        <div class="offset-4 col-8">
-                           <button name="submit" type="submit" class="btn btn-primary">Update My Profile</button>
-                        </div>
-                     </div>
-                  </form>
-               </div>
-            </div>
-         </div>
-      </div>
-      <div class="tab-pane" id="mygp" role="tabpanel">
-         <div class="card-body">
-            <div class="row">
-               <div class="col-md-12">
-                  <h4>My GP</h4>
-                  <hr>
-               </div>
-            </div>
-            <div class="row">
-               <div class="col-md-12">
-                  <h5>{{patient.patient_at.name}}</h5>
-                  <div class="form-group row">
-                     <label class="col-4 col-form-label">Address Line 1</label> 
-                     <div class="col-8">
-                        <label class="col-4 col-form-label">{{patient.patient_at.address.address_1}}</label> 
-                     </div>
-                  </div>
-                  <div class="form-group row">
-                     <label class="col-4 col-form-label">Address Line 2</label> 
-                     <div class="col-8">
-                        <label class="col-4 col-form-label">{{patient.patient_at.address.address_2}}</label> 
-                     </div>
-                  </div>
-                  <div class="form-group row">
-                     <label class="col-4 col-form-label">City</label> 
-                     <div class="col-8">
-                        <label class="col-4 col-form-label">{{patient.patient_at.address.city}}</label> 
-                     </div>
-                  </div>
-                  <div class="form-group row">
-                     <label class="col-4 col-form-label">State / Province</label> 
-                     <div class="col-8">
-                        <label class="col-4 col-form-label">{{patient.patient_at.address.stateProvice}}</label> 
-                     </div>
-                  </div>
-                  <div class="form-group row">
-                     <label class="col-4 col-form-label">Zipcode</label> 
-                     <div class="col-8">
-                        <label class="col-4 col-form-label">{{patient.patient_at.address.postalZip}}</label> 
-                     </div>
-                  </div>
-                  <div class="form-group row">
-                     <label class="col-4 col-form-label">Country</label> 
-                     <div class="col-8">
-                        <label class="col-4 col-form-label">{{patient.patient_at.address.country.name}}</label> 
-                     </div>
-                  </div>
-                  <div class="form-group row">
-                     <label class="col-4 col-form-label">Contact Number</label> 
-                     <div class="col-8">
-                        <label class="col-4 col-form-label">{{patient.patient_at.contact_number}}</label> 
-                     </div>
-                  </div>
-                  <hr>
-                  <h5>Opening Hours</h5>
-                  <table class="table">
-                     <thead class="thead-dark">
-                        <tr>
-                           <th scope="col">Weekday</th>
-                           <th scope="col">Open</th>
-                           <th scope="col">Close</th>
-                        </tr>
-                     </thead>
-                     <tbody>
-                        <tr>
-                           <td>Monday</td>
-                           <td>{{patient.patient_at.open_times.monday.from}}</td>
-                           <td>{{patient.patient_at.open_times.monday.to}}</td>
-                        </tr>
-                        <tr>
-                           <td>Tuesday</td>
-                           <td>{{patient.patient_at.open_times.tuesday.from}}</td>
-                           <td>{{patient.patient_at.open_times.tuesday.to}}</td>
-                        </tr>
-                        <tr>
-                           <td>Wednesday</td>
-                           <td>{{patient.patient_at.open_times.wednesday.from}}</td>
-                           <td>{{patient.patient_at.open_times.wednesday.to}}</td>
-                        </tr>
-                        <tr>
-                           <td>Thursday</td>
-                           <td>{{patient.patient_at.open_times.thursday.from}}</td>
-                           <td>{{patient.patient_at.open_times.thursday.to}}</td>
-                        </tr>
-                        <tr>
-                           <td>Friday</td>
-                           <td>{{patient.patient_at.open_times.monday.from}}</td>
-                           <td>{{patient.patient_at.open_times.monday.to}}</td>
-                        </tr>
-                     </tbody>
-                  </table>
-               </div>
-            </div>
-         </div>
-      </div>
-      <div class="tab-pane" id="messages" role="tabpanel">.3..</div>
-      <div class="tab-pane" id="address" role="tabpanel">
-         <div class="card-body">
-            <div class="row">
-               <div class="col-md-12">
-                  <h4>My Address</h4>
-                  <hr>
-               </div>
-            </div>
-            <div class="row">
-               <div class="col-md-12">
-                  
-                  <div class="form-group">
-                     <form method="post">
-                        {% csrf_token %}
-                        <input type="text" name="UPDATEPATIENTADDRESS" hidden>
-                     
-                        <div class="form-group">
-                           <label for="address_1"><b>Address Line 1</b></label>
-                           <input type="text" class="form-control" id="address_1" name="address_1" placeholder="Address Line 1" value="{{patient.address.address_1}}" required>
-                        </div>
-                        <div class="form-group">
-                           <label for="address_2"><b>Address Line 2</b></label>
-                           <input type="text" class="form-control" id="address_2" name="address_2" placeholder="Address Line 2" value="{{patient.address.address_2}}">
-                        </div>
-                        <div class="row">
-                           <div class="col-6">
-                              <div class="form-group">
-                                 <label for="city"><b>City</b></label>
-                                 <input type="text" class="form-control" id="city" name="city" placeholder="City" value="{{patient.address.city}}" required>
-                              </div>
-                           </div>
-                           <div class="col-6">
-                              <div class="form-group">
-                                 <label for="stateProvice"><b>State / Province</b></label>
-                                 <input type="text" class="form-control" id="stateProvice"
-                                    name="stateProvice" placeholder="State / Province" value="{{patient.address.stateProvice}}">
-                              </div>
-                           </div>
-                        </div>
-                        <div class="row">
-                           <div class="col-6">
-                              <div class="form-group">
-                                 <label for="postalZip"><b>Postal / Zip Code</b></label>
-                                 <input type="text" class="form-control" id="postalZip"
-                                    name="postalZip" placeholder="Postal / Zip Code" value="{{patient.address.postalZip}}" required>
-                              </div>
-                           </div>
-                           <div class="col-6">
-                              <div class="form-group">
-                                 <label for="country"><b>Country</b></label>
-
-                                 <select class="form-control" id="country" name="country">
-                                    {% if patient.address.country %}
-                                       {% for country in countries %}
-                                          {% ifequal country.alpha patient.address.country.alpha %}
-                                             <option value="{{country.alpha}}" selected="selected">{{country.name}}</option>
-                                          {% else %}
-                                             <option value="{{country.alpha}}">{{country.name}}</option>
-                                          {% endifequal %}
-                                       {% endfor %}
-                                    {% else %}
-                                       {% for country in countries %}
-                                          {% ifequal country.alpha "GB" %}
-                                             <option value="{{country.alpha}}" selected="selected">{{country.name}}</option>
-                                          {% else %}
-                                             <option value="{{country.alpha}}">{{country.name}}</option>
-                                          {% endifequal %}
-                                       {% endfor %}
-                                    {% endif %}
-                                 </select>
-
-                              </div>
-                           </div>
+        </div>
+        <div class="tab-pane" id="mygp" role="tabpanel">
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-12">
+                        <h4>My GP</h4>
+                        <hr>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        <h5>{{patient.patient_at.name}}</h5>
+                        <div class="form-group row">
+                            <label class="col-4 col-form-label">Address Line 1</label> 
+                            <div class="col-8">
+                                <label class="col-4 col-form-label">{{patient.patient_at.address.address_1}}</label> 
+                            </div>
                         </div>
                         <div class="form-group row">
-                        <div class="offset-4 col-8">
-                           <button name="submit" type="submit" class="btn btn-primary">Update My Profile</button>
+                            <label class="col-4 col-form-label">Address Line 2</label> 
+                            <div class="col-8">
+                                <label class="col-4 col-form-label">{{patient.patient_at.address.address_2}}</label> 
+                            </div>
                         </div>
-                     </div>
-                     </form>
-                  </div>
-               </div>
+                        <div class="form-group row">
+                            <label class="col-4 col-form-label">City</label> 
+                            <div class="col-8">
+                                <label class="col-4 col-form-label">{{patient.patient_at.address.city}}</label> 
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label class="col-4 col-form-label">State / Province</label> 
+                            <div class="col-8">
+                                <label class="col-4 col-form-label">{{patient.patient_at.address.stateProvice}}</label> 
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label class="col-4 col-form-label">Zipcode</label> 
+                            <div class="col-8">
+                                <label class="col-4 col-form-label">{{patient.patient_at.address.postalZip}}</label> 
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label class="col-4 col-form-label">Country</label> 
+                            <div class="col-8">
+                                <label class="col-4 col-form-label">{{patient.patient_at.address.country.name}}</label> 
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label class="col-4 col-form-label">Contact Number</label> 
+                            <div class="col-8">
+                                <label class="col-4 col-form-label">{{patient.patient_at.contact_number}}</label> 
+                            </div>
+                        </div>
+                        <hr>
+                        <h5>Opening Hours</h5>
+                        <table class="table">
+                            <thead class="thead-dark">
+                                <tr>
+                                    <th scope="col">Weekday</th>
+                                    <th scope="col">Open</th>
+                                    <th scope="col">Close</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>Monday</td>
+                                    <td>{{patient.patient_at.open_times.monday.from}}</td>
+                                    <td>{{patient.patient_at.open_times.monday.to}}</td>
+                                </tr>
+                                <tr>
+                                    <td>Tuesday</td>
+                                    <td>{{patient.patient_at.open_times.tuesday.from}}</td>
+                                    <td>{{patient.patient_at.open_times.tuesday.to}}</td>
+                                </tr>
+                                <tr>
+                                    <td>Wednesday</td>
+                                    <td>{{patient.patient_at.open_times.wednesday.from}}</td>
+                                    <td>{{patient.patient_at.open_times.wednesday.to}}</td>
+                                </tr>
+                                <tr>
+                                    <td>Thursday</td>
+                                    <td>{{patient.patient_at.open_times.thursday.from}}</td>
+                                    <td>{{patient.patient_at.open_times.thursday.to}}</td>
+                                </tr>
+                                <tr>
+                                    <td>Friday</td>
+                                    <td>{{patient.patient_at.open_times.monday.from}}</td>
+                                    <td>{{patient.patient_at.open_times.monday.to}}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
             </div>
-         </div>
-      </div>
-      <div class="tab-pane" id="mymedicalrecords" role="tabpanel">
-         <div class="card-body">
-            <div class="row">
-               <div class="col-md-12">
-                  <h4>My Medical Records</h4>
-                  <hr>
-               </div>
+        </div>
+        <div class="tab-pane" id="messages" role="tabpanel">.3..</div>
+        <div class="tab-pane" id="address" role="tabpanel">
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-12">
+                        <h4>My Address</h4>
+                        <hr>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <form method="post">
+                                {% csrf_token %}
+                                <input type="text" name="UPDATEPATIENTADDRESS" hidden>
+                                <div class="form-group">
+                                    <label for="address_1"><b>Address Line 1</b></label>
+                                    <input type="text" class="form-control" id="address_1" name="address_1" placeholder="Address Line 1" value="{{patient.address.address_1}}" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="address_2"><b>Address Line 2</b></label>
+                                    <input type="text" class="form-control" id="address_2" name="address_2" placeholder="Address Line 2" value="{{patient.address.address_2}}">
+                                </div>
+                                <div class="row">
+                                    <div class="col-6">
+                                        <div class="form-group">
+                                            <label for="city"><b>City</b></label>
+                                            <input type="text" class="form-control" id="city" name="city" placeholder="City" value="{{patient.address.city}}" required>
+                                        </div>
+                                    </div>
+                                    <div class="col-6">
+                                        <div class="form-group">
+                                            <label for="stateProvice"><b>State / Province</b></label>
+                                            <input type="text" class="form-control" id="stateProvice"
+                                                name="stateProvice" placeholder="State / Province" value="{{patient.address.stateProvice}}">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-6">
+                                        <div class="form-group">
+                                            <label for="postalZip"><b>Postal / Zip Code</b></label>
+                                            <input type="text" class="form-control" id="postalZip"
+                                                name="postalZip" placeholder="Postal / Zip Code" value="{{patient.address.postalZip}}" required>
+                                        </div>
+                                    </div>
+                                    <div class="col-6">
+                                        <div class="form-group">
+                                            <label for="country"><b>Country</b></label>
+                                            <select class="form-control" id="country" name="country">
+                                                {% if patient.address.country %}
+                                                {% for country in countries %}
+                                                {% ifequal country.alpha patient.address.country.alpha %}
+                                                <option value="{{country.alpha}}" selected="selected">{{country.name}}</option>
+                                                {% else %}
+                                                <option value="{{country.alpha}}">{{country.name}}</option>
+                                                {% endifequal %}
+                                                {% endfor %}
+                                                {% else %}
+                                                {% for country in countries %}
+                                                {% ifequal country.alpha "GB" %}
+                                                <option value="{{country.alpha}}" selected="selected">{{country.name}}</option>
+                                                {% else %}
+                                                <option value="{{country.alpha}}">{{country.name}}</option>
+                                                {% endifequal %}
+                                                {% endfor %}
+                                                {% endif %}
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <div class="offset-4 col-8">
+                                        <button name="submit" type="submit" class="btn btn-primary">Update My Profile</button>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
             </div>
-            <div class="row">
-               <div class="col-md-12">
-                  
-                  <div class="form-group">
-                     <!-- List of uploaded documents -->
-                       {% if documents %}
-                           <ul>
-                               {% for document in documents %}
-                                   <li><a href="{{ document.document.url }}" download>{{ document.document.name }}</a>&nbsp;&nbsp;&nbsp;&nbsp;<a href="" onclick="deleteMyMedicalRecords('{{document.id}}');">Delete</a></li>
-                               {% endfor %}
-                           </ul>
-                       {% else %}
-                           <p>No documents.</p>
-                       {% endif %}
-
-                       <!-- Upload form. Note enctype attribute! -->
-                       <form method="post" enctype="multipart/form-data">
-                           {% csrf_token %}
-                           <input type="text" name="UPLOADMYMEDICALRECORDDOCUMENTS" hidden>
-                           <p>{{ form.non_field_errors }}</p>
-
-                           <p>{{ form.docfile.label_tag }} {{ form.docfile.help_text }}</p>
-
-                           <p>
-                               {{ form.docfile.errors }}
-                               {{ form.docfile }}
-                           </p>
-
-                           <p><input type="submit" value="Upload"/></p>
-                       </form>
-                  </div>
-               </div>
+        </div>
+        <div class="tab-pane" id="mymedicalrecords" role="tabpanel">
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-12">
+                        <h4>My Medical Records</h4>
+                        <hr>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <!-- List of uploaded documents -->
+                            {% if documents %}
+                            <ul>
+                                {% for document in documents %}
+                                <li><a href="{{ document.document.url }}" download>{{ document.document.name }}</a>&nbsp;&nbsp;&nbsp;&nbsp;<a href="" onclick="deleteMyMedicalRecords('{{document.id}}');">Delete</a></li>
+                                {% endfor %}
+                            </ul>
+                            {% else %}
+                            <p>No documents.</p>
+                            {% endif %}
+                            <!-- Upload form. Note enctype attribute! -->
+                            <form method="post" enctype="multipart/form-data">
+                                {% csrf_token %}
+                                <input type="text" name="UPLOADMYMEDICALRECORDDOCUMENTS" hidden>
+                                <p>{{ form.non_field_errors }}</p>
+                                <p>{{ form.docfile.label_tag }} {{ form.docfile.help_text }}</p>
+                                <p>
+                                    {{ form.docfile.errors }}
+                                    {{ form.docfile }}
+                                </p>
+                                <p><input type="submit" value="Upload"/></p>
+                            </form>
+                        </div>
+                    </div>
+                </div>
             </div>
-         </div>
-      </div>
-   </div>
+        </div>
+        <div class="tab-pane" id="mynotes" role="tabpanel">
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-12">
+                        <h4>My Notes</h4>
+                        <hr>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+                            <div class="modal-dialog modal-dialog-centered" role="document">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="exampleModalLongTitle">Notes</h5>
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                        </button>
+                                    </div>
+                                    <form method="post">
+                                        {% csrf_token %}
+                                        <input type="text" name="CREATENOTES" hidden>
+                                        <div class="modal-body">
+                                            <div class="form-group">
+                                                <input type="text" class="form-control" name="title" placeholder="Title" required>
+                                            </div>
+                                            <div class="form-group">
+                                                <textarea class="form-control" name="desciption" placeholder="Desciption" rows="4" required></textarea>
+                                            </div>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                            <button type="submit" class="btn btn-primary">Save</button>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModalCenter"> Create Notes </button>
+                        <br>
+                        <hr>
+                        {% if notes %}
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th scope="col">Title</th>
+                                    <th scope="col">Description</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for n in notes %}
+                                <tr>
+                                    <td>{{n.title}}</td>
+                                    <td>{{n.desciption}}</td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
-
 <script type="text/javascript">
-   function deleteMyMedicalRecords(document_id){
-      $.ajax({
-         data: {
-            'TASK': 'deleteMyMedicalRecords',
-            'document_id': document_id,
-         },
-         dataType: 'json',
-         success: function (response) {
-            
-         }
-      });
-   }
+    function deleteMyMedicalRecords(document_id){
+    $.ajax({
+    data: {
+    'TASK': 'deleteMyMedicalRecords',
+    'document_id': document_id,
+    },
+    dataType: 'json',
+    success: function (response) {
+    
+    }
+    });
+    }
 </script>
 {% endblock %}
