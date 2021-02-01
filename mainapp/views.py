@@ -322,7 +322,7 @@ def patient_view(request, patient_id):
 
 	# Handle file upload
 	if request.method == 'POST' and "UPLOADMYMEDICALRECORDDOCUMENTS" in request.POST:
-		form = MyMedicalRecordsForm(request.POST, request.FILES)
+		form = GPMedicalRecordsForm(request.POST, request.FILES)
 		if form.is_valid():
 			newdoc = GPMedicalRecords(prescribed_by=account_object,prescribed_to=patient,document = request.FILES['docfile'])
 			newdoc.save()
@@ -330,7 +330,7 @@ def patient_view(request, patient_id):
 			# Redirect to the document list after POST
 			return redirect('mainapp:patient_view', patient_id=patient_id)
 	else:
-		form = MyMedicalRecordsForm() # A empty, unbound form
+		form = GPMedicalRecordsForm() # A empty, unbound form
 
 	if request.is_ajax():
 		TASK = request.GET.get('TASK', None)
