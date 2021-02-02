@@ -132,6 +132,7 @@ def create_profile(request):
 		weekdays = ['monday', 'tuesday', 'wednesday', 'thursday', 'friday']
 		schedule = ['from', 'to']
 		workingHours = {}
+		print("rolerolerolerole", role)
 
 		for i in weekdays:
 			workingHours[i] = {
@@ -140,6 +141,7 @@ def create_profile(request):
 			}
 
 		if role == 'doctor':
+			print("creating doctor role")
 			Doctor.objects.create(
 				user = request.user,
 				works_at = GeneralPractice.objects.get(id=list_of_gps),
@@ -148,20 +150,22 @@ def create_profile(request):
 			return redirect('mainapp:doctor_profile')
 			
 		elif role == 'nurse':
+			print("creating nurse role")
 			Nurse.objects.create(
 				user = request.user,
 				works_at = GeneralPractice.objects.get(id=list_of_gps),
 				working_hours = workingHours
 			)
 
-			# return redirect('mainapp:doctor_profile')
+			return redirect('mainapp:nurse_profile')
 		elif role == 'receptionist':
+			print("creating receptionist role")
 			Receptionist.objects.create(
 				user = request.user,
 				works_at = GeneralPractice.objects.get(id=list_of_gps),
 				working_hours = workingHours
 			)
-			# return redirect('mainapp:doctor_profile')
+			return redirect('mainapp:receptionist_profile')
 
 	context = {
 		"countries": Countries.objects.all(),
@@ -268,7 +272,15 @@ def nurse_profile(request):
 
 @login_required
 def receptionist_profile(request):
-	return render(request,"mainapp/receptionist_profile.html", {})
+
+	try:
+		receptionist = Receptionist.objects.get(user=request.user)
+	except Receptionist.DoesNotExist:
+		raise e
+	context = {
+		"receptionist": receptionist
+	}
+	return render(request,"mainapp/receptionist_profile.html", context)
 
 @login_required
 def gp_view(request):

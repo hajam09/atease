@@ -26,12 +26,17 @@ def install_patients():
 			username=email, email=email, password=password, first_name=firstname, last_name=lastname
 		)
 
+		address_1 = str(randint(1, 100)) + " " + fake.unique.first_name() + " " + "Road"
+		alphabet = list(string.ascii_uppercase)
+		postalZip = random.choice(alphabet) + random.choice(alphabet) + str(randint(1, 100)) + " " + str(randint(1, 10)) + random.choice(alphabet) + random.choice(alphabet)
+
+
 		location = {
-			"address_1": "01 Edgware Road",
-			"address_2": "Edgware",
+			"address_1": address_1,
+			"address_2": fake.unique.last_name(),
 			"city": "London",
 			"stateProvice": "Essex",
-			"postalZip": "HG77 6XE",
+			"postalZip": postalZip,
 			"country": {
 				"alpha": "GB",
 				"name": "United Kingdom"
@@ -67,11 +72,29 @@ def install_gp():
 		letters = string.ascii_lowercase
 		registration_number = ''.join(random.choice(letters) for i in range(10))
 		contact_number = "+44"+str(randint(7000000000, 7999999999))
+
+		address_1 = str(randint(1, 100)) + " " + name
+		alphabet = list(string.ascii_uppercase)
+		postalZip = random.choice(alphabet) + random.choice(alphabet) + str(randint(1, 100)) + " " + str(randint(1, 10)) + random.choice(alphabet) + random.choice(alphabet)
+
+		location = {
+			"address_1": address_1,
+			"address_2": fake.unique.last_name(),
+			"city": "London",
+			"stateProvice": "Essex",
+			"postalZip": postalZip,
+			"country": {
+				"alpha": "GB",
+				"name": "United Kingdom"
+			}
+		}
+
 		list_of_gps.append(
 			GeneralPractice(
 				name = name,
 				registration_number = registration_number,
-				contact_number = contact_number
+				contact_number = contact_number,
+				address = location,
 			)
 		)
 
