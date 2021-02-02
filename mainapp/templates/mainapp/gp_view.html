@@ -98,7 +98,101 @@
 
 
 		</div>
-		<div class="tab-pane fade" id="nav-profile" role="tabpanel" aria-labelledby="nav-profile-tab">..4.</div>
+		<div class="tab-pane fade" id="nav-profile" role="tabpanel" aria-labelledby="nav-profile-tab">
+			<div style="height:70px;"></div>
+			{% if can_edit_opening_times %}
+
+
+			<form method="post">
+				{% csrf_token %}
+				<input type="text" name="Update_GP_Hours" hidden>
+
+				<div class="form-group">
+					<h4 for="working_hours">Edit GP Hours</h4>
+					<br>
+					<div class="row">
+						<div class="col-md-auto">
+							<div>
+								<label>Monday: </label>
+								From: <input type="time" name="monday_from" value="{{profile.works_at.open_times.monday.from}}">
+								To: <input type="time" name="monday_to" value="{{profile.works_at.open_times.monday.to}}">
+							</div>
+							<br>
+							<div>
+								<label>Tuesday: </label>
+								From: <input type="time" name="tuesday_from" value="{{profile.works_at.open_times.tuesday.from}}">
+								To: <input type="time" name="tuesday_to" value="{{profile.works_at.open_times.tuesday.to}}">
+							</div>
+							<br>
+							<div>
+								<label>Wednesday: </label>
+								From: <input type="time" name="wednesday_from" value="{{profile.works_at.open_times.wednesday.from}}">
+								To: <input type="time" name="wednesday_to" value="{{profile.works_at.open_times.wednesday.to}}">
+							</div>
+							<br>
+							<div>
+								<label>Thursday: </label>
+								From: <input type="time" name="thursday_from" value="{{profile.works_at.open_times.thursday.from}}">
+								To: <input type="time" name="thursday_to" value="{{profile.works_at.open_times.thursday.to}}">
+							</div>
+							<br>
+							<div>
+								<label>Friday: </label>
+								From: <input type="time" name="friday_from" value="{{profile.works_at.open_times.friday.from}}">
+								To: <input type="time" name="friday_to" value="{{profile.works_at.open_times.friday.to}}">
+							</div>
+						</div>
+					</div>
+				</div>
+
+				<div class="form-group">
+					<button type="submit" class="btn btn-success btn-lg btn-block">Update Hours</button>
+				</div>
+
+
+			</form>
+
+
+
+			{% else %}
+				<table class="table">
+	                <thead class="thead-dark">
+	                    <tr>
+	                        <th scope="col">Weekday</th>
+	                        <th scope="col">Open</th>
+	                        <th scope="col">Close</th>
+	                    </tr>
+	                </thead>
+	                <tbody>
+	                    <tr>
+	                        <td>Monday</td>
+	                        <td>{{profile.works_at.open_times.monday.from}}</td>
+	                        <td>{{profile.works_at.open_times.monday.to}}</td>
+	                    </tr>
+	                    <tr>
+	                        <td>Tuesday</td>
+	                        <td>{{profile.works_at.open_times.tuesday.from}}</td>
+	                        <td>{{profile.works_at.open_times.tuesday.to}}</td>
+	                    </tr>
+	                    <tr>
+	                        <td>Wednesday</td>
+	                        <td>{{profile.works_at.open_times.wednesday.from}}</td>
+	                        <td>{{profile.works_at.open_times.wednesday.to}}</td>
+	                    </tr>
+	                    <tr>
+	                        <td>Thursday</td>
+	                        <td>{{profile.works_at.open_times.thursday.from}}</td>
+	                        <td>{{profile.works_at.open_times.thursday.to}}</td>
+	                    </tr>
+	                    <tr>
+	                        <td>Friday</td>
+	                        <td>{{profile.works_at.open_times.monday.from}}</td>
+	                        <td>{{profile.works_at.open_times.monday.to}}</td>
+	                    </tr>
+	                </tbody>
+	            </table>
+			{% endif %}
+		</div>
 		<div class="tab-pane fade" id="nav-contact" role="tabpanel" aria-labelledby="nav-contact-tab">..65.</div>
 	</div>
 </div>

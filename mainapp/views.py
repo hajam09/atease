@@ -285,6 +285,43 @@ def receptionist_profile(request):
 @login_required
 def gp_view(request):
 
+	context = {}
+
+	try:
+		account_object = Doctor.objects.get(user=request.user)
+	except:
+
+		try:
+			account_object = Nurse.objects.get(user=request.user)
+		except:
+			account_object = Receptionist.objects.get(user=request.user)
+
+	context["can_edit_opening_times"] = True if isinstance(account_object, Receptionist) else False
+	context["profile"] = account_object
+
+
+	
+	if request.method == 'POST' and "Update_GP_Hours" in request.POST and isinstance(account_object, Receptionist):
+
+		weekdays = ['monday', 'tuesday', 'wednesday', 'thursday', 'friday']
+		schedule = ['from', 'to']
+		workingHours = {}
+
+		for i in weekdays:
+			workingHours[i] = {
+				'from': request.POST[i+'_from'],
+				'to': request.POST[i+'_to']
+			}
+
+		print(workingHours)
+
+		the_gp = account_object.works_at
+		the_gp.open_times = workingHours
+		the_gp.save()
+		return redirect('mainapp:gp_view')
+
+
+
 	if request.method == 'POST' and "search_for_patients" in request.POST:
 		patient_name = request.POST['patient_name']
 		patient_name = patient_name.split(" ")
@@ -298,30 +335,17 @@ def gp_view(request):
 		if len(patient_name) == 2:
 			first_name = patient_name[0]
 			last_name = patient_name[1]
+
+
 		# Get all the patients within the gp of the authenticated user.
-
-		try:
-			account_object = Doctor.objects.get(user=request.user)
-		except:
-
-			try:
-				account_object = Nurse.objects.get(user=request.user)
-			except:
-				account_object = Receptionist.objects.get(user=request.user)
-
-		the_gp = None
 		if account_object:
 			the_gp = account_object.works_at
 
 			patients_of_this_gp = Patient.objects.filter(patient_at=the_gp, user__first_name__icontains=first_name) | Patient.objects.filter(patient_at=the_gp, user__last_name__icontains=last_name)
 
 
-		context = {
-			"patients": patients_of_this_gp
-		}
-
-		return render(request,"mainapp/gp_view.html", context)
-	return render(request,"mainapp/gp_view.html", {})
+		context["patients"] = patients_of_this_gp
+	return render(request,"mainapp/gp_view.html", context)
 
 def patient_view(request, patient_id):
 

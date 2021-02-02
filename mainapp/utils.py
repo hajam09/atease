@@ -11,10 +11,13 @@ def install_patients():
 	if 'mainapp_patient' not in all_tables:
 		return
 
-	if Patient.objects.all().count() >= 200:
+	if Patient.objects.all().count() >= 100:
 		return
 
-	for i in range(201):
+	list_of_patients = []
+	all_gps = GeneralPractice.objects.all()
+
+	for i in range(101):
 		print(i)
 		fake = Faker()
 		firstname = fake.unique.first_name()
@@ -29,6 +32,18 @@ def install_patients():
 		address_1 = str(randint(1, 100)) + " " + fake.unique.first_name() + " " + "Road"
 		alphabet = list(string.ascii_uppercase)
 		postalZip = random.choice(alphabet) + random.choice(alphabet) + str(randint(1, 100)) + " " + str(randint(1, 10)) + random.choice(alphabet) + random.choice(alphabet)
+
+		year = str(randint(1930, 2021))
+		month = str(randint(1, 12))
+
+		if len(month) == 1:
+			month = "0" + month
+
+		day = str(randint(1, 28))
+		if len(day) == 1:
+			day = "0" + day
+
+		date_of_birth = year + "-" + month + "-" + day
 
 
 		location = {
@@ -45,14 +60,30 @@ def install_patients():
 
 		Patient.objects.create(
 			user = user,
-			date_of_birth = '1998-07-04',
+			date_of_birth = date_of_birth,
 			address = location,
 			mobile = "+44"+str(randint(7000000000, 7999999999)),
 			nhs_number = str(randint(70000000, 79999999)),
-			blood_group = "A+",
-			patient_at = random.choice(GeneralPractice.objects.all())
+			blood_group = random.choice(['A+', 'A-', 'B+', 'B-', 'O+', 'O-', 'AB+', 'AB-']),
+			patient_at = random.choice(all_gps)
 		)
-		
+
+		# list_of_patients.append(
+		# 	Patient(
+		# 		user = user,
+		# 		date_of_birth = date_of_birth,
+		# 		address = location,
+		# 		mobile = "+44"+str(randint(7000000000, 7999999999)),
+		# 		nhs_number = str(randint(70000000, 79999999)),
+		# 		blood_group = random.choice(['A+', 'A-', 'B+', 'B-', 'O+', 'O-', 'AB+', 'AB-']),
+		# 		patient_at = random.choice(all_gps)
+		# 	)
+		# )
+
+	if len(list_of_patients) == 0:
+		return
+
+	Patient.objects.bulk_create(list_of_patients)
 	return
 
 
@@ -61,7 +92,7 @@ def install_gp():
 	all_tables = connection.introspection.table_names()
 	if 'mainapp_generalpractice' not in all_tables:
 		return
-	if GeneralPractice.objects.all().count() > 15:
+	if GeneralPractice.objects.all().count() > 20:
 		return
 
 	list_of_gps = []
@@ -89,12 +120,40 @@ def install_gp():
 			}
 		}
 
+		open_times = {
+			"monday": {
+				"from": "09:30",
+				"to": "05:30"
+			},
+			"tuesday": {
+				"from": "09:30",
+				"to": "05:30"
+			},
+			"wednesday": {
+				"from": "09:30",
+				"to": "05:30"
+			},
+			"monday": {
+				"from": "09:30",
+				"to": "05:30"
+			},
+			"thursday": {
+				"from": "09:30",
+				"to": "05:30"
+			},
+			"friday": {
+				"from": "09:30",
+				"to": "05:30"
+			}
+		}
+
 		list_of_gps.append(
 			GeneralPractice(
 				name = name,
 				registration_number = registration_number,
 				contact_number = contact_number,
 				address = location,
+				open_times = open_times,
 			)
 		)
 
