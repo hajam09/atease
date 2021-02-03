@@ -18,7 +18,6 @@ def install_patients():
 	all_gps = GeneralPractice.objects.all()
 
 	for i in range(101):
-		print(i)
 		fake = Faker()
 		firstname = fake.unique.first_name()
 		lastname = fake.unique.last_name()

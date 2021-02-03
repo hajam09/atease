@@ -78,13 +78,15 @@ class GPCurrentMedication(models.Model):
 	prescribed_to = models.ForeignKey(Patient, on_delete=models.CASCADE)
 	prescribed_by = models.ForeignKey(Doctor, on_delete=models.CASCADE)
 	name = models.CharField(max_length=32)
-	descrption = models.TextField()
-	startDate = models.DateField()
+	description = models.TextField()
+	start_date = models.DateField()
+	prescribed_date = models.DateField(auto_now_add=True)
 
 	class Meta:
 		verbose_name_plural = "GPCurrentMedication"
 
 class Notes(models.Model):
+	# Used by the patients
 	user = models.ForeignKey(User, on_delete=models.CASCADE)
 	title = models.CharField(max_length=32)
 	desciption = models.TextField()

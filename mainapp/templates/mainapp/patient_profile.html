@@ -59,6 +59,9 @@
         <li class="nav-item">
             <a class="nav-link" data-toggle="tab" href="#mynotes" role="tab" aria-controls="mynotes">My Notes</a>
         </li>
+        <li class="nav-item">
+            <a class="nav-link" data-toggle="tab" href="#gpmedication" role="tab" aria-controls="gpmedication">GP Medication</a>
+        </li>
     </ul>
     <div class="tab-content">
         <div class="tab-pane active" id="profile" role="tabpanel">
@@ -352,7 +355,7 @@
                 </div>
                 <div class="row">
                     <div class="col-md-12">
-                        <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+                        <div class="modal fade" id="notesModal" tabindex="-1" role="dialog" aria-labelledby="notesModalTitle" aria-hidden="true">
                             <div class="modal-dialog modal-dialog-centered" role="document">
                                 <div class="modal-content">
                                     <div class="modal-header">
@@ -369,7 +372,7 @@
                                                 <input type="text" class="form-control" name="title" placeholder="Title" required>
                                             </div>
                                             <div class="form-group">
-                                                <textarea class="form-control" name="desciption" placeholder="Desciption" rows="4" required></textarea>
+                                                <textarea class="form-control" name="description" placeholder="Description" rows="4" required></textarea>
                                             </div>
                                         </div>
                                         <div class="modal-footer">
@@ -380,7 +383,7 @@
                                 </div>
                             </div>
                         </div>
-                        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModalCenter"> Create Notes </button>
+                        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#notesModal"> Create Notes </button>
                         <br>
                         <hr>
                         {% if notes %}
@@ -395,12 +398,31 @@
                                 {% for n in notes %}
                                 <tr>
                                     <td>{{n.title}}</td>
-                                    <td>{{n.desciption}}</td>
+                                    <td>{{n.description}}</td>
                                 </tr>
                                 {% endfor %}
                             </tbody>
                         </table>
                         {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="tab-pane" id="gpmedication" role="tabpanel">
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-12">
+                        <h4>GP Prescribed Medication</h4>
+                        <hr>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        
+                        <br><br>
+                        <div class="row" id="list_of_medications">
+                            
+                        </div>
                     </div>
                 </div>
             </div>
@@ -420,5 +442,70 @@
     }
     });
     }
+
+    function Add_Medication() {
+
+        var ml = [];
+
+        {% if gp_medication %}
+
+            {% for g in gp_medication %}
+
+            ml.push({
+                "name": '{{g.name}}',
+                "description": '{{g.description|linebreaks}}',
+                "start_date": '{{g.start_date}}',
+                "prescribed_date": '{{g.prescribed_date}}',
+            });
+                
+            {% endfor %}
+            
+        {% endif %}
+
+        var i,j,temparray,chunk = 2;
+        var nl = [];
+
+        for (i=0,j=ml.length; i<j; i+=chunk) {
+            temparray = ml.slice(i,i+chunk);
+            nl.push(temparray)
+        }
+
+        for (var i = 0; i < nl.length; i++) {
+
+
+            $('#list_of_medications').append(
+                `<div class="row">
+
+                    <div class="col-6">
+                        <div class="card" style="width: 18rem;">
+                            <div class="card-body">
+                                <h5 class="card-title">`+ nl[i][0].name +`</h5>
+                                <p class="card-text">`+ nl[i][0].description +`</p>
+                                <span>Start from: `+ nl[i][0].start_date +`</span>
+                                <br>
+                                <span>prescribed at: `+ nl[i][0].prescribed_date +`</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-6">
+                        <div class="card" style="width: 18rem;">
+                            <div class="card-body">
+                                <h5 class="card-title">`+ nl[i][1].name +`</h5>
+                                <p class="card-text">`+ nl[i][1].description +`</p>
+                                <span>Start from: `+ nl[i][1].start_date +`</span>
+                                <br>
+                                <span>prescribed at: `+ nl[i][1].prescribed_date +`</span>
+                            </div>
+                        </div>
+                    </div>
+
+
+                </div>
+                <br><br>`
+            );
+        }
+    }
+
+    Add_Medication();
 </script>
 {% endblock %}

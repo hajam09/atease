@@ -2,244 +2,362 @@
 {% load static %}
 {% block content %}
 <style type="text/css">
-   .nav.nav-tabs {
-      float: left;
-      display: block;
-      margin-right: 20px;
-      border-bottom: 0;
-      border-right: 1px solid #ddd;
-      padding-right: 15px;
-   }
-
-   .nav-tabs .nav-link {
-      border: 1px solid transparent;
-      border-top-left-radius: .25rem;
-      border-top-right-radius: .25rem;
-   }
-
-   .nav-tabs .nav-link.active {
-      color: #495057;
-      background-color: #007bff !important;
-      border-color: transparent !important;
-   }
-
-   .nav-tabs .nav-link {
-      border: 1px solid transparent;
-      border-top-left-radius: 0rem!important;
-      border-top-right-radius: 0rem!important;
-   }
-
-   .tab-content>.active {
-      display: block;
-      min-height: 165px;
-   }
-
-   .nav.nav-tabs {
-      float: left;
-      display: block;
-      margin-right: 20px;
-      border-bottom: 0;
-      border-right: 1px solid transparent;
-      padding-right: 15px;
-   }
+	.nav.nav-tabs {
+	float: left;
+	display: block;
+	margin-right: 20px;
+	border-bottom: 0;
+	border-right: 1px solid #ddd;
+	padding-right: 15px;
+	}
+	.nav-tabs .nav-link {
+	border: 1px solid transparent;
+	border-top-left-radius: .25rem;
+	border-top-right-radius: .25rem;
+	}
+	.nav-tabs .nav-link.active {
+	color: #495057;
+	background-color: #007bff !important;
+	border-color: transparent !important;
+	}
+	.nav-tabs .nav-link {
+	border: 1px solid transparent;
+	border-top-left-radius: 0rem!important;
+	border-top-right-radius: 0rem!important;
+	}
+	.tab-content>.active {
+	display: block;
+	min-height: 165px;
+	}
+	.nav.nav-tabs {
+	float: left;
+	display: block;
+	margin-right: 20px;
+	border-bottom: 0;
+	border-right: 1px solid transparent;
+	padding-right: 15px;
+	}
 </style>
-
 <div style="height:70px;"></div>
 <div class="container">
-   <ul class="nav nav-tabs" id="myTab" role="tablist">
-      <li class="nav-item">
-         <a class="nav-link active" data-toggle="tab" href="#profile" role="tab" aria-controls="profile">Profile</a>
-      </li>
-      <li class="nav-item">
-         <a class="nav-link" data-toggle="tab" href="#appointments" role="tab" aria-controls="appointments">My Appointments</a>
-      </li>
-      <li class="nav-item">
-         <a class="nav-link" data-toggle="tab" href="#address" role="tab" aria-controls="address">Address</a>
-      </li>
-      <li class="nav-item">
-         <a class="nav-link" data-toggle="tab" href="#mymedicalrecords" role="tab" aria-controls="mymedicalrecords">Medical Records</a>
-      </li>
-   </ul>
-   <div class="tab-content">
-      <div class="tab-pane active" id="profile" role="tabpanel">
-         <div class="card-body">
-            <div class="row">
-               <div class="col-md-12">
-                  <h4>Profile</h4>
-                  <hr>
-               </div>
-            </div>
-            <div class="row">
-               <div class="col-md-12">
-                     <div class="form-group row">
-                        <label for="first_name" class="col-4 col-form-label">First Name</label> 
-                        <div class="col-8">
-                           <input value="{{patient.user.first_name}}" class="form-control here" disabled>
-                        </div>
-                     </div>
-                     <div class="form-group row">
-                        <label for="last_name" class="col-4 col-form-label">Last Name</label> 
-                        <div class="col-8">
-                           <input value="{{patient.user.last_name}}" class="form-control here" disabled>
-                        </div>
-                     </div>
-                     <div class="form-group row">
-                        <label for="email" class="col-4 col-form-label">Email</label> 
-                        <div class="col-8">
-                           <input value="{{patient.user.email}}" class="form-control here" disabled>
-                           <small>Not Verified</small>
-                        </div>
-                     </div>
-                     <div class="form-group row">
-                        <label for="dob" class="col-4 col-form-label">Date of Birth</label> 
-                        <div class="col-8">
-                           <input id="dob" name="dob" value="{{patient.date_of_birth}}" class="form-control here" disabled type="text">
-                        </div>
-                     </div>
-                     <div class="form-group row">
-                        <label for="mobile" class="col-4 col-form-label">Mobile</label> 
-                        <div class="col-8">
-                           <input value="{{patient.mobile}}" class="form-control here" disabled>
-                        </div>
-                     </div>
-                     <div class="form-group row">
-                        <label for="nhs_number" class="col-4 col-form-label">NHS Number</label> 
-                        <div class="col-8">
-                           <input id="nhs_number" name="nhs_number" value="{{patient.nhs_number}}" class="form-control here" disabled type="text">
-                        </div>
-                     </div>
-                     <div class="form-group row">
-                        <label for="blood_group" class="col-4 col-form-label">Blood Group</label> 
-                        <div class="col-8">
-                           <input id="blood_group" name="blood_group" value="{{patient.blood_group}}" class="form-control here" disabled type="text">
-                        </div>
-                     </div>
-               </div>
-            </div>
-         </div>
-      </div>
-
-      <div class="tab-pane" id="messages" role="tabpanel">.3..</div>
-      <div class="tab-pane" id="address" role="tabpanel">
-         <div class="card-body">
-            <div class="row">
-               <div class="col-md-12">
-                  <h4>Address</h4>
-                  <hr>
-               </div>
-            </div>
-            <div class="row">
-               <div class="col-md-12">
-                  
-                  <div class="form-group">
-                     <form method="post">
-                        {% csrf_token %}
-                        <input type="text" name="UPDATEPATIENTADDRESS" hidden>
-                     
-                        <div class="form-group">
-                           <label for="address_1"><b>Address Line 1</b></label>
-                           <input type="text" class="form-control" value="{{patient.address.address_1}}" disabled>
-                        </div>
-                        <div class="form-group">
-                           <label for="address_2"><b>Address Line 2</b></label>
-                           <input type="text" class="form-control" value="{{patient.address.address_2}}" disabled>
-                        </div>
-                        <div class="row">
-                           <div class="col-6">
-                              <div class="form-group">
-                                 <label for="city"><b>City</b></label>
-                                 <input type="text" class="form-control" value="{{patient.address.city}}" disabled>
-                              </div>
-                           </div>
-                           <div class="col-6">
-                              <div class="form-group">
-                                 <label for="stateProvice"><b>State / Province</b></label>
-                                 <input type="text" class="form-control" value="{{patient.address.stateProvice}}" disabled>
-                              </div>
-                           </div>
-                        </div>
-                        <div class="row">
-                           <div class="col-6">
-                              <div class="form-group">
-                                 <label for="postalZip"><b>Postal / Zip Code</b></label>
-                                 <input type="text" class="form-control" value="{{patient.address.postalZip}}" disabled>
-                              </div>
-                           </div>
-                           <div class="col-6">
-                              <div class="form-group">
-                                 <label for="country"><b>Country</b></label>
-
-                                 <input type="text" class="form-control" value="{{patient.address.country.name}}" disabled>
-
-                              </div>
-                           </div>
-                        </div>
-                        <div class="form-group row">
-                     </div>
-                     </form>
-                  </div>
-               </div>
-            </div>
-         </div>
-      </div>
-      <div class="tab-pane" id="mymedicalrecords" role="tabpanel">
-         <div class="card-body">
-            <div class="row">
-               <div class="col-md-12">
-                  <h4>Medical Records</h4>
-                  <hr>
-               </div>
-            </div>
-            <div class="row">
-               <div class="col-md-12">
-                  
-                  <div class="form-group">
-                     <!-- List of uploaded documents -->
-                       {% if documents %}
-                           <ul>
-                               {% for document in documents %}
-                                   <li><a href="{{ document.document.url }}" download>{{ document.document.name }}</a>&nbsp;&nbsp;&nbsp;&nbsp;<a href="" onclick="deleteMyMedicalRecords('{{document.id}}');">Delete</a></li>
-                               {% endfor %}
-                           </ul>
-                       {% else %}
-                           <p>No documents.</p>
-                       {% endif %}
-
-                       <!-- Upload form. Note enctype attribute! -->
-                       <form method="post" enctype="multipart/form-data">
-                           {% csrf_token %}
-                           <input type="text" name="UPLOADMYMEDICALRECORDDOCUMENTS" hidden>
-                           <p>{{ form.non_field_errors }}</p>
-
-                           <p>{{ form.docfile.label_tag }} {{ form.docfile.help_text }}</p>
-
-                           <p>
-                               {{ form.docfile.errors }}
-                               {{ form.docfile }}
-                           </p>
-
-                           <p><input type="submit" value="Upload"/></p>
-                       </form>
-                  </div>
-               </div>
-            </div>
-         </div>
-      </div>
-   </div>
+	<ul class="nav nav-tabs" id="myTab" role="tablist">
+		<li class="nav-item">
+			<a class="nav-link active" data-toggle="tab" href="#profile" role="tab" aria-controls="profile">Profile</a>
+		</li>
+		<li class="nav-item">
+			<a class="nav-link" data-toggle="tab" href="#appointments" role="tab" aria-controls="appointments">My Appointments</a>
+		</li>
+		<li class="nav-item">
+			<a class="nav-link" data-toggle="tab" href="#address" role="tab" aria-controls="address">Address</a>
+		</li>
+		<li class="nav-item">
+			<a class="nav-link" data-toggle="tab" href="#mymedicalrecords" role="tab" aria-controls="mymedicalrecords">Medical Records</a>
+		</li>
+		<li class="nav-item">
+			<a class="nav-link" data-toggle="tab" href="#medication" role="tab" aria-controls="medication">Medication</a>
+		</li>
+	</ul>
+	<div class="tab-content">
+		<div class="tab-pane active" id="profile" role="tabpanel">
+			<div class="card-body">
+				<div class="row">
+					<div class="col-md-12">
+						<h4>Profile</h4>
+						<hr>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-md-12">
+						<div class="form-group row">
+							<label for="first_name" class="col-4 col-form-label">First Name</label> 
+							<div class="col-8">
+								<input value="{{patient.user.first_name}}" class="form-control here" disabled>
+							</div>
+						</div>
+						<div class="form-group row">
+							<label for="last_name" class="col-4 col-form-label">Last Name</label> 
+							<div class="col-8">
+								<input value="{{patient.user.last_name}}" class="form-control here" disabled>
+							</div>
+						</div>
+						<div class="form-group row">
+							<label for="email" class="col-4 col-form-label">Email</label> 
+							<div class="col-8">
+								<input value="{{patient.user.email}}" class="form-control here" disabled>
+								<small>Not Verified</small>
+							</div>
+						</div>
+						<div class="form-group row">
+							<label for="dob" class="col-4 col-form-label">Date of Birth</label> 
+							<div class="col-8">
+								<input id="dob" name="dob" value="{{patient.date_of_birth}}" class="form-control here" disabled type="text">
+							</div>
+						</div>
+						<div class="form-group row">
+							<label for="mobile" class="col-4 col-form-label">Mobile</label> 
+							<div class="col-8">
+								<input value="{{patient.mobile}}" class="form-control here" disabled>
+							</div>
+						</div>
+						<div class="form-group row">
+							<label for="nhs_number" class="col-4 col-form-label">NHS Number</label> 
+							<div class="col-8">
+								<input id="nhs_number" name="nhs_number" value="{{patient.nhs_number}}" class="form-control here" disabled type="text">
+							</div>
+						</div>
+						<div class="form-group row">
+							<label for="blood_group" class="col-4 col-form-label">Blood Group</label> 
+							<div class="col-8">
+								<input id="blood_group" name="blood_group" value="{{patient.blood_group}}" class="form-control here" disabled type="text">
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="tab-pane" id="address" role="tabpanel">
+			<div class="card-body">
+				<div class="row">
+					<div class="col-md-12">
+						<h4>Address</h4>
+						<hr>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-md-12">
+						<div class="form-group">
+							<form method="post">
+								{% csrf_token %}
+								<input type="text" name="UPDATEPATIENTADDRESS" hidden>
+								<div class="form-group">
+									<label for="address_1"><b>Address Line 1</b></label>
+									<input type="text" class="form-control" value="{{patient.address.address_1}}" disabled>
+								</div>
+								<div class="form-group">
+									<label for="address_2"><b>Address Line 2</b></label>
+									<input type="text" class="form-control" value="{{patient.address.address_2}}" disabled>
+								</div>
+								<div class="row">
+									<div class="col-6">
+										<div class="form-group">
+											<label for="city"><b>City</b></label>
+											<input type="text" class="form-control" value="{{patient.address.city}}" disabled>
+										</div>
+									</div>
+									<div class="col-6">
+										<div class="form-group">
+											<label for="stateProvice"><b>State / Province</b></label>
+											<input type="text" class="form-control" value="{{patient.address.stateProvice}}" disabled>
+										</div>
+									</div>
+								</div>
+								<div class="row">
+									<div class="col-6">
+										<div class="form-group">
+											<label for="postalZip"><b>Postal / Zip Code</b></label>
+											<input type="text" class="form-control" value="{{patient.address.postalZip}}" disabled>
+										</div>
+									</div>
+									<div class="col-6">
+										<div class="form-group">
+											<label for="country"><b>Country</b></label>
+											<input type="text" class="form-control" value="{{patient.address.country.name}}" disabled>
+										</div>
+									</div>
+								</div>
+								<div class="form-group row">
+								</div>
+							</form>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="tab-pane" id="mymedicalrecords" role="tabpanel">
+			<div class="card-body">
+				<div class="row">
+					<div class="col-md-12">
+						<h4>Medical Records</h4>
+						<hr>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-md-12">
+						<div class="form-group">
+							<!-- List of uploaded documents -->
+							{% if documents %}
+							<ul>
+								{% for document in documents %}
+								<li><a href="{{ document.document.url }}" download>{{ document.document.name }}</a>&nbsp;&nbsp;&nbsp;&nbsp;<a href="" onclick="deleteMyMedicalRecords('{{document.id}}');">Delete</a></li>
+								{% endfor %}
+							</ul>
+							{% else %}
+							<p>No documents.</p>
+							{% endif %}
+							<!-- Upload form. Note enctype attribute! -->
+							<form method="post" enctype="multipart/form-data">
+								{% csrf_token %}
+								<input type="text" name="UPLOADMYMEDICALRECORDDOCUMENTS" hidden>
+								<p>{{ form.non_field_errors }}</p>
+								<p>{{ form.docfile.label_tag }} {{ form.docfile.help_text }}</p>
+								<p>
+									{{ form.docfile.errors }}
+									{{ form.docfile }}
+								</p>
+								<p><input type="submit" value="Upload"/></p>
+							</form>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="tab-pane" id="medication" role="tabpanel">
+			<div class="card-body">
+				<div class="row">
+					<div class="col-md-12">
+						<h4>Medication</h4>
+						<hr>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-md-12">
+						<div class="modal fade" id="medicationModal" tabindex="-1" role="dialog" aria-labelledby="medicationModalTitle" aria-hidden="true">
+							<div class="modal-dialog modal-dialog-centered" role="document">
+								<div class="modal-content">
+									<div class="modal-header">
+										<h5 class="modal-title" id="exampleModalLongTitle">Medication</h5>
+										<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+										<span aria-hidden="true">&times;</span>
+										</button>
+									</div>
+									<form method="post">
+										{% csrf_token %}
+										<input type="text" name="Create_GP_Current_Medication" hidden>
+										<div class="modal-body">
+											<div class="form-group">
+												<input type="text" class="form-control" name="name" placeholder="Medication name" required>
+											</div>
+											<div class="form-group">
+												<textarea class="form-control" name="description" placeholder="Medication description" rows="4" required></textarea>
+											</div>
+											<div class="form-group">
+												<label>Start Date</label>
+												<input type="date" class="form-control" id="start_date" name="start_date" required>
+											</div>
+											
+										</div>
+										<div class="modal-footer">
+											<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+											<button type="submit" class="btn btn-primary">Save</button>
+										</div>
+									</form>
+								</div>
+							</div>
+						</div>
+						<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#medicationModal"> Add a medication </button>
+						<br><br>
+						<div class="row" id="list_of_medications">
+							
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
 </div>
-
 <script type="text/javascript">
-   function deleteMyMedicalRecords(document_id){
-      $.ajax({
-         data: {
-            'TASK': 'deleteMyMedicalRecords',
-            'document_id': document_id,
-         },
-         dataType: 'json',
-         success: function (response) {
-            
-         }
-      });
-   }
+	function deleteMyMedicalRecords(document_id){
+		$.ajax({
+			data: {
+				'TASK': 'deleteMyMedicalRecords',
+				'document_id': document_id,
+			},
+			dataType: 'json',
+			success: function (response){}
+		});
+	}
+
+	window.onload = function() {
+		var today = new Date();
+		var dd = today.getDate();
+		var mm = today.getMonth()+1; //January is 0!
+		var yyyy = today.getFullYear();
+
+		if(dd<10) {
+			dd='0'+dd
+		}
+
+		if(mm<10) {
+			mm='0'+mm
+		}
+
+		today = yyyy+'-'+mm+'-'+dd;
+		document.getElementById("start_date").setAttribute("min", today);
+	};
+
+	function Add_Medication() {
+
+		var ml = [];
+
+		{% if gp_medication %}
+
+			{% for g in gp_medication %}
+
+			ml.push({
+				"name": '{{g.name}}',
+				"description": '{{g.description|linebreaks}}',
+				"start_date": '{{g.start_date}}',
+				"prescribed_date": '{{g.prescribed_date}}',
+			});
+				
+			{% endfor %}
+			
+		{% endif %}
+
+		var i,j,temparray,chunk = 2;
+		var nl = [];
+
+		for (i=0,j=ml.length; i<j; i+=chunk) {
+			temparray = ml.slice(i,i+chunk);
+			nl.push(temparray)
+		}
+
+		for (var i = 0; i < nl.length; i++) {
+
+
+			$('#list_of_medications').append(
+				`<div class="row">
+
+					<div class="col-6">
+						<div class="card" style="width: 18rem;">
+							<div class="card-body">
+								<h5 class="card-title">`+ nl[i][0].name +`</h5>
+								<p class="card-text">`+ nl[i][0].description +`</p>
+								<span>Start from: `+ nl[i][0].start_date +`</span>
+								<br>
+								<span>prescribed at: `+ nl[i][0].prescribed_date +`</span>
+							</div>
+						</div>
+					</div>
+					<div class="col-6">
+						<div class="card" style="width: 18rem;">
+							<div class="card-body">
+								<h5 class="card-title">`+ nl[i][1].name +`</h5>
+								<p class="card-text">`+ nl[i][1].description +`</p>
+								<span>Start from: `+ nl[i][1].start_date +`</span>
+								<br>
+								<span>prescribed at: `+ nl[i][1].prescribed_date +`</span>
+							</div>
+						</div>
+					</div>
+
+
+				</div>
+				<br><br>`
+			);
+		}
+	}
+
+	Add_Medication();
 </script>
 {% endblock %}

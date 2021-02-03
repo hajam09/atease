@@ -252,6 +252,7 @@ def patient_profile(request):
 		"patient": patient,
 		"countries": Countries.objects.all(),
 		"notes": Notes.objects.filter(user=request.user),
+		"gp_medication": GPCurrentMedication.objects.filter(prescribed_to=patient),
 	}
 	return render(request,"mainapp/patient_profile.html", context)
 
@@ -382,6 +383,21 @@ def patient_view(request, patient_id):
 	else:
 		form = GPMedicalRecordsForm() # A empty, unbound form
 
+
+	if request.method == "POST" and "Create_GP_Current_Medication" in request.POST and isinstance(account_object, Doctor):
+		name = request.POST['name']
+		description = request.POST['description']
+		start_date = request.POST['start_date']
+
+		GPCurrentMedication.objects.create(
+			prescribed_to = patient,
+			prescribed_by = account_object,
+			name = name,
+			description = description,
+			start_date = start_date,
+		)
+		return redirect('mainapp:patient_view', patient_id=patient_id)
+
 	if request.is_ajax():
 		TASK = request.GET.get('TASK', None)
 
@@ -396,6 +412,7 @@ def patient_view(request, patient_id):
 		"countries": Countries.objects.all(),
 		"form": form,
 		"documents": GPMedicalRecords.objects.filter(prescribed_to=patient),
+		"gp_medication": GPCurrentMedication.objects.filter(prescribed_to=patient),
 	}
 
 	return render(request,"mainapp/patient_view.html", context)
