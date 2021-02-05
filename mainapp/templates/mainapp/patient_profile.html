@@ -62,6 +62,9 @@
         <li class="nav-item">
             <a class="nav-link" data-toggle="tab" href="#gpmedication" role="tab" aria-controls="gpmedication">GP Medication</a>
         </li>
+        <li class="nav-item">
+            <a class="nav-link" data-toggle="tab" href="#mymedication" role="tab" aria-controls="mymedication">My Medication</a>
+        </li>
     </ul>
     <div class="tab-content">
         <div class="tab-pane active" id="profile" role="tabpanel">
@@ -427,6 +430,58 @@
                 </div>
             </div>
         </div>
+        <div class="tab-pane" id="mymedication" role="tabpanel">
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-12">
+                        <h4>My Medication</h4>
+                        <hr>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="modal fade" id="medicationModal" tabindex="-1" role="dialog" aria-labelledby="medicationModalTitle" aria-hidden="true">
+                            <div class="modal-dialog modal-dialog-centered" role="document">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="exampleModalLongTitle">Medication</h5>
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                        </button>
+                                    </div>
+                                    <form method="post">
+                                        {% csrf_token %}
+                                        <input type="text" name="Create_My_Current_Medication" hidden>
+                                        <div class="modal-body">
+                                            <div class="form-group">
+                                                <input type="text" class="form-control" name="name" placeholder="Medication name" required>
+                                            </div>
+                                            <div class="form-group">
+                                                <textarea class="form-control" name="description" placeholder="Medication description" rows="4" required></textarea>
+                                            </div>
+                                            <div class="form-group">
+                                                <label>Start Date</label>
+                                                <input type="date" class="form-control" id="start_date" name="start_date" required>
+                                            </div>
+                                            
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                            <button type="submit" class="btn btn-primary">Save</button>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#medicationModal"> Add a medication </button>
+                        <br><br>
+                        <div class="row" id="list_of_my_medications">
+                            
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 </div>
 <script type="text/javascript">
@@ -443,7 +498,113 @@
     });
     }
 
-    function Add_Medication() {
+    window.onload = function() {
+        var today = new Date();
+        var dd = today.getDate();
+        var mm = today.getMonth()+1; //January is 0!
+        var yyyy = today.getFullYear();
+
+        if(dd<10) {
+            dd='0'+dd
+        }
+
+        if(mm<10) {
+            mm='0'+mm
+        }
+
+        today = yyyy+'-'+mm+'-'+dd;
+        document.getElementById("start_date").setAttribute("min", today);
+    };
+
+    function Add_My_Medication() {
+        var ml = [];
+
+        {% if my_medication %}
+
+            {% for g in my_medication %}
+
+            ml.push({
+                "name": '{{g.name}}',
+                "description": '{{g.description|linebreaks}}',
+                "start_date": '{{g.start_date}}',
+            });
+
+            {% endfor %}
+
+        {% endif %}
+
+        console.log(ml);
+
+        var i,j,temparray,chunk = 2;
+        var nl = [];
+
+        for (i=0,j=ml.length; i<j; i+=chunk) {
+            temparray = ml.slice(i,i+chunk);
+            nl.push(temparray)
+        }
+
+        for (var i = 0; i < nl.length; i++) {
+
+            var second_med_name = nl[i][1] ? nl[i][1].name : null;
+            var second_med_description = nl[i][1] ? nl[i][1].description : null;
+            var second_med_start_date= nl[i][1] ? nl[i][1].start_date : null;
+
+            if (second_med_name == null || second_med_description == null || second_med_start_date == null) {
+
+                $('#list_of_my_medications').append(`
+                    <div class="row">
+
+                        <div class="col-6">
+                            <div class="card" style="width: 18rem;">
+                                <div class="card-body">
+                                    <h5 class="card-title">`+ nl[i][0].name +`</h5>
+                                    <p class="card-text">`+ nl[i][0].description +`</p>
+                                    <span>Start from: `+ nl[i][0].start_date +`</span>
+                                    <br>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div><br><br>
+                `);
+
+            } else {
+
+                $('#list_of_my_medications').append(
+                    `<div class="row">
+
+                        <div class="col-6">
+                            <div class="card" style="width: 18rem;">
+                                <div class="card-body">
+                                    <h5 class="card-title">`+ nl[i][0].name +`</h5>
+                                    <p class="card-text">`+ nl[i][0].description +`</p>
+                                    <span>Start from: `+ nl[i][0].start_date +`</span>
+                                    <br>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="card" style="width: 18rem;">
+                                <div class="card-body">
+                                    <h5 class="card-title">`+ nl[i][1].name +`</h5>
+                                    <p class="card-text">`+ nl[i][1].description +`</p>
+                                    <span>Start from: `+ nl[i][1].start_date +`</span>
+                                    <br>
+                                </div>
+                            </div>
+                        </div>
+
+
+                    </div>
+                    <br><br>`
+                );
+            }
+
+        }
+
+    }
+
+    function Add_GP_Medication() {
 
         var ml = [];
 
@@ -472,40 +633,67 @@
 
         for (var i = 0; i < nl.length; i++) {
 
+            var second_med_name = nl[i][1] ? nl[i][1].name : null;
+            var second_med_description = nl[i][1] ? nl[i][1].description : null;
+            var second_med_start_date= nl[i][1] ? nl[i][1].start_date : null;
+            var second_med_prescribed_date = nl[i][1] ? nl[i][1].prescribed_date : null;
 
-            $('#list_of_medications').append(
-                `<div class="row">
+            if (second_med_name == null || second_med_description == null || second_med_start_date == null || second_med_prescribed_date == null) {
 
-                    <div class="col-6">
-                        <div class="card" style="width: 18rem;">
-                            <div class="card-body">
-                                <h5 class="card-title">`+ nl[i][0].name +`</h5>
-                                <p class="card-text">`+ nl[i][0].description +`</p>
-                                <span>Start from: `+ nl[i][0].start_date +`</span>
-                                <br>
-                                <span>prescribed at: `+ nl[i][0].prescribed_date +`</span>
+                $('#list_of_medications').append(`
+                        <div class="row">
+
+                            <div class="col-6">
+                                <div class="card" style="width: 18rem;">
+                                    <div class="card-body">
+                                        <h5 class="card-title">`+ nl[i][0].name +`</h5>
+                                        <p class="card-text">`+ nl[i][0].description +`</p>
+                                        <span>Start from: `+ nl[i][0].start_date +`</span>
+                                        <br>
+                                        <span>prescribed at: `+ nl[i][0].prescribed_date +`</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div><br><br>
+                    `);
+            } else {
+                $('#list_of_medications').append(
+                    `<div class="row">
+
+                        <div class="col-6">
+                            <div class="card" style="width: 18rem;">
+                                <div class="card-body">
+                                    <h5 class="card-title">`+ nl[i][0].name +`</h5>
+                                    <p class="card-text">`+ nl[i][0].description +`</p>
+                                    <span>Start from: `+ nl[i][0].start_date +`</span>
+                                    <br>
+                                    <span>prescribed at: `+ nl[i][0].prescribed_date +`</span>
+                                </div>
                             </div>
                         </div>
-                    </div>
-                    <div class="col-6">
-                        <div class="card" style="width: 18rem;">
-                            <div class="card-body">
-                                <h5 class="card-title">`+ nl[i][1].name +`</h5>
-                                <p class="card-text">`+ nl[i][1].description +`</p>
-                                <span>Start from: `+ nl[i][1].start_date +`</span>
-                                <br>
-                                <span>prescribed at: `+ nl[i][1].prescribed_date +`</span>
+                        <div class="col-6">
+                            <div class="card" style="width: 18rem;">
+                                <div class="card-body">
+                                    <h5 class="card-title">`+ nl[i][1].name +`</h5>
+                                    <p class="card-text">`+ nl[i][1].description +`</p>
+                                    <span>Start from: `+ nl[i][1].start_date +`</span>
+                                    <br>
+                                    <span>prescribed at: `+ nl[i][1].prescribed_date +`</span>
+                                </div>
                             </div>
                         </div>
+
+
                     </div>
-
-
-                </div>
-                <br><br>`
-            );
+                    <br><br>`
+                );
+            }
+                
         }
     }
 
-    Add_Medication();
+    Add_GP_Medication();
+    Add_My_Medication();
 </script>
 {% endblock %}

@@ -89,7 +89,7 @@ class Notes(models.Model):
 	# Used by the patients
 	user = models.ForeignKey(User, on_delete=models.CASCADE)
 	title = models.CharField(max_length=32)
-	desciption = models.TextField()
+	description = models.TextField()
 	date = models.DateTimeField(auto_now_add=True, blank=True)
 
 	class Meta:
@@ -98,7 +98,7 @@ class Notes(models.Model):
 class MyCurrentMedication(models.Model):
 	user = models.ForeignKey(User, on_delete=models.CASCADE)
 	name = models.CharField(max_length=32)
-	desciption = models.TextField()
+	description = models.TextField()
 	start_date = models.DateField()
 
 	class Meta:

@@ -324,37 +324,65 @@
 
 		for (var i = 0; i < nl.length; i++) {
 
+			var second_med_name = nl[i][1] ? nl[i][1].name : null;
+			var second_med_description = nl[i][1] ? nl[i][1].description : null;
+			var second_med_start_date= nl[i][1] ? nl[i][1].start_date : null;
+			var second_med_prescribed_date = nl[i][1] ? nl[i][1].prescribed_date : null;
 
-			$('#list_of_medications').append(
-				`<div class="row">
+			if (second_med_name == null || second_med_description == null || second_med_start_date == null || second_med_prescribed_date == null) {
 
-					<div class="col-6">
-						<div class="card" style="width: 18rem;">
-							<div class="card-body">
-								<h5 class="card-title">`+ nl[i][0].name +`</h5>
-								<p class="card-text">`+ nl[i][0].description +`</p>
-								<span>Start from: `+ nl[i][0].start_date +`</span>
-								<br>
-								<span>prescribed at: `+ nl[i][0].prescribed_date +`</span>
+				$('#list_of_medications').append(`
+						<div class="row">
+
+							<div class="col-6">
+								<div class="card" style="width: 18rem;">
+									<div class="card-body">
+										<h5 class="card-title">`+ nl[i][0].name +`</h5>
+										<p class="card-text">`+ nl[i][0].description +`</p>
+										<span>Start from: `+ nl[i][0].start_date +`</span>
+										<br>
+										<span>prescribed at: `+ nl[i][0].prescribed_date +`</span>
+									</div>
+								</div>
+							</div>
+
+						</div><br><br>
+					`);
+				
+			} else {
+
+				$('#list_of_medications').append(
+					`<div class="row">
+
+						<div class="col-6">
+							<div class="card" style="width: 18rem;">
+								<div class="card-body">
+									<h5 class="card-title">`+ nl[i][0].name +`</h5>
+									<p class="card-text">`+ nl[i][0].description +`</p>
+									<span>Start from: `+ nl[i][0].start_date +`</span>
+									<br>
+									<span>prescribed at: `+ nl[i][0].prescribed_date +`</span>
+								</div>
 							</div>
 						</div>
-					</div>
-					<div class="col-6">
-						<div class="card" style="width: 18rem;">
-							<div class="card-body">
-								<h5 class="card-title">`+ nl[i][1].name +`</h5>
-								<p class="card-text">`+ nl[i][1].description +`</p>
-								<span>Start from: `+ nl[i][1].start_date +`</span>
-								<br>
-								<span>prescribed at: `+ nl[i][1].prescribed_date +`</span>
+						<div class="col-6">
+							<div class="card" style="width: 18rem;">
+								<div class="card-body">
+									<h5 class="card-title">`+ second_med_name +`</h5>
+									<p class="card-text">`+ second_med_description +`</p>
+									<span>Start from: `+ second_med_start_date +`</span>
+									<br>
+									<span>prescribed at: `+ second_med_prescribed_date +`</span>
+								</div>
 							</div>
 						</div>
+
+
 					</div>
-
-
-				</div>
-				<br><br>`
-			);
+					<br><br>`
+				);
+			}
+				
 		}
 	}
 

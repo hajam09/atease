@@ -214,14 +214,27 @@ def patient_profile(request):
 
 	if request.method == 'POST' and "CREATENOTES" in request.POST:
 		title = request.POST["title"]
-		desciption = request.POST["desciption"]
+		description = request.POST["description"]
 
 		Notes.objects.create(
 			user = request.user,
 			title = title,
-			desciption = desciption,
+			description = description,
 		)
 
+		return redirect('mainapp:patient_profile')
+
+	if request.method == 'POST' and "Create_My_Current_Medication" in request.POST:
+		name = request.POST['name']
+		description = request.POST['description']
+		start_date = request.POST['start_date']
+
+		MyCurrentMedication.objects.create(
+			user = request.user,
+			name = name,
+			description = description,
+			start_date = start_date,
+		)
 		return redirect('mainapp:patient_profile')
 
 
@@ -253,6 +266,7 @@ def patient_profile(request):
 		"countries": Countries.objects.all(),
 		"notes": Notes.objects.filter(user=request.user),
 		"gp_medication": GPCurrentMedication.objects.filter(prescribed_to=patient),
+		"my_medication": MyCurrentMedication.objects.filter(user=request.user),
 	}
 	return render(request,"mainapp/patient_profile.html", context)
 

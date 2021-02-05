@@ -1,29 +1,12 @@
 TODO:
 
 The system shall verify the email address when guest is registering a patient account.
-The system shall display appropriate message if the user enters wrong URL.
-The system shall use facial authentication to verify user against hospital database when linking the account to chosen hospital.
-The system shall make sure all the updates are stored securely on a database.
-Patient makes requesty to the gp and receptionist accepts them.
-Make request to join the GP and attach (documents).
-ON new account creation, GP is emtpy. allow user to make request to join the GP.
 
 
+Patient makes a request (and attach documents) to join the the gp and the receptionist accepts them.
 The system shall allow users to book and cancel appointment.
-\The system shall allow hospital(users) to provide available appointments to patients.
-* List all appointments as a list for the GP and the doctors.
-Use calender for the patients to view their schedule.
-
-
-
-
-
-
- - The system shall allow users to add medication to their profile
- * Not doctor
- * descrption - one to be taken a day or. ..
- * Each medication has one note only.
-
+	- List all appointments as a list for the GP and the doctors.
+	- Use calender for the patients to view their schedule.
 
 - The system shall have a 24-hour live chat service for help.
 * Message between the patient or receptionist on the GP.
@@ -47,6 +30,11 @@ Receptionist of the Gp are only able to edit the opening hours.
 The system shall allow GP doctors(users) to add medical records to specific patient.
 Doctors can only see patients who are in the same GP.
 The system shall allow user to create medical notes.
+The system shall allow users to add medication to their profile
 
 
 DONE:
+
+The system shall display appropriate message if the user enters wrong URL.
+The system shall make sure all the updates are stored securely on a database.
+The system shall use facial authentication to verify user against hospital database when linking the account to chosen hospital.
