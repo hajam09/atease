@@ -114,3 +114,11 @@ class Countries(models.Model):
 
 	def __str__ (self):
 		return str(self.id) + " - " + self.alpha + " - " + self.name
+
+class HealthAdvice(models.Model):
+	title = models.CharField(max_length=64)
+	fact = models.TextField()
+	symptoms = models.TextField()
+
+	class Meta:
+		verbose_name_plural = "HealthAdvice"

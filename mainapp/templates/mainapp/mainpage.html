@@ -1,4 +1,71 @@
 {% extends "mainapp/base.html" %}
 {% load static %}
 {% block content %}
+<div style="height:70px;"></div>
+<div class="container">
+	<div class="row gutters-sm">
+		<div class="col-md-12">
+			<input class="form-control form-control-lg" id="myInput" onkeyup="auto_filter()" type="text" placeholder="Search for health tips.">
+			<div style="height:70px;"></div>
+
+			<table class="table" id="myTable">
+				<thead>
+					<tr>
+						<th scope="col">Title</th>
+						<th scope="col">Fact</th>
+						<th scope="col">Symptoms</th>
+					</tr>
+				</thead>
+				<tbody id="health_advice_table">
+					
+				</tbody>
+			</table>
+		</div>
+	</div>
+</div>
+<script type="text/javascript">
+
+	function display_health_advice() {
+
+		{% for h in health_advice %}
+
+			var title = '{{ h.title }}';
+			var fact = '{{ h.fact|linebreaksbr }}';
+			var symptoms = '{{ h.symptoms|linebreaksbr }}';
+
+			$('#health_advice_table').append(`
+				<tr>
+					<th scope="row">` + title + `</th>
+					<td>` + fact + `</td>
+					<td>` + symptoms + `</td>
+				</tr>
+			`);
+
+		{% endfor %}
+
+	}
+	display_health_advice();
+
+	function auto_filter() {
+		var input, filter, table, tr, td, i, txtValue;
+
+		input = document.getElementById("myInput");
+		filter = input.value.toUpperCase();
+		table = document.getElementById("myTable");
+		tr = table.getElementsByTagName("tr");
+
+		for (i = 0; i < tr.length; i++) {
+			td = tr[i].getElementsByTagName("td")[0];
+
+			if (td) {
+				txtValue = td.textContent || td.innerText;
+				if (txtValue.toUpperCase().indexOf(filter) > -1) {
+					tr[i].style.display = "";
+				} else {
+					tr[i].style.display = "none";
+				}
+			}       
+		}
+	}
+</script>
 {% endblock %}

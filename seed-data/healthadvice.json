@@ -1,0 +1,109 @@
+{
+	"HealthAdvice": [
+	{
+	  "title": "type 2 diabetes",
+	  "fact": " Type 2 diabetes is a common condition that causes the level of sugar (glucose) in the blood to become too high. It can cause symptoms like excessive thirst, needing to pee a lot and tiredness. It can also increase your risk of getting serious problems with your eyes, heart and nerves.",
+	  "symptoms": "losing weight without trying to, cuts or wounds taking longer to heal, blurred vision"
+	},
+	{
+	  "title": "type 1 diabetes",
+	  "fact":"Type 1 diabetes causes the level of glucose (sugar) in your blood to become too high. It happens when your body cannot produce enough of a hormone called insulin, which controls blood glucose. You need daily injections of insulin to keep your blood glucose levels under control.",
+	  "symptoms":"losing weight without trying to, cuts or wounds taking longer to heal, blurred vision"
+	},
+	{
+	  "title":"coronavirus",
+	  "fact":"Coronaviruses are a family of viruses that cause illness in humans and animals. Seven different types have been found in people, including those responsible for the SARS, MERS and COVID-19 epidemics.",
+	  "symptoms":"A high temperature – this means you feel hot to touch on your chest or back (you do not need to measure your temperature). A new, continuous cough – this means coughing a lot for more than an hour, or 3 or more coughing episodes in 24 hours (if you usually have a cough, it may be worse than usual). A loss or change to your sense of smell or taste – this means you have noticed you cannot smell or taste anything, or things smell or taste different to normal."
+	},
+	{
+	  "title":"Ischemic heart disease/coronary artery disease",
+	  "fact":"The deadliest disease in the world is coronary artery disease (CAD). Also called ischemic heart disease, CAD occurs when the blood vessels that supply blood to the heart become narrowed. Untreated CAD can lead to chest pain, heart failure, and arrhythmias.",
+	  "symptoms":"Shortness of breath, Heart palpitations: irregular heartbeats, skipped beats or a “flip-flop” feeling in your chest, A faster-than-normal heartbeat, Dizziness, Nausea, Extreme weakness, Sweating."
+	},
+	{
+	  "title":"Stroke",
+	  "fact":"A stroke occurs when an artery in your brain is blocked or leaks. This causes the oxygen-deprived brain cells to begin dying within minutes. During a stroke, you feel sudden numbness and confusion or have trouble walking and seeing. If left untreated, a stroke can cause long-term disability.",
+	  "symptoms":"Face – the face may have dropped on 1 side, the person may not be able to smile, or their mouth or eye may have dropped. Arms – the person with suspected stroke may not be able to lift both arms and keep them there because of weakness or numbness in 1 arm. Speech – their speech may be slurred or garbled, or the person may not be able to talk at all despite appearing to be awake; they may also have problems understanding what you're saying to them.",
+	},
+	{
+	  "title":"Respiratory tract infections (RTIs)",
+	  "fact": "Respiratory tract infections (RTIs) can affect the sinuses, throat, airways or lungs. Most RTIs get better without treatment, but sometimes you may need to see your GP.",
+	  "symptoms":"A cough – you may bring up mucus (phlegm). Sneezing. A stuffy or runny nose. A sore throat. Headaches. muscle aches. breathlessness, tight chest, or wheezing. a high temperature (fever). feeling generally unwell",
+	},
+    {
+	  "title":"Trachea, bronchus, and lung cancers",
+	  "fact":"Respiratory cancers include cancers of the trachea, larynx, bronchus, and lungs. The main causes are smoking, secondhand smoke, and environmental toxins. But household pollutions such as fuels and mold also contribute.",
+	  "symptoms":"a cough that doesn’t go away after 2 or 3 weeks. a long-standing cough that gets worse. chest infections that keep coming back. coughing up blood. an ache or pain when breathing or coughing. persistent breathlessness. persistent tiredness or lack of energy. loss of appetite or unexplained weight loss",
+	},
+    {
+	  "title":" Alzheimer’s disease and other dementias",
+	  "fact":"Alzheimer’s disease is a progressive disease that destroys memory and interrupts normal mental functions. These include thinking, reasoning, and typical behavior.",
+	  "symptoms":"confusion, disorientation and getting lost in familiar places. difficulty planning or making decisions. problems with speech and language. problems moving around without assistance or performing self-care tasks. personality changes, such as becoming aggressive, demanding and suspicious of others. hallucinations (seeing or hearing things that are not there) and delusions (believing things that are untrue). low mood or anxiety.",
+	},
+    {
+	  "title":"Tuberculosis (TB)",
+	  "fact":"Tuberculosis (TB) is a bacterial infection spread through inhaling tiny droplets from the coughs or sneezes of an infected person. It mainly affects the lungs, but it can affect any part of the body, including the tummy (abdomen), glands, bones and nervous system.",
+	  "symptoms":"a persistent cough that lasts more than 3 weeks and usually brings up phlegm, which may be bloody. weight loss. night sweats. high temperature. tiredness and fatigue. loss of appetite. swellings in the neck.",
+	},
+    {
+	  "title": "Cirrhosis",
+	  "fact":"Cirrhosis is the result of chronic or long-term scarring and damage to the liver. The damage may be the result of a kidney disease, or it can be caused by conditions like hepatitis and chronic alcoholism. A healthy liver filters harmful substances from your blood and sends healthy blood into your body. As substances damage the liver, scar tissue forms. As more scar tissue forms, the liver has to work harder to function properly. Ultimately, the liver may stop working.",
+	  "symptoms": "feel very tired and weak. feel sick (nausea). lose your appetite. lose weight and muscle mass. get red patches on your palms and small, spider-like blood vessels on your skin (spider angiomas) above waist level.",
+	},
+    {
+	  "title":"Addison's disease",
+	  "fact":"Addison's disease, also known as primary adrenal insufficiency or hypoadrenalism, is a rare disorder of the adrenal glands. The adrenal glands are 2 small glands that sit on top of the kidneys. They produce 2 essential hormones: cortisol and aldosterone. The adrenal gland is damaged in Addison's disease, so it does not produce enough cortisol or aldosterone.",
+	  "symptoms":"lack of energy or motivation (fatigue). muscle weakness. low mood. loss of appetite and unintentional weight loss. increased thirst.",
+	},
+    {
+	  "title":"Anal cancer",
+	  "fact":"Anal cancer is a rare type of cancer that affects the anus (the end of the bowel).",
+	  "symptoms":"lack of energy or motivation (fatigue). muscle weakness. low mood. loss of appetite and unintentional weight loss. increased thirst. bleeding from the bottom (rectal bleeding). itching and pain around the anus. small lumps around the anus. a discharge of mucus from the anus. loss of bowel control (bowel incontinence).",
+	},
+    {
+	  "title":"Arthritis",
+	  "fact":"Arthritis is a common condition that causes pain and inflammation in a joint.",
+	  "symptoms":"joint pain, tenderness and stiffness. inflammation in and around the joints. restricted movement of the joints. warm red skin over the affected joint. weakness and muscle wasting.",
+	},
+    {
+	  "title":"Asthma",
+	  "fact":"Asthma is a common lung condition that causes occasional breathing difficulties.",
+	  "symptoms":"a whistling sound when breathing (wheezing). Breathlessness. a tight chest, which may feel like a band is tightening around it. Coughing.",
+	},
+    {
+	  "title":"Binge eating disorder",
+	  "fact":"Binge eating is an eating disorder where a person feels they have to overeat through regular binges.",
+	  "symptoms":"you eat much faster than normal. you eat until you feel uncomfortably full. you eat a large amount of food when you are not hungry. you eat alone or secretly due to being embarrassed about the amount of food you are consuming. you have feelings of guilt, shame or disgust afterwards.",
+	},
+    {
+	  "title":"Bladder cancer",
+	  "fact":"Bladder cancer is where a growth of abnormal tissue, known as a tumour, develops in the bladder lining. In some cases, the tumour spreads into the bladder muscle.",
+	  "symptoms":"a need to urinate on a more frequent basis. sudden urges to urinate. a burning sensation when passing urine. pelvic pain. bone pain. unintentional weight loss. swelling of the legs.",
+	},
+    {
+	  "title":"Bowel cancer",
+	  "fact":"Bowel cancer is a general term for cancer that begins in the large bowel. Depending on where the cancer starts, bowel cancer is sometimes called colon or rectal cancer.",
+	  "symptoms": "persistent blood in your poo – that happens for no obvious reason or is associated with a change in bowel habit. a persistent change in your bowel habit – which is usually having to poo more and your poo may also become more runny. persistent lower abdominal (tummy) pain, bloating or discomfort – that's always caused by eating and may be associated with loss of appetite or significant unintentional weight loss.",
+	},
+    {
+	  "title":"Common cold",
+	  "fact":"You can often treat a cold without seeing a GP. You should begin to feel better in about a week or 2.",
+	  "symptoms":"a blocked or runny nose. a sore throat. Headaches. muscle aches. Coughs. Sneezing. a raised temperature. pressure in your ears and face. loss of taste and smell.",
+	},
+    {
+	  "title":"Gum disease",
+	  "fact":"Gum disease is a very common condition where the gums become swollen, sore or infected.",
+	  "symptoms":"red and swollen gums. bleeding gums after brushing or flossing your teeth. bad breath (halitosis). an unpleasant taste in your mouth. loose teeth that can make eating difficult. collections of pus that develop under your gums or teeth (gum abscesses).",
+	},
+    {
+	  "title":"Hay fever",
+	  "fact":"Hay fever is usually worse between late March and September, especially when it's warm, humid and windy. This is when the pollen count is at its highest.",
+	  "symptoms":"sneezing and coughing. a runny or blocked nose. itchy, red or watery eyes. itchy throat, mouth, nose and ears. loss of smell. pain around your temples and forehead. Headache. Earache. feeling tired.",
+	},
+    {
+	  "title":"Kidney cancer",
+	  "fact":"Kidney cancer, also called renal cancer, is one of the most common types of cancer in the UK.",
+	  "symptoms":"blood in your pee – you may notice your pee is darker than usual or reddish in colour. a persistent pain in your lower back or side, just below your ribs. a lump or swelling in your side (although kidney cancer is often too small to feel). extreme tiredness. loss of appetite and unintentional weight loss. persistent high blood pressure (hypertension). a high temperature. night sweats. in men, swelling of the veins in the testicles. swollen glands in your neck. bone pain. coughing up blood.",
+	},
+	]
+}

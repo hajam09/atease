@@ -77,7 +77,10 @@ def signup(request):
 	return render(request,"mainapp/signup.html", {})
 
 def mainpage(request):
-	return render(request,"mainapp/mainpage.html", {})
+	context = {
+		"health_advice": HealthAdvice.objects.all()
+	}
+	return render(request,"mainapp/mainpage.html", context)
 
 @login_required
 def create_profile(request):
@@ -106,7 +109,7 @@ def create_profile(request):
 			"address_1": request.POST["address_1"].strip().title(),
 			"address_2": request.POST["address_2"].strip().title(),
 			"city": request.POST["city"].strip().title(),
-			"stateProvice": request.POST["stateProvice"].strip().title(),
+			"stateProvince": request.POST["stateProvince"].strip().title(),
 			"postalZip": request.POST["postalZip"].strip().upper(),
 			"country": {
 				"alpha": country.alpha,
@@ -201,7 +204,7 @@ def patient_profile(request):
 			"address_1": request.POST["address_1"].strip().title(),
 			"address_2": request.POST["address_2"].strip().title(),
 			"city": request.POST["city"].strip().title(),
-			"stateProvice": request.POST["stateProvice"].strip().title(),
+			"stateProvince": request.POST["stateProvince"].strip().title(),
 			"postalZip": request.POST["postalZip"].strip().upper(),
 			"country": {
 				"alpha": country.alpha,

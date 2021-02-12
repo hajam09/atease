@@ -49,7 +49,7 @@ def install_patients():
 			"address_1": address_1,
 			"address_2": fake.unique.last_name(),
 			"city": "London",
-			"stateProvice": "Essex",
+			"stateProvince": "Essex",
 			"postalZip": postalZip,
 			"country": {
 				"alpha": "GB",
@@ -111,7 +111,7 @@ def install_gp():
 			"address_1": address_1,
 			"address_2": fake.unique.last_name(),
 			"city": "London",
-			"stateProvice": "Essex",
+			"stateProvince": "Essex",
 			"postalZip": postalZip,
 			"country": {
 				"alpha": "GB",

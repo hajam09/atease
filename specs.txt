@@ -1,22 +1,17 @@
 TODO:
 
 The system shall verify the email address when guest is registering a patient account.
-
-
 Patient makes a request (and attach documents) to join the the gp and the receptionist accepts them.
 The system shall allow users to book and cancel appointment.
 	- List all appointments as a list for the GP and the doctors.
 	- Use calender for the patients to view their schedule.
+	- Allow the doctor to create a time sheet in calender for appointment times.
+	- Display the times on the GP Request appointment.
+	- Block the calender slot if the slot is filled.
+	- Allow patient to book 10 mins appointment time.
+	- Create the record, and display it on the patients profile and doctor profile.
 
-- The system shall have a 24-hour live chat service for help.
-* Message between the patient or receptionist on the GP.
-* Only to discuss service issues, like appointment bookings or altercation.
-
-
-The system shall provide health related article to the users Core
-The system shall allow users to search for common symptoms Core
-
-
+- The system shall have a 24-hour live chat service between the patient and receptionist.
 
 TESTING NEEDED:
 The system shall allow guest to create a patient account.
@@ -31,6 +26,8 @@ The system shall allow GP doctors(users) to add medical records to specific pati
 Doctors can only see patients who are in the same GP.
 The system shall allow user to create medical notes.
 The system shall allow users to add medication to their profile
+The system shall provide health related article to the users.
+The system shall allow users to search for common symptoms.
 
 
 DONE:
