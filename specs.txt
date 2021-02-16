@@ -1,5 +1,4 @@
 TODO:
-
 The system shall verify the email address when guest is registering a patient account.
 Patient makes a request (and attach documents) to join the the gp and the receptionist accepts them.
 The system shall allow users to book and cancel appointment.
@@ -12,6 +11,9 @@ The system shall allow users to book and cancel appointment.
 	- Create the record, and display it on the patients profile and doctor profile.
 
 - The system shall have a 24-hour live chat service between the patient and receptionist.
+_ Delete files from the folder.
+- Delete notes.
+- Allow patiens to view medical records added by doctor.
 
 TESTING NEEDED:
 The system shall allow guest to create a patient account.
@@ -29,9 +31,7 @@ The system shall allow users to add medication to their profile
 The system shall provide health related article to the users.
 The system shall allow users to search for common symptoms.
 
-
 DONE:
-
 The system shall display appropriate message if the user enters wrong URL.
 The system shall make sure all the updates are stored securely on a database.
 The system shall use facial authentication to verify user against hospital database when linking the account to chosen hospital.
