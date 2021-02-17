@@ -9,6 +9,7 @@ from .models import *
 from .utils import *
 from .forms import MyMedicalRecordsForm, GPMedicalRecordsForm
 import json
+import datetime
 
 def login(request):
 
@@ -263,6 +264,43 @@ def patient_profile(request):
 		MyCurrentMedication.objects.get(id=my_medication_id).delete()
 		return redirect('mainapp:patient_profile')
 
+	if request.method == 'POST' and "CreateAppointment" in request.POST:
+		# the patient is creating an appointment via the calender.
+		appointmentTime = request.POST['appointmentTime']
+		print(appointmentTime)
+
+		# get all the doctor who work in the patient gp.
+		_all_doc = Doctor.objects.filter(works_at=patient.patient_at)
+
+		num_to_weekday = {
+			0: 'monday',
+			1: 'tuesday',
+			2: 'wednesday',
+			3: 'thursday',
+			4: 'friday',
+			5: 'saturday',
+			6: 'sunday'
+		}
+
+		# if multiple doctors, then check if the appointment is in working hours and no other appointment is made for that doctor in that time.
+		for doc in _all_doc:
+			work_hrs = doc.working_hours
+			_app_time_parsed = appointmentTime.split("T")
+			_app_time_parsed_date = _app_time_parsed[0].split("-")
+			_app_time_parsed_time = _app_time_parsed[1].split(":")
+			_to_parse_date_time = datetime.datetime(int(_app_time_parsed_date[0]), int(_app_time_parsed_date[1]), int(_app_time_parsed_date[2]),
+				int(_app_time_parsed_time[0]), int(_app_time_parsed_time[1]), 0, 0)
+			_weekday = num_to_weekday[_to_parse_date_time.weekday()]
+
+			if int(_app_time_parsed_time[0]) >= int(work_hrs[_weekday]["from"].split(":")[0]) and int(_app_time_parsed_time[0]) <= int(work_hrs[_weekday]["to"].split(":")[0]):
+				# the time is accepted and need to check if that slot is free for any doctor.
+				if not Appointments.objects.filter(doctor=doc, user=request.user, time=appointmentTime).exists():
+					Appointments.objects.create(doctor=doc, user=request.user, time=appointmentTime)
+					print("appoiuntment created")
+					return redirect('mainapp:patient_profile')
+
+		# return redirect('mainapp:patient_profile')
+
 	if request.is_ajax():
 		TASK = request.GET.get('TASK', None)
 
@@ -290,8 +328,22 @@ def doctor_profile(request):
 		doctor = Doctor.objects.get(user=request.user)
 	except Doctor.DoesNotExist:
 		raise e
+
+	appointments = Appointments.objects.filter(doctor=doctor)
+	data = []
+	# '2021-02-16T16:00:00'
+	for a in appointments:
+		startTime = a.time
+		endTime = startTime + datetime.timedelta(minutes = 10)
+		data.append({
+			"title": a.user.get_full_name(),
+			"start": startTime.strftime("%Y-%m-%dT%H:%M:00"),
+			"end": endTime.strftime("%Y-%m-%dT%H:%M:00"),
+		})
+	print(data)
 	context = {
-		"doctor": doctor
+		"doctor": doctor,
+		"appointments": data
 	}
 	return render(request,"mainapp/doctor_profile.html", context)
 

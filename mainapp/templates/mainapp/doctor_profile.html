@@ -48,19 +48,19 @@
 <div class="container">
    <ul class="nav nav-tabs" id="myTab" role="tablist">
       <li class="nav-item">
-         <a class="nav-link active" data-toggle="tab" href="#profile" role="tab" aria-controls="profile">My Profile</a>
+         <a class="nav-link" data-toggle="tab" href="#profile" role="tab" aria-controls="profile">My Profile</a>
       </li>
       <li class="nav-item">
          <a class="nav-link" data-toggle="tab" href="#mygp" role="tab" aria-controls="mygp">My GP</a>
       </li>
       <li class="nav-item">
-         <a class="nav-link" data-toggle="tab" href="#appointments" role="tab" aria-controls="appointments">My Appointments</a>
+         <a class="nav-link active" data-toggle="tab" href="#appointments" role="tab" aria-controls="appointments">My Appointments</a>
       </li>
       
       
    </ul>
    <div class="tab-content">
-      <div class="tab-pane active" id="profile" role="tabpanel">
+      <div class="tab-pane" id="profile" role="tabpanel">
          <div class="card-body">
             <div class="row">
                <div class="col-md-12">
@@ -200,7 +200,9 @@
             </div>
          </div>
       </div>
-      <div class="tab-pane" id="messages" role="tabpanel">.3..</div>
+      <div class="tab-pane active" id="appointments" role="tabpanel">
+         <div id='calendar'></div>
+      </div>
       
    </div>
 </div>
@@ -218,5 +220,69 @@
          }
       });
    }
+
+   function renderCalenderView() {
+
+      var event = [];
+
+      {% if appointments %}
+
+      {% for a in appointments  %}
+
+      console.log('{{a.title}}');
+
+         event.push({
+            title: '{{a.title}}',
+            start: '{{a.start}}',
+            end: '{{a.end}}',
+         })
+         
+      {% endfor %}
+         
+      {% endif %}
+
+      console.log(event);
+
+      var calendarEl = document.getElementById('calendar');
+
+      var calendar = new FullCalendar.Calendar(calendarEl, {
+         initialView: 'timeGridWeek',
+         headerToolbar: {
+            left: 'prev,next today',
+            center: 'title',
+            right: 'dayGridMonth,timeGridWeek,timeGridDay'
+         },
+         selectable: true,
+         slotDuration: '00:10:00',
+         businessHours: {
+            daysOfWeek: [ 1, 2, 3, 4, 5 ],
+            startTime: '08:00',
+            endTime: '18:00'
+         },
+         events: event //[
+            // {
+            //    title: 'John Wick',
+            //    start: '2021-02-16T16:00:00',
+            //    end: '2021-02-16T16:10:00',
+            // },
+            // {
+            //    title: 'Example2',
+            //    start: '2021-02-16',
+            //    end: '2021-02-20T16:00:00',
+            // },
+            // {
+            //    title: 'Example3',
+            //    start: '2021-02-16',
+            //    end: '2021-02-20T16:00:00',
+            //    url: 'http://google.com/'
+            // },
+         //]
+      });
+
+      calendar.render();
+   }
+
+   renderCalenderView();
+
 </script>
 {% endblock %}
