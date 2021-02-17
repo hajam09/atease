@@ -39,6 +39,17 @@
     }
 </style>
 <div style="height:70px;"></div>
+{% if messages %}
+    {% for message in messages %}
+        {% if message.tags == "success" %}
+            <div style="color: black; text-align: center;" class="alert alert-success" role="alert">{{message}}</div>
+        {% elif message.tags == "error" %}
+            <div style="color: black; text-align: center;" class="alert alert-danger" role="alert">{{message}}</div>
+        {% else %}
+            <div style="color: black; text-align: center;" class="alert alert-info" role="alert">{{message}}</div>
+        {% endif %}
+    {% endfor %}
+    {% endif %}
 <div class="container">
     <ul class="nav nav-tabs" id="myTab" role="tablist">
         <li class="nav-item">
@@ -791,6 +802,40 @@
 
     function renderCalenderView() {
 
+        var event = [];
+
+      {% if appointments %}
+
+      {% for a in appointments  %}
+
+      console.log('{{a.title}}');
+
+         event.push({
+            title: '{{a.title}}',
+            start: '{{a.start}}',
+            end: '{{a.end}}',
+         })
+         
+      {% endfor %}
+         
+      {% endif %}
+
+      // {% if other_appointments %}
+
+      // {% for b in other_appointments  %}
+
+      // console.log('{{b.title}}');
+
+      //    event.push({
+      //       title: '{{b.title}}',
+      //       start: '{{b.start}}',
+      //       end: '{{b.end}}',
+      //    })
+         
+      // {% endfor %}
+         
+      // {% endif %}
+
       var calendarEl = document.getElementById('calendar');
 
       var calendar = new FullCalendar.Calendar(calendarEl, {
@@ -802,7 +847,12 @@
          },
          selectable: true,
          slotDuration: '00:10:00',
-         events: [
+         businessHours: {
+            daysOfWeek: [ 1, 2, 3, 4, 5 ],
+            startTime: '08:00',
+            endTime: '18:00'
+         },
+         events: event //[
             // {
             //    title: 'John Wick',
             //    start: '2021-02-17T16:00:00',
@@ -819,7 +869,7 @@
             //    end: '2021-02-20T16:00:00',
             //    url: 'http://google.com/'
             // },
-         ]
+         //]
       });
 
       calendar.render();

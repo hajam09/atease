@@ -10,6 +10,7 @@ from .utils import *
 from .forms import MyMedicalRecordsForm, GPMedicalRecordsForm
 import json
 import datetime
+from django.contrib import messages
 
 def login(request):
 
@@ -294,10 +295,17 @@ def patient_profile(request):
 
 			if int(_app_time_parsed_time[0]) >= int(work_hrs[_weekday]["from"].split(":")[0]) and int(_app_time_parsed_time[0]) <= int(work_hrs[_weekday]["to"].split(":")[0]):
 				# the time is accepted and need to check if that slot is free for any doctor.
-				if not Appointments.objects.filter(doctor=doc, user=request.user, time=appointmentTime).exists():
+				appointmentCreated = False
+				if not Appointments.objects.filter(doctor=doc, time=appointmentTime).exists():
 					Appointments.objects.create(doctor=doc, user=request.user, time=appointmentTime)
 					print("appoiuntment created")
-					return redirect('mainapp:patient_profile')
+					appointmentCreated = True
+					break
+
+		if appointmentCreated == False:
+			# display this message in the html.
+			messages.add_message(request,messages.SUCCESS,"Couldn't create an appontment for this time. Try different time.")
+		return redirect('mainapp:patient_profile')
 
 		# return redirect('mainapp:patient_profile')
 
@@ -310,6 +318,34 @@ def patient_profile(request):
 			instance.delete()
 			return HttpResponse(json.dumps({}), content_type="application/json")
 
+	# this user's appointment
+	appointments = Appointments.objects.filter(user=request.user)
+	appointments_data = []
+	for a in appointments:
+		startTime = a.time
+		endTime = startTime + datetime.timedelta(minutes = 10)
+		appointments_data.append({
+			"title": a.doctor.user.get_full_name(),
+			"start": startTime.strftime("%Y-%m-%dT%H:%M:00"),
+			"end": endTime.strftime("%Y-%m-%dT%H:%M:00"),
+		})
+
+	# get blocked appointments.
+	# get all the doctor who work in the patient gp.
+	# _all_doc = Doctor.objects.filter(works_at=patient.patient_at)
+	# appointments_data2 = []
+	# for d in _all_doc:
+	# 	_appointments = Appointments.objects.filter(doctor=d)
+	# 	for a in _appointments:
+	# 		startTime = a.time
+	# 		endTime = startTime + datetime.timedelta(minutes = 10)
+	# 		appointments_data2.append({
+	# 			"title": a.user.get_full_name(),
+	# 			"start": startTime.strftime("%Y-%m-%dT%H:%M:00"),
+	# 			"end": endTime.strftime("%Y-%m-%dT%H:%M:00"),
+	# 		})
+
+
 	context = {
 		"documents": MyMedicalRecords.objects.filter(user=request.user),
 		'form': form,
@@ -319,6 +355,8 @@ def patient_profile(request):
 		"gp_medication": GPCurrentMedication.objects.filter(prescribed_to=patient),
 		"my_medication": MyCurrentMedication.objects.filter(user=request.user),
 		"gp_medical_record_documents": GPMedicalRecords.objects.filter(prescribed_to=patient, access_to_patient=True),
+		"appointments": appointments_data,
+		# "other_appointments": appointments_data2,
 	}
 	return render(request,"mainapp/patient_profile.html", context)
 
