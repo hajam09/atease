@@ -57,6 +57,9 @@
             <a class="nav-link" data-toggle="tab" href="#mymedicalrecords" role="tab" aria-controls="mymedicalrecords">My Medical Records</a>
         </li>
         <li class="nav-item">
+            <a class="nav-link" data-toggle="tab" href="#gpmedicalrecords" role="tab" aria-controls="gpmedicalrecords">GP Medical Records</a>
+        </li>
+        <li class="nav-item">
             <a class="nav-link" data-toggle="tab" href="#mynotes" role="tab" aria-controls="mynotes">My Notes</a>
         </li>
         <li class="nav-item">
@@ -343,6 +346,34 @@
                                 </p>
                                 <p><input type="submit" value="Upload"/></p>
                             </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="tab-pane" id="gpmedicalrecords" role="tabpanel">
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-12">
+                        <h4>GP Medical Records</h4>
+                        <hr>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <!-- List of uploaded documents -->
+                            {% if gp_medical_record_documents %}
+                            <ul>
+                                {% for document in gp_medical_record_documents %}
+                                    <li>
+                                        <a href="{{ document.document.url }}" download>{{ document.document.name }}</a>
+                                    </li>
+                                {% endfor %}
+                            </ul>
+                            {% else %}
+                            <p>No documents shared by you GP.</p>
+                            {% endif %}
                         </div>
                     </div>
                 </div>

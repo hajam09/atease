@@ -280,6 +280,7 @@ def patient_profile(request):
 		"notes": Notes.objects.filter(user=request.user),
 		"gp_medication": GPCurrentMedication.objects.filter(prescribed_to=patient),
 		"my_medication": MyCurrentMedication.objects.filter(user=request.user),
+		"gp_medical_record_documents": GPMedicalRecords.objects.filter(prescribed_to=patient, access_to_patient=True),
 	}
 	return render(request,"mainapp/patient_profile.html", context)
 
@@ -435,6 +436,20 @@ def patient_view(request, patient_id):
 			document_id = request.GET.get('document_id', None)
 			instance = GPMedicalRecords.objects.get(id=document_id)
 			instance.delete()
+			return HttpResponse(json.dumps({}), content_type="application/json")
+
+		if TASK == 'allowGPMedicalRecordsAccessToPatient':
+			document_id = request.GET.get('document_id', None)
+			instance = GPMedicalRecords.objects.get(id=document_id)
+			instance.access_to_patient = True
+			instance.save()
+			return HttpResponse(json.dumps({}), content_type="application/json")
+
+		if TASK == 'denyGPMedicalRecordsAccessToPatient':
+			document_id = request.GET.get('document_id', None)
+			instance = GPMedicalRecords.objects.get(id=document_id)
+			instance.access_to_patient = False
+			instance.save()
 			return HttpResponse(json.dumps({}), content_type="application/json")
 
 	context = {

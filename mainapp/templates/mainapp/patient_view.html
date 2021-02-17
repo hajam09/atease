@@ -188,7 +188,19 @@
 							{% if documents %}
 							<ul>
 								{% for document in documents %}
-								<li><a href="{{ document.document.url }}" download>{{ document.document.name }}</a>&nbsp;&nbsp;&nbsp;&nbsp;<a href="" onclick="deleteMyMedicalRecords('{{document.id}}');">Delete</a></li>
+								<li>
+									<a href="{{ document.document.url }}" download>{{ document.document.name }}</a>
+									&nbsp;&nbsp;&nbsp;&nbsp;
+									<a href="" onclick="deleteMyMedicalRecords('{{document.id}}');">Delete</a>
+									&nbsp;&nbsp;&nbsp;&nbsp;
+									{% if document.access_to_patient %}
+										Allow access to patient
+										<input type="checkbox" id="allow_deny_access_{{document.id}}" onclick="denyAccess('{{document.id}}');" checked>
+									{% else %}
+										Allow access to patient
+										<input type="checkbox" id="allow_deny_access_{{document.id}}" onclick="allowAccess('{{document.id}}');">
+									{% endif %}
+								</li>
 								{% endfor %}
 							</ul>
 							{% else %}
@@ -389,6 +401,33 @@
 			}
 				
 		}
+	}
+
+	function allowAccess(document_id) {
+
+		$.ajax({
+			data: {
+				'TASK': 'allowGPMedicalRecordsAccessToPatient',
+				'document_id': document_id,
+			},
+			dataType: 'json',
+			success: function (response){}
+		});
+
+		$("#allow_deny_access_"+document_id).attr("onclick","denyAccess("+document_id+")");
+	}
+
+	function denyAccess(document_id) {
+		$.ajax({
+			data: {
+				'TASK': 'denyGPMedicalRecordsAccessToPatient',
+				'document_id': document_id,
+			},
+			dataType: 'json',
+			success: function (response){}
+		});
+
+		$("#allow_deny_access_"+document_id).attr("onclick","allowAccess("+document_id+")");
 	}
 
 	Add_Medication();

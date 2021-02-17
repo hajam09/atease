@@ -12,8 +12,7 @@ The system shall allow users to book and cancel appointment.
 
 - The system shall have a 24-hour live chat service between the patient and receptionist.
 _ Delete files from the folder.
-- Delete notes.
-- Allow patiens to view medical records added by doctor.
+
 
 TESTING NEEDED:
 The system shall allow guest to create a patient account.
@@ -30,6 +29,7 @@ The system shall allow user to create medical notes.
 The system shall allow users to add medication to their profile
 The system shall provide health related article to the users.
 The system shall allow users to search for common symptoms.
+Allow patiens to view medical records added by doctor.
 
 DONE:
 The system shall display appropriate message if the user enters wrong URL.

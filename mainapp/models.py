@@ -70,6 +70,7 @@ class GPMedicalRecords(models.Model):
 	prescribed_to = models.ForeignKey(Patient, on_delete=models.CASCADE)
 	prescribed_by = models.ForeignKey(Doctor, on_delete=models.CASCADE)
 	document = models.FileField(upload_to='gpMedicalRecords/', blank=True, null=True,)
+	access_to_patient = models.BooleanField(default=False)
 
 	class Meta:
 		verbose_name_plural = "GPMedicalRecords"
