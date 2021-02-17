@@ -395,6 +395,7 @@
                                 <tr>
                                     <th scope="col">Title</th>
                                     <th scope="col">Description</th>
+                                    <th scope="col">Actions</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -402,6 +403,23 @@
                                 <tr>
                                     <td>{{n.title}}</td>
                                     <td>{{n.description}}</td>
+                                    <td>
+                                        <div class="dropdown">
+                                            <span class="dropdown-toggle" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                                ...
+                                            </span>
+                                            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                                <a class="dropdown-item" href="#">
+                                                    <form method="post">
+                                                        {% csrf_token %}
+                                                        <input type="text" name="DELETENOTES" hidden>
+                                                        <input type="text" name="notes_id" value="{{n.id}}" hidden>
+                                                        <input type="submit" value="Delete">
+                                                    </form>
+                                                </a>
+                                            </div>
+                                        </div>
+                                    </td>
                                 </tr>
                                 {% endfor %}
                             </tbody>
@@ -524,6 +542,7 @@
             {% for g in my_medication %}
 
             ml.push({
+                "pk": '{{g.pk}}',
                 "name": '{{g.name}}',
                 "description": '{{g.description|linebreaks}}',
                 "start_date": '{{g.start_date}}',
@@ -560,6 +579,7 @@
                                     <h5 class="card-title">`+ nl[i][0].name +`</h5>
                                     <p class="card-text">`+ nl[i][0].description +`</p>
                                     <span>Start from: `+ nl[i][0].start_date +`</span>
+                                    <form method="post"> {% csrf_token %} <input type="text" name="DELETE_my_medication" hidden> <input type="text" name="my_medication_id" value="`+ nl[i][0].pk +`" hidden> <input type="submit" value="Delete"> </form>
                                     <br>
                                 </div>
                             </div>
@@ -579,6 +599,7 @@
                                     <h5 class="card-title">`+ nl[i][0].name +`</h5>
                                     <p class="card-text">`+ nl[i][0].description +`</p>
                                     <span>Start from: `+ nl[i][0].start_date +`</span>
+                                    <form method="post"> {% csrf_token %} <input type="text" name="DELETE_my_medication" hidden> <input type="text" name="my_medication_id" value="`+ nl[i][0].pk +`" hidden> <input type="submit" value="Delete"> </form>
                                     <br>
                                 </div>
                             </div>
@@ -589,6 +610,7 @@
                                     <h5 class="card-title">`+ nl[i][1].name +`</h5>
                                     <p class="card-text">`+ nl[i][1].description +`</p>
                                     <span>Start from: `+ nl[i][1].start_date +`</span>
+                                    <form method="post"> {% csrf_token %} <input type="text" name="DELETE_my_medication" hidden> <input type="text" name="my_medication_id" value="`+ nl[i][1].pk +`" hidden> <input type="submit" value="Delete"> </form>
                                     <br>
                                 </div>
                             </div>

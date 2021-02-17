@@ -253,6 +253,16 @@ def patient_profile(request):
 	else:
 		form = MyMedicalRecordsForm() # A empty, unbound form
 
+	if request.method == 'POST' and "DELETENOTES" in request.POST:
+		notes_id = request.POST['notes_id']
+		Notes.objects.get(id=notes_id).delete()
+		return redirect('mainapp:patient_profile')
+
+	if request.method == 'POST' and "DELETE_my_medication" in request.POST:
+		my_medication_id = request.POST['my_medication_id']
+		MyCurrentMedication.objects.get(id=my_medication_id).delete()
+		return redirect('mainapp:patient_profile')
+
 	if request.is_ajax():
 		TASK = request.GET.get('TASK', None)
 
@@ -345,15 +355,13 @@ def gp_view(request):
 		patient_name = patient_name.split(" ")
 		first_name = ""
 		last_name = ""
-		print(patient_name)
 		
 		if len(patient_name) == 1:
 			first_name = patient_name[0]
 
-		if len(patient_name) == 2:
+		if len(patient_name) >= 2:
 			first_name = patient_name[0]
-			last_name = patient_name[1]
-
+			last_name = " ".join(patient_name[1:])
 
 		# Get all the patients within the gp of the authenticated user.
 		if account_object:
@@ -413,6 +421,11 @@ def patient_view(request, patient_id):
 			description = description,
 			start_date = start_date,
 		)
+		return redirect('mainapp:patient_view', patient_id=patient_id)
+
+	if request.method == "POST" and "DELETE_gp_medication" in request.POST and isinstance(account_object, Doctor):
+		gp_medication_id = request.POST['gp_medication_id']
+		GPCurrentMedication.objects.get(id=gp_medication_id).delete()
 		return redirect('mainapp:patient_view', patient_id=patient_id)
 
 	if request.is_ajax():

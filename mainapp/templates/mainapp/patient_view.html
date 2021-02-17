@@ -304,6 +304,7 @@
 			{% for g in gp_medication %}
 
 			ml.push({
+				"pk": '{{g.pk}}',
 				"name": '{{g.name}}',
 				"description": '{{g.description|linebreaks}}',
 				"start_date": '{{g.start_date}}',
@@ -324,6 +325,7 @@
 
 		for (var i = 0; i < nl.length; i++) {
 
+			var second_med_pk = nl[i][1] ? nl[i][1].pk : null;
 			var second_med_name = nl[i][1] ? nl[i][1].name : null;
 			var second_med_description = nl[i][1] ? nl[i][1].description : null;
 			var second_med_start_date= nl[i][1] ? nl[i][1].start_date : null;
@@ -342,6 +344,7 @@
 										<span>Start from: `+ nl[i][0].start_date +`</span>
 										<br>
 										<span>prescribed at: `+ nl[i][0].prescribed_date +`</span>
+										<form method="post"> {% csrf_token %} <input type="text" name="DELETE_gp_medication" hidden> <input type="text" name="gp_medication_id" value="`+ nl[i][0].pk +`" hidden> <input type="submit" value="Delete"> </form>
 									</div>
 								</div>
 							</div>
@@ -362,6 +365,7 @@
 									<span>Start from: `+ nl[i][0].start_date +`</span>
 									<br>
 									<span>prescribed at: `+ nl[i][0].prescribed_date +`</span>
+									<form method="post"> {% csrf_token %} <input type="text" name="DELETE_gp_medication" hidden> <input type="text" name="gp_medication_id" value="`+ nl[i][0].pk +`" hidden> <input type="submit" value="Delete"> </form>
 								</div>
 							</div>
 						</div>
@@ -373,6 +377,7 @@
 									<span>Start from: `+ second_med_start_date +`</span>
 									<br>
 									<span>prescribed at: `+ second_med_prescribed_date +`</span>
+									<form method="post"> {% csrf_token %} <input type="text" name="DELETE_gp_medication" hidden> <input type="text" name="gp_medication_id" value="`+ second_med_pk +`" hidden> <input type="submit" value="Delete"> </form>
 								</div>
 							</div>
 						</div>
