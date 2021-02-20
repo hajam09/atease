@@ -17,16 +17,19 @@ def install_patients():
 	list_of_patients = []
 	all_gps = GeneralPractice.objects.all()
 
-	for i in range(101):
+	for i in range(1):
 		fake = Faker()
 		firstname = fake.unique.first_name()
 		lastname = fake.unique.last_name()
 		email = firstname+'.'+lastname+'@yahoo.com'
-		password = "A1b2c3d5e6"
+		email = email.lower()
+		password = "A1b2C3d4E5f6G7h"
 
-		user = User.objects.create(
-			username=email, email=email, password=password, first_name=firstname, last_name=lastname
-		)
+		if User.objects.filter(username=email).exists():
+			continue
+
+		user = User.objects.create_user(username=email, email=email, password=password, first_name=firstname, last_name=lastname)
+		user.save()
 
 		address_1 = str(randint(1, 100)) + " " + fake.unique.first_name() + " " + "Road"
 		alphabet = list(string.ascii_uppercase)
@@ -188,6 +191,6 @@ def install_countries():
 	print("Countries table created and populated")
 	return
 
-install_countries()
-install_gp()
-install_patients()
+# install_countries()
+# install_gp()
+# install_patients()
