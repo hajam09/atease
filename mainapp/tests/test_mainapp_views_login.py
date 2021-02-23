@@ -22,12 +22,11 @@ class TestViewLogin(TestCase):
 		self.assertEquals(response.status_code, 200)
 		self.assertTemplateUsed(response, "mainapp/login.html")
 
-	@skip("Not working")
 	def test_login_authenticate_valid_user(self):
 		context = {
 			"LOGIN": "",
 			"email": self.user_1.email,
-			"password": "A1b2c3d5e6",
+			"password": "A1b2C3d4E5f6G7h",
 		}
 		response = self.client.post(self.url, context)
 		self.assertEqual(response.status_code, 302)
@@ -47,7 +46,7 @@ class TestViewLogin(TestCase):
 		self.assertTemplateUsed(response, "mainapp/login.html")
 
 	def test_logout(self):
-		self.client.login(username=self.user_1.email, password='A1b2c3d5e6')
+		self.client.login(username=self.user_1.email, password='A1b2C3d4E5f6G7h')
 		self.url = reverse('mainapp:logout')
 		response = self.client.get(self.url)
 		self.assertEqual(response.status_code, 302)
