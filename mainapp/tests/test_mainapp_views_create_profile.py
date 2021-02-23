@@ -11,6 +11,7 @@ import string, random
 # coverage run --source=mainapp manage.py test mainapp
 # coverage html
 
+@skip("")
 class TestViewCreateProfile(TestCase):
 
 	def setUp(self):
