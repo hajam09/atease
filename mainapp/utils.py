@@ -1,7 +1,9 @@
-from .models import Countries, GeneralPractice, Patient
+from django.contrib.auth.models import User
 from django.db import connection
 from faker import Faker
-from django.contrib.auth.models import User
+from mainapp.models import Countries
+from mainapp.models import GeneralPractice
+from mainapp.models import Patient
 from random import randint
 import random
 import string
@@ -47,7 +49,6 @@ def install_patients():
 
 		date_of_birth = year + "-" + month + "-" + day
 
-
 		location = {
 			"address_1": address_1,
 			"address_2": fake.unique.last_name(),
@@ -70,25 +71,11 @@ def install_patients():
 			patient_at = random.choice(all_gps)
 		)
 
-		# list_of_patients.append(
-		# 	Patient(
-		# 		user = user,
-		# 		date_of_birth = date_of_birth,
-		# 		address = location,
-		# 		mobile = "+44"+str(randint(7000000000, 7999999999)),
-		# 		nhs_number = str(randint(70000000, 79999999)),
-		# 		blood_group = random.choice(['A+', 'A-', 'B+', 'B-', 'O+', 'O-', 'AB+', 'AB-']),
-		# 		patient_at = random.choice(all_gps)
-		# 	)
-		# )
-
 	if len(list_of_patients) == 0:
 		return
 
 	Patient.objects.bulk_create(list_of_patients)
 	return
-
-
 
 def install_gp():
 	all_tables = connection.introspection.table_names()
@@ -163,7 +150,6 @@ def install_gp():
 		return
 
 	GeneralPractice.objects.bulk_create(list_of_gps)
-
 	return
 
 def install_countries():
@@ -188,9 +174,4 @@ def install_countries():
 		return
 	
 	Countries.objects.bulk_create(list_of_countries)
-	print("Countries table created and populated")
 	return
-
-# install_countries()
-# install_gp()
-# install_patients()

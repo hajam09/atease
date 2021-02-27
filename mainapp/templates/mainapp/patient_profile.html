@@ -566,7 +566,9 @@
                                         <input type="text" name="CreateAppointment" hidden>
                                         <div class="modal-body">
                                             <div class="form-group">
-                                                <input type="datetime-local" id="appointmentTime" name="appointmentTime" step="600">
+                                                <input type="date" name="appointmentDate" onchange="appointmentDateHandler(event);">
+                                                <select name="appointmentTime" id="appointmentTime" hidden>
+                                                </select>                                                
                                             </div>
                                         </div>
                                         <div class="modal-footer">
@@ -589,16 +591,14 @@
 </div>
 <script type="text/javascript">
     function deleteMyMedicalRecords(document_id){
-    $.ajax({
-    data: {
-    'TASK': 'deleteMyMedicalRecords',
-    'document_id': document_id,
-    },
-    dataType: 'json',
-    success: function (response) {
-    
-    }
-    });
+        $.ajax({
+            data: {
+                'TASK': 'deleteMyMedicalRecords',
+                'document_id': document_id,
+            },
+            dataType: 'json',
+            success: function (response) {}
+        });
     }
 
     window.onload = function() {
@@ -800,6 +800,48 @@
         }
     }
 
+    function appointmentDateHandler(e) {
+
+        var chosenDate = e.target.value;
+        var day = new Date(chosenDate).getUTCDay();
+
+        var weekday = ["sunday", "monday", "tuesday", "wednesday", "thursday", "friday", "saturday"];
+
+        if([6,0].includes(day)) {
+            alert('Weekends not allowed');
+             return;
+        }
+
+        var time_element = document.getElementById("appointmentTime");
+
+        if (!time_element.hasAttribute("hidden"))
+            $("#appointmentTime").attr('hidden','')
+
+        // fetch all the free dates for the chosen date.
+        $.ajax({
+            data: {
+                'TASK': 'fetch_available_dates',
+                'chosenDate': chosenDate,
+                'weekday': weekday[day],
+            },
+            dataType: 'json',
+            success: function (response) {
+                var select = document.getElementById("appointmentTime");
+                var length = select.options.length;
+                for (i = length-1; i >= 0; i--) {
+                    select.options[i] = null;
+                }
+                var free_slot = response.free_slot;
+                for (var i = 0; i<free_slot.length; i++ ) {
+                    console.log("adding");
+                    $("#appointmentTime").append('<option value="'+free_slot[i]+'">'+free_slot[i]+'</option>')
+                }
+            }
+        });
+
+        document.getElementById("appointmentTime").removeAttribute("hidden");
+    }
+
     function renderCalenderView() {
 
         var event = [];
@@ -820,22 +862,6 @@
          
       {% endif %}
 
-      // {% if other_appointments %}
-
-      // {% for b in other_appointments  %}
-
-      // console.log('{{b.title}}');
-
-      //    event.push({
-      //       title: '{{b.title}}',
-      //       start: '{{b.start}}',
-      //       end: '{{b.end}}',
-      //    })
-         
-      // {% endfor %}
-         
-      // {% endif %}
-
       var calendarEl = document.getElementById('calendar');
 
       var calendar = new FullCalendar.Calendar(calendarEl, {
@@ -852,24 +878,7 @@
             startTime: '08:00',
             endTime: '18:00'
          },
-         events: event //[
-            // {
-            //    title: 'John Wick',
-            //    start: '2021-02-17T16:00:00',
-            //    end: '2021-02-17T16:10:00',
-            // },
-            // {
-            //    title: 'Example2',
-            //    start: '2021-02-16',
-            //    end: '2021-02-20T16:00:00',
-            // },
-            // {
-            //    title: 'Example3',
-            //    start: '2021-02-16',
-            //    end: '2021-02-20T16:00:00',
-            //    url: 'http://google.com/'
-            // },
-         //]
+         events: event 
       });
 
       calendar.render();

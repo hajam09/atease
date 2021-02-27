@@ -1,7 +1,7 @@
-from django.db import models
-from django.contrib.auth.models import User
-import jsonfield
 from datetime import datetime
+from django.contrib.auth.models import User
+from django.db import models
+import jsonfield
 
 class GeneralPractice(models.Model):
 	name = models.CharField(max_length=32)

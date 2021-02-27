@@ -1,16 +1,35 @@
-from django.shortcuts import render, redirect
-from django.contrib.auth.models import User
-from django.contrib.auth.decorators import login_required
-from django.contrib.auth import authenticate, logout as auth_logout, login as auth_login
-from django.http import HttpResponse
-from django.contrib.auth.decorators import login_required
-from http import HTTPStatus
-from .models import *
-from .utils import *
-from .forms import MyMedicalRecordsForm, GPMedicalRecordsForm
-import json
-import datetime
 from django.contrib import messages
+from django.contrib.auth import authenticate
+from django.contrib.auth import login as auth_login
+from django.contrib.auth import logout as auth_logout
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth.models import User
+from django.http import HttpResponse
+from django.shortcuts import redirect
+from django.shortcuts import render
+from mainapp.forms import GPMedicalRecordsForm
+from mainapp.forms import MyMedicalRecordsForm
+from mainapp.utils import install_countries
+from mainapp.utils import install_gp
+from mainapp.utils import install_patients
+from mainapp.models import Appointments
+from mainapp.models import Countries
+from mainapp.models import Doctor
+from mainapp.models import GPCurrentMedication
+from mainapp.models import GPMedicalRecords
+from mainapp.models import GeneralPractice
+from mainapp.models import HealthAdvice
+from mainapp.models import MyCurrentMedication
+from mainapp.models import MyMedicalRecords
+from mainapp.models import Notes
+from mainapp.models import Nurse
+from mainapp.models import Patient
+from mainapp.models import Receptionist
+import datetime
+import json
+import pandas as pd
+from http import HTTPStatus
 
 def login(request):
 
@@ -72,9 +91,7 @@ def signup(request):
 			context = {
 				"message": "Account created successfully.",
 			}
-
 			return render(request,"mainapp/signup.html", context)
-
 
 	return render(request,"mainapp/signup.html", {})
 
@@ -99,7 +116,6 @@ def create_profile(request):
 		return redirect('mainapp:receptionist_profile')
 
 	if request.method == "POST" and "patient_profile" in request.POST:
-		# Patient cretates an account
 		date_of_birth = request.POST['date_of_birth']
 		mobile_number = request.POST['mobile_number']
 		nhs_number = request.POST['nhs_number']
@@ -128,7 +144,6 @@ def create_profile(request):
 			blood_group = blood_group,
 			patient_at = GeneralPractice.objects.get(id=list_of_gps)
 		)
-		# Patient object created
 		return redirect('mainapp:patient_profile')
 
 	if request.method == "POST" and "staff_profile" in request.POST:
@@ -137,7 +152,6 @@ def create_profile(request):
 		weekdays = ['monday', 'tuesday', 'wednesday', 'thursday', 'friday']
 		schedule = ['from', 'to']
 		workingHours = {}
-		print("rolerolerolerole", role)
 
 		for i in weekdays:
 			workingHours[i] = {
@@ -176,7 +190,6 @@ def create_profile(request):
 		"countries": Countries.objects.all(),
 		"gps": GeneralPractice.objects.all(),
 	}
-
 	return render(request,"mainapp/create_profile.html", context)
 
 @login_required
@@ -220,20 +233,17 @@ def patient_profile(request):
 	if request.method == 'POST' and "CREATENOTES" in request.POST:
 		title = request.POST["title"]
 		description = request.POST["description"]
-
 		Notes.objects.create(
 			user = request.user,
 			title = title,
 			description = description,
 		)
-
 		return redirect('mainapp:patient_profile')
 
 	if request.method == 'POST' and "Create_My_Current_Medication" in request.POST:
 		name = request.POST['name']
 		description = request.POST['description']
 		start_date = request.POST['start_date']
-
 		MyCurrentMedication.objects.create(
 			user = request.user,
 			name = name,
@@ -241,7 +251,6 @@ def patient_profile(request):
 			start_date = start_date,
 		)
 		return redirect('mainapp:patient_profile')
-
 
 	# Handle file upload
 	if request.method == 'POST' and "UPLOADMYMEDICALRECORDDOCUMENTS" in request.POST:
@@ -266,48 +275,31 @@ def patient_profile(request):
 		return redirect('mainapp:patient_profile')
 
 	if request.method == 'POST' and "CreateAppointment" in request.POST:
-		# the patient is creating an appointment via the calender.
+		appointmentDate = request.POST['appointmentDate']
 		appointmentTime = request.POST['appointmentTime']
-		print(appointmentTime)
+		appointmentDateSplit = appointmentDate.split("-")
+		appointmentTimeSplit = appointmentTime.split(":")
+		appointmentTimeSet = appointmentDate+"T"+appointmentTime
+		appointmentCreated = False
 
-		# get all the doctor who work in the patient gp.
 		_all_doc = Doctor.objects.filter(works_at=patient.patient_at)
-
-		num_to_weekday = {
-			0: 'monday',
-			1: 'tuesday',
-			2: 'wednesday',
-			3: 'thursday',
-			4: 'friday',
-			5: 'saturday',
-			6: 'sunday'
-		}
-
-		# if multiple doctors, then check if the appointment is in working hours and no other appointment is made for that doctor in that time.
 		for doc in _all_doc:
-			work_hrs = doc.working_hours
-			_app_time_parsed = appointmentTime.split("T")
-			_app_time_parsed_date = _app_time_parsed[0].split("-")
-			_app_time_parsed_time = _app_time_parsed[1].split(":")
-			_to_parse_date_time = datetime.datetime(int(_app_time_parsed_date[0]), int(_app_time_parsed_date[1]), int(_app_time_parsed_date[2]),
-				int(_app_time_parsed_time[0]), int(_app_time_parsed_time[1]), 0, 0)
-			_weekday = num_to_weekday[_to_parse_date_time.weekday()]
-
-			if int(_app_time_parsed_time[0]) >= int(work_hrs[_weekday]["from"].split(":")[0]) and int(_app_time_parsed_time[0]) <= int(work_hrs[_weekday]["to"].split(":")[0]):
-				# the time is accepted and need to check if that slot is free for any doctor.
-				appointmentCreated = False
-				if not Appointments.objects.filter(doctor=doc, time=appointmentTime).exists():
-					Appointments.objects.create(doctor=doc, user=request.user, time=appointmentTime)
-					print("appoiuntment created")
-					appointmentCreated = True
-					break
+			if not Appointments.objects.filter(doctor=doc,
+				time__year=appointmentDateSplit[0],
+				time__month=appointmentDateSplit[1],
+				time__day=appointmentDateSplit[2],
+				time__hour=appointmentTimeSplit[0],
+				time__minute=appointmentTimeSplit[1]).exists():
+				Appointments.objects.create(doctor=doc, user=request.user, time=appointmentTimeSet)
+				msg = "An appointment has been created for you at {} {} with {}".format(appointmentDate, appointmentTime, doc.user.get_full_name())
+				messages.add_message(request,messages.SUCCESS, msg)
+				appointmentCreated = True
+				break
 
 		if appointmentCreated == False:
-			# display this message in the html.
-			messages.add_message(request,messages.SUCCESS,"Couldn't create an appontment for this time. Try different time.")
+			msg = "Error creating an appointment. Please try again later."
+			messages.add_message(request,messages.SUCCESS, msg)
 		return redirect('mainapp:patient_profile')
-
-		# return redirect('mainapp:patient_profile')
 
 	if request.is_ajax():
 		TASK = request.GET.get('TASK', None)
@@ -317,6 +309,31 @@ def patient_profile(request):
 			instance = MyMedicalRecords.objects.get(id=document_id)
 			instance.delete()
 			return HttpResponse(json.dumps({}), content_type="application/json")
+
+		if TASK == 'fetch_available_dates':
+			chosenDate = request.GET.get('chosenDate', None)
+			weekday = request.GET.get('weekday', None)
+
+			gp_open_from = patient.patient_at.open_times[weekday]["from"]
+			gp_open_to = patient.patient_at.open_times[weekday]["to"]
+			gp_open_to_split = gp_open_to.split(":")
+			new_48_time_end_time = str(int(gp_open_to_split[0])+12) + ":" + gp_open_to_split[1]
+
+			# list of appointment times for the gp through out the specified date.
+			available_times = list(pd.date_range(gp_open_from, new_48_time_end_time, freq="10min").time)
+			time_slot = {str(i)[0:5]: 0 for i in available_times}
+			_all_doc = Doctor.objects.filter(works_at=patient.patient_at)
+
+			# in the time slot for each day, check number of doctors filled.
+			for doc in _all_doc:
+				doc_appointments = Appointments.objects.filter(doctor=doc, time__year=chosenDate.split("-")[0],
+					time__month=chosenDate.split("-")[1], time__day=chosenDate.split("-")[2])
+				
+				for i in doc_appointments:
+					time_slot[str(i.time.time())[0:5]] += 1
+
+			free_slot = [k for k, v in time_slot.items() if v!=_all_doc.count()]
+			return HttpResponse(json.dumps({"free_slot": free_slot}), content_type="application/json")
 
 	# this user's appointment
 	appointments = Appointments.objects.filter(user=request.user)
@@ -330,22 +347,6 @@ def patient_profile(request):
 			"end": endTime.strftime("%Y-%m-%dT%H:%M:00"),
 		})
 
-	# get blocked appointments.
-	# get all the doctor who work in the patient gp.
-	# _all_doc = Doctor.objects.filter(works_at=patient.patient_at)
-	# appointments_data2 = []
-	# for d in _all_doc:
-	# 	_appointments = Appointments.objects.filter(doctor=d)
-	# 	for a in _appointments:
-	# 		startTime = a.time
-	# 		endTime = startTime + datetime.timedelta(minutes = 10)
-	# 		appointments_data2.append({
-	# 			"title": a.user.get_full_name(),
-	# 			"start": startTime.strftime("%Y-%m-%dT%H:%M:00"),
-	# 			"end": endTime.strftime("%Y-%m-%dT%H:%M:00"),
-	# 		})
-
-
 	context = {
 		"documents": MyMedicalRecords.objects.filter(user=request.user),
 		'form': form,
@@ -356,7 +357,6 @@ def patient_profile(request):
 		"my_medication": MyCurrentMedication.objects.filter(user=request.user),
 		"gp_medical_record_documents": GPMedicalRecords.objects.filter(prescribed_to=patient, access_to_patient=True),
 		"appointments": appointments_data,
-		# "other_appointments": appointments_data2,
 	}
 	return render(request,"mainapp/patient_profile.html", context)
 
@@ -369,7 +369,6 @@ def doctor_profile(request):
 
 	appointments = Appointments.objects.filter(doctor=doctor)
 	data = []
-	# '2021-02-16T16:00:00'
 	for a in appointments:
 		startTime = a.time
 		endTime = startTime + datetime.timedelta(minutes = 10)
@@ -378,7 +377,6 @@ def doctor_profile(request):
 			"start": startTime.strftime("%Y-%m-%dT%H:%M:00"),
 			"end": endTime.strftime("%Y-%m-%dT%H:%M:00"),
 		})
-	print(data)
 	context = {
 		"doctor": doctor,
 		"appointments": data
@@ -403,13 +401,11 @@ def receptionist_profile(request):
 
 @login_required
 def gp_view(request):
-
 	context = {}
 
 	try:
 		account_object = Doctor.objects.get(user=request.user)
 	except:
-
 		try:
 			account_object = Nurse.objects.get(user=request.user)
 		except:
@@ -418,10 +414,7 @@ def gp_view(request):
 	context["can_edit_opening_times"] = True if isinstance(account_object, Receptionist) else False
 	context["profile"] = account_object
 
-
-	
 	if request.method == 'POST' and "Update_GP_Hours" in request.POST and isinstance(account_object, Receptionist):
-
 		weekdays = ['monday', 'tuesday', 'wednesday', 'thursday', 'friday']
 		schedule = ['from', 'to']
 		workingHours = {}
@@ -432,14 +425,10 @@ def gp_view(request):
 				'to': request.POST[i+'_to']
 			}
 
-		print(workingHours)
-
 		the_gp = account_object.works_at
 		the_gp.open_times = workingHours
 		the_gp.save()
 		return redirect('mainapp:gp_view')
-
-
 
 	if request.method == 'POST' and "search_for_patients" in request.POST:
 		patient_name = request.POST['patient_name']
@@ -457,9 +446,7 @@ def gp_view(request):
 		# Get all the patients within the gp of the authenticated user.
 		if account_object:
 			the_gp = account_object.works_at
-
 			patients_of_this_gp = Patient.objects.filter(patient_at=the_gp, user__first_name__icontains=first_name) | Patient.objects.filter(patient_at=the_gp, user__last_name__icontains=last_name)
-
 
 		context["patients"] = patients_of_this_gp
 	return render(request,"mainapp/gp_view.html", context)
@@ -474,7 +461,6 @@ def patient_view(request, patient_id):
 	try:
 		account_object = Doctor.objects.get(user=request.user)
 	except:
-
 		try:
 			account_object = Nurse.objects.get(user=request.user)
 		except:
@@ -498,7 +484,6 @@ def patient_view(request, patient_id):
 			return redirect('mainapp:patient_view', patient_id=patient_id)
 	else:
 		form = GPMedicalRecordsForm() # A empty, unbound form
-
 
 	if request.method == "POST" and "Create_GP_Current_Medication" in request.POST and isinstance(account_object, Doctor):
 		name = request.POST['name']
@@ -549,5 +534,4 @@ def patient_view(request, patient_id):
 		"documents": GPMedicalRecords.objects.filter(prescribed_to=patient),
 		"gp_medication": GPCurrentMedication.objects.filter(prescribed_to=patient),
 	}
-
 	return render(request,"mainapp/patient_view.html", context)
