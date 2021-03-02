@@ -566,9 +566,11 @@
                                         <input type="text" name="CreateAppointment" hidden>
                                         <div class="modal-body">
                                             <div class="form-group">
-                                                <input type="date" name="appointmentDate" onchange="appointmentDateHandler(event);">
-                                                <select name="appointmentTime" id="appointmentTime" hidden>
-                                                </select>                                                
+                                                <input type="date" id="appointmentDate" name="appointmentDate" onchange="appointmentDateHandler(event);">
+                                                <select name="appointmentTime" id="appointmentTime" onchange="getAvailableDoctor(event);" hidden>
+                                                </select>
+                                                <select name="availableDoctor" id="availableDoctor" hidden>
+                                                </select>
                                             </div>
                                         </div>
                                         <div class="modal-footer">
@@ -636,8 +638,6 @@
             {% endfor %}
 
         {% endif %}
-
-        console.log(ml);
 
         var i,j,temparray,chunk = 2;
         var nl = [];
@@ -833,13 +833,48 @@
                 }
                 var free_slot = response.free_slot;
                 for (var i = 0; i<free_slot.length; i++ ) {
-                    console.log("adding");
                     $("#appointmentTime").append('<option value="'+free_slot[i]+'">'+free_slot[i]+'</option>')
                 }
+                getAvailableDoctor(e, free_slot[0]);
             }
         });
 
         document.getElementById("appointmentTime").removeAttribute("hidden");
+    }
+
+    function getAvailableDoctor(e, f=null){
+
+        var chosenDate = $('#appointmentDate').val();
+        var chosenTime = $('#appointmentTime').val();
+
+        var doctor_element = document.getElementById("availableDoctor");
+        if (!doctor_element.hasAttribute("hidden"))
+            $("#availableDoctor").attr('hidden','')
+
+        // fetch all the doctors who are free on the chosenDate and chosenTime to book the appointment.
+        $.ajax({
+            data: {
+                'TASK': 'fetch_available_doctors',
+                'chosenDate': chosenDate,
+                'chosenTime': chosenTime,
+            },
+            dataType: 'json',
+            success: function (response) {
+                var select = document.getElementById("availableDoctor");
+                var length = select.options.length;
+                for (i = length-1; i >= 0; i--) {
+                    select.options[i] = null;
+                }
+                var free_doctors = eval(response.free_doctors);
+                for (var i = 0; i<free_doctors.length; i++ ) {
+                    $("#availableDoctor").append(
+                        '<option value="'+free_doctors[i].doctor_object_id+'">'+free_doctors[i].doctor_name+'</option>'
+                        );
+                }
+            }
+        });
+
+        document.getElementById("availableDoctor").removeAttribute("hidden");
     }
 
     function renderCalenderView() {
@@ -849,8 +884,6 @@
       {% if appointments %}
 
       {% for a in appointments  %}
-
-      console.log('{{a.title}}');
 
          event.push({
             title: '{{a.title}}',

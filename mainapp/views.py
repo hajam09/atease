@@ -5,6 +5,7 @@ from django.contrib.auth import logout as auth_logout
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
+from django.core import serializers
 from django.http import HttpResponse
 from django.shortcuts import redirect
 from django.shortcuts import render
@@ -275,30 +276,32 @@ def patient_profile(request):
 		return redirect('mainapp:patient_profile')
 
 	if request.method == 'POST' and "CreateAppointment" in request.POST:
+		# make below fields be mandatory in post on the template.
 		appointmentDate = request.POST['appointmentDate']
 		appointmentTime = request.POST['appointmentTime']
-		appointmentDateSplit = appointmentDate.split("-")
-		appointmentTimeSplit = appointmentTime.split(":")
+		availableDoctor = request.POST['availableDoctor']
 		appointmentTimeSet = appointmentDate+"T"+appointmentTime
-		appointmentCreated = False
 
-		_all_doc = Doctor.objects.filter(works_at=patient.patient_at)
-		for doc in _all_doc:
-			if not Appointments.objects.filter(doctor=doc,
-				time__year=appointmentDateSplit[0],
-				time__month=appointmentDateSplit[1],
-				time__day=appointmentDateSplit[2],
-				time__hour=appointmentTimeSplit[0],
-				time__minute=appointmentTimeSplit[1]).exists():
-				Appointments.objects.create(doctor=doc, user=request.user, time=appointmentTimeSet)
-				msg = "An appointment has been created for you at {} {} with {}".format(appointmentDate, appointmentTime, doc.user.get_full_name())
-				messages.add_message(request,messages.SUCCESS, msg)
-				appointmentCreated = True
-				break
+		requestedDoctor = Doctor.objects.get(id=availableDoctor)
 
-		if appointmentCreated == False:
-			msg = "Error creating an appointment. Please try again later."
+		if not Appointments.objects.filter(
+			doctor=requestedDoctor,
+			time__year=appointmentDate.split("-")[0],
+			time__month=appointmentDate.split("-")[1],
+			time__day=appointmentDate.split("-")[2],
+			time__hour=appointmentTime.split(":")[0],
+			time__minute=appointmentTime.split(":")[1]).exists():
+			Appointments.objects.create(
+				doctor=requestedDoctor,
+				user=request.user,
+				time=appointmentTimeSet
+			)
+			msg = "An appointment has been created for you at {} {} with {}".format(appointmentDate, appointmentTime, requestedDoctor.user.get_full_name())
 			messages.add_message(request,messages.SUCCESS, msg)
+			return redirect('mainapp:patient_profile')
+
+		msg = "Error creating an appointment. Please try again later."
+		messages.add_message(request,messages.SUCCESS, msg)
 		return redirect('mainapp:patient_profile')
 
 	if request.is_ajax():
@@ -334,6 +337,24 @@ def patient_profile(request):
 
 			free_slot = [k for k, v in time_slot.items() if v!=_all_doc.count()]
 			return HttpResponse(json.dumps({"free_slot": free_slot}), content_type="application/json")
+
+		if TASK == 'fetch_available_doctors':
+			chosenDate = request.GET.get('chosenDate', None)
+			chosenTime = request.GET.get('chosenTime', None)
+
+			_all_doc = Doctor.objects.filter(works_at=patient.patient_at)
+			free_doctor = []
+
+			for doc in _all_doc:
+				if not Appointments.objects.filter(
+					doctor=doc,
+					time__year=chosenDate.split("-")[0],
+					time__month=chosenDate.split("-")[1],
+					time__day=chosenDate.split("-")[2],
+					time__hour=chosenTime.split(":")[0],
+					time__minute=chosenTime.split(":")[1]).exists():
+					free_doctor.append({"doctor_name": doc.user.get_full_name(), "doctor_object_id": doc.id})
+			return HttpResponse(json.dumps({"free_doctors": free_doctor }), content_type="application/json")
 
 	# this user's appointment
 	appointments = Appointments.objects.filter(user=request.user)

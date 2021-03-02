@@ -1,5 +1,8 @@
 TODO:
 The system shall verify the email address when guest is registering a patient account.
+Implement forget password function.
+update names on doctor profile.
+update names for nurse profile and receptionist profile
 Patient makes a request (and attach documents) to join the the gp and the receptionist accepts them.
 - The system shall have a 24-hour live chat service between the patient and receptionist.
 _ Delete files from the folder.
