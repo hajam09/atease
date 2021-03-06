@@ -158,6 +158,12 @@ def create_profile(request):
 			}
 		}
 
+		the_gp = GeneralPractice.objects.filter(registration_number=gp_code)
+		if not the_gp.exists():
+			messages.add_message(request,messages.SUCCESS, "No GP found.")
+			return redirect('mainapp:create_profile')
+
+
 		Patient.objects.create(
 			user = request.user,
 			date_of_birth = date_of_birth,
@@ -165,7 +171,7 @@ def create_profile(request):
 			mobile = mobile_number,
 			nhs_number = nhs_number,
 			blood_group = blood_group,
-			patient_at = GeneralPractice.objects.get(registration_number=gp_code)
+			patient_at = the_gp[0]
 		)
 		return redirect('mainapp:patient_profile')
 
@@ -175,6 +181,11 @@ def create_profile(request):
 		weekdays = ['monday', 'tuesday', 'wednesday', 'thursday', 'friday']
 		schedule = ['from', 'to']
 		workingHours = {}
+
+		the_gp = GeneralPractice.objects.filter(registration_number=gp_code)
+		if not the_gp.exists():
+			messages.add_message(request,messages.SUCCESS, "No GP found.")
+			return redirect('mainapp:create_profile')
 
 		for i in weekdays:
 			workingHours[i] = {
@@ -186,7 +197,7 @@ def create_profile(request):
 			print("creating doctor role")
 			Doctor.objects.create(
 				user = request.user,
-				works_at = GeneralPractice.objects.get(registration_number=gp_code),
+				works_at = the_gp[0],
 				working_hours = workingHours
 			)
 			return redirect('mainapp:doctor_profile')
@@ -195,7 +206,7 @@ def create_profile(request):
 			print("creating nurse role")
 			Nurse.objects.create(
 				user = request.user,
-				works_at = GeneralPractice.objects.get(registration_number=gp_code),
+				works_at = the_gp[0],
 				working_hours = workingHours
 			)
 
@@ -204,7 +215,7 @@ def create_profile(request):
 			print("creating receptionist role")
 			Receptionist.objects.create(
 				user = request.user,
-				works_at = GeneralPractice.objects.get(registration_number=gp_code),
+				works_at = the_gp[0],
 				working_hours = workingHours
 			)
 			return redirect('mainapp:receptionist_profile')
