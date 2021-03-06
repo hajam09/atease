@@ -1,5 +1,4 @@
 TODO:
-The system shall verify the email address when guest is registering a patient account.
 Implement forget password function.
 update names on doctor profile.
 update names for nurse profile and receptionist profile
@@ -9,6 +8,7 @@ _ Delete files from the folder.
 
 
 TESTING NEEDED:
+The system shall verify the email address when guest is registering a patient account.
 The system shall allow guest to create a patient account.
 The system shall make sure that the user’s password is at least 8 characters long, include 1 special character, include at lease 1 uppercase and lowercase.
 The system shall store users to update their profile.

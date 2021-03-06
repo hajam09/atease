@@ -89,7 +89,12 @@
                         <label for="email" class="col-4 col-form-label">Email</label> 
                         <div class="col-8">
                            <input id="email" name="email" placeholder="Email" class="form-control here" value="{{user.email}}" type="text">
-                           <small>Not Verified</small>
+                           {% if doctor.email_verified %}
+                               <small style="color:green">Verified</small>
+                           {% else %}
+                               <small style="color:red">Not Verified</small>
+                               <small><a href="#" onclick="verify_email();">Click here to verify.</a></small>
+                           {% endif %}
                         </div>
                      </div>
                      
@@ -208,6 +213,18 @@
 </div>
 
 <script type="text/javascript">
+function verify_email() {
+        $.ajax({
+            data: {
+                'TASK': 'verify_email',
+            },
+            dataType: 'json',
+            success: function (response) {
+                alert(response.message);
+            }
+        });
+    }
+    
    function deleteMyMedicalRecords(document_id){
       $.ajax({
          data: {

@@ -16,4 +16,5 @@ urlpatterns = [
 	path('profile/', views.create_profile, name='create_profile'),
 	path('gp_view/', views.gp_view, name='gp_view'),
 	path('staff_only/<slug:patient_id>/', views.patient_view, name='patient_view'),
+	path('verify/<slug:code>/', views.verify_view, name='verify_view'),
 ]

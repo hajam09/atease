@@ -1,3 +1,4 @@
+from django.conf import settings
 from django.contrib import messages
 from django.contrib.auth import authenticate
 from django.contrib.auth import login as auth_login
@@ -6,14 +7,13 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.core import serializers
+from django.core.mail import EmailMessage
 from django.http import HttpResponse
 from django.shortcuts import redirect
 from django.shortcuts import render
+from http import HTTPStatus
 from mainapp.forms import GPMedicalRecordsForm
 from mainapp.forms import MyMedicalRecordsForm
-from mainapp.utils import install_countries
-from mainapp.utils import install_gp
-from mainapp.utils import install_patients
 from mainapp.models import Appointments
 from mainapp.models import Countries
 from mainapp.models import Doctor
@@ -27,10 +27,13 @@ from mainapp.models import Notes
 from mainapp.models import Nurse
 from mainapp.models import Patient
 from mainapp.models import Receptionist
+from mainapp.utils import install_countries
+from mainapp.utils import install_gp
+from mainapp.utils import install_patients
 import datetime
 import json
 import pandas as pd
-from http import HTTPStatus
+import uuid
 
 def login(request):
 
@@ -307,6 +310,26 @@ def patient_profile(request):
 	if request.is_ajax():
 		TASK = request.GET.get('TASK', None)
 
+		if TASK == 'verify_email':
+			new_verification_code = str(uuid.uuid4())
+			patient.verification_data["verification_code"] = new_verification_code
+			patient.save()
+
+			link = "http://localhost:8000/verify/{}/".format(new_verification_code)
+
+			email_subject = "Activate your AtEase email."
+			message = """
+			Hi {},
+				Please click the link below to activate your email.
+				Link: {}
+
+			Thanks,
+			Management
+			""".format(patient.user.get_full_name(), link)
+			email_message = EmailMessage(email_subject, message, settings.EMAIL_HOST_USER, [patient.user.email])
+			email_message.send()
+			return HttpResponse(json.dumps({"message": "Verification link has been sent to your email."}), content_type="application/json")
+
 		if TASK == 'deleteMyMedicalRecords':
 			document_id = request.GET.get('document_id', None)
 			instance = MyMedicalRecords.objects.get(id=document_id)
@@ -388,6 +411,29 @@ def doctor_profile(request):
 	except Doctor.DoesNotExist:
 		raise e
 
+	if request.is_ajax():
+		TASK = request.GET.get('TASK', None)
+
+		if TASK == 'verify_email':
+			new_verification_code = str(uuid.uuid4())
+			doctor.verification_data["verification_code"] = new_verification_code
+			doctor.save()
+
+			link = "http://localhost:8000/verify/{}/".format(new_verification_code)
+
+			email_subject = "Activate your AtEase email."
+			message = """
+			Hi {},
+				Please click the link below to activate your email.
+				Link: {}
+
+			Thanks,
+			Management
+			""".format(doctor.user.get_full_name(), link)
+			email_message = EmailMessage(email_subject, message, settings.EMAIL_HOST_USER, [doctor.user.email])
+			email_message.send()
+			return HttpResponse(json.dumps({"message": "Verification link has been sent to your email."}), content_type="application/json")
+
 	appointments = Appointments.objects.filter(doctor=doctor)
 	data = []
 	for a in appointments:
@@ -406,6 +452,33 @@ def doctor_profile(request):
 
 @login_required
 def nurse_profile(request):
+	try:
+		nurse = Nurse.objects.get(user=request.user)
+	except Nurse.DoesNotExist:
+		raise e
+
+	if request.is_ajax():
+		TASK = request.GET.get('TASK', None)
+
+		if TASK == 'verify_email':
+			new_verification_code = str(uuid.uuid4())
+			nurse.verification_data["verification_code"] = new_verification_code
+			nurse.save()
+
+			link = "http://localhost:8000/verify/{}/".format(new_verification_code)
+
+			email_subject = "Activate your AtEase email."
+			message = """
+			Hi {},
+				Please click the link below to activate your email.
+				Link: {}
+
+			Thanks,
+			Management
+			""".format(nurse.user.get_full_name(), link)
+			email_message = EmailMessage(email_subject, message, settings.EMAIL_HOST_USER, [nurse.user.email])
+			email_message.send()
+			return HttpResponse(json.dumps({"message": "Verification link has been sent to your email."}), content_type="application/json")
 	return render(request,"mainapp/nurse_profile.html", {})
 
 @login_required
@@ -415,6 +488,30 @@ def receptionist_profile(request):
 		receptionist = Receptionist.objects.get(user=request.user)
 	except Receptionist.DoesNotExist:
 		raise e
+
+
+	if request.is_ajax():
+		TASK = request.GET.get('TASK', None)
+
+		if TASK == 'verify_email':
+			new_verification_code = str(uuid.uuid4())
+			receptionist.verification_data["verification_code"] = new_verification_code
+			receptionist.save()
+
+			link = "http://localhost:8000/verify/{}/".format(new_verification_code)
+
+			email_subject = "Activate your AtEase email."
+			message = """
+			Hi {},
+				Please click the link below to activate your email.
+				Link: {}
+
+			Thanks,
+			Management
+			""".format(receptionist.user.get_full_name(), link)
+			email_message = EmailMessage(email_subject, message, settings.EMAIL_HOST_USER, [receptionist.user.email])
+			email_message.send()
+			return HttpResponse(json.dumps({"message": "Verification link has been sent to your email."}), content_type="application/json")
 	context = {
 		"receptionist": receptionist
 	}
@@ -556,3 +653,31 @@ def patient_view(request, patient_id):
 		"gp_medication": GPCurrentMedication.objects.filter(prescribed_to=patient),
 	}
 	return render(request,"mainapp/patient_view.html", context)
+
+def verify_view(request, code):
+	patient = Patient.objects.filter(verification_data__contains={"verification_code": code})
+	doctor = Doctor.objects.filter(verification_data__contains={"verification_code": code})
+	nurse = Nurse.objects.filter(verification_data__contains={"verification_code": code})
+	receptionist = Receptionist.objects.filter(verification_data__contains={"verification_code": code})
+
+	if patient.exists():
+		this_patient_object = patient[0]
+		this_patient_object.email_verified = True
+		this_patient_object.save()
+
+	elif doctor.exists():
+		this_doctor_object = doctor[0]
+		this_doctor_object.email_verified = True
+		this_doctor_object.save()
+
+	elif nurse.exists():
+		this_nurse_object = nurse[0]
+		this_nurse_object.email_verified = True
+		this_nurse_object.save()
+
+	elif receptionist.exists():
+		this_receptionist_object = receptionist[0]
+		this_receptionist_object.email_verified = True
+		this_receptionist_object.save()
+
+	return redirect('mainapp:mainpage')

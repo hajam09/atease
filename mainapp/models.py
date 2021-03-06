@@ -21,6 +21,8 @@ class Patient(models.Model):
 	nhs_number = models.CharField(max_length=32)
 	blood_group = models.CharField(max_length=32)
 	patient_at = models.ForeignKey(GeneralPractice, on_delete=models.CASCADE)
+	email_verified = models.BooleanField(default=False, blank=True)
+	verification_data = jsonfield.JSONField()
 
 	class Meta:
 		verbose_name_plural = "Patient"
@@ -29,6 +31,8 @@ class Doctor(models.Model):
 	user = models.OneToOneField(User, on_delete=models.CASCADE)
 	works_at = models.ForeignKey(GeneralPractice, on_delete=models.CASCADE)
 	working_hours = jsonfield.JSONField()
+	email_verified = models.BooleanField(default=False, blank=True)
+	verification_data = jsonfield.JSONField()
 
 	class Meta:
 		verbose_name_plural = "Doctor"
@@ -37,6 +41,8 @@ class Nurse(models.Model):
 	user = models.OneToOneField(User, on_delete=models.CASCADE)
 	works_at = models.ForeignKey(GeneralPractice, on_delete=models.CASCADE)
 	working_hours = jsonfield.JSONField()
+	email_verified = models.BooleanField(default=False, blank=True)
+	verification_data = jsonfield.JSONField()
 
 	class Meta:
 		verbose_name_plural = "Nurse"
@@ -45,6 +51,8 @@ class Receptionist(models.Model):
 	user = models.OneToOneField(User, on_delete=models.CASCADE)
 	works_at = models.ForeignKey(GeneralPractice, on_delete=models.CASCADE)
 	working_hours = jsonfield.JSONField()
+	email_verified = models.BooleanField(default=False, blank=True)
+	verification_data = jsonfield.JSONField()
 
 	class Meta:
 		verbose_name_plural = "Receptionist"
