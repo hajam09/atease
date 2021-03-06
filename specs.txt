@@ -1,13 +1,12 @@
 TODO:
 Implement forget password function.
-update names on doctor profile.
-update names for nurse profile and receptionist profile
 Patient makes a request (and attach documents) to join the the gp and the receptionist accepts them.
 - The system shall have a 24-hour live chat service between the patient and receptionist.
 _ Delete files from the folder.
 
 
 TESTING NEEDED:
+Update the following profiles: patient, doctor, and receptionist.
 The system shall verify the email address when guest is registering a patient account.
 The system shall allow guest to create a patient account.
 The system shall make sure that the user’s password is at least 8 characters long, include 1 special character, include at lease 1 uppercase and lowercase.

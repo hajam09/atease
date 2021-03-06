@@ -212,6 +212,10 @@ def patient_profile(request):
 		patient.mobile = mobile
 		patient.user.first_name = first_name
 		patient.user.last_name = last_name
+
+		if patient.user.email != email:
+			patient.email_verified = False
+
 		patient.user.email = email
 		patient.save()
 		patient.user.save()
@@ -411,6 +415,21 @@ def doctor_profile(request):
 	except Doctor.DoesNotExist:
 		raise e
 
+	if request.method == "POST" and "UpdateDoctorProfile" in request.POST:
+		first_name = request.POST["first_name"]
+		last_name = request.POST["last_name"]
+		email = request.POST["email"]
+
+		if doctor.user.email != email:
+			doctor.email_verified = False
+
+		doctor.user.first_name = first_name
+		doctor.user.last_name = last_name
+		doctor.user.email = email
+		doctor.save()
+		doctor.user.save()
+		return redirect('mainapp:doctor_profile')
+
 	if request.is_ajax():
 		TASK = request.GET.get('TASK', None)
 
@@ -489,6 +508,20 @@ def receptionist_profile(request):
 	except Receptionist.DoesNotExist:
 		raise e
 
+	if request.method == "POST" and "UpdateReceptionistProfile" in request.POST:
+		first_name = request.POST["first_name"]
+		last_name = request.POST["last_name"]
+		email = request.POST["email"]
+
+		if receptionist.user.email != email:
+			receptionist.email_verified = False
+
+		receptionist.user.first_name = first_name
+		receptionist.user.last_name = last_name
+		receptionist.user.email = email
+		receptionist.save()
+		receptionist.user.save()
+		return redirect('mainapp:doctor_profile')
 
 	if request.is_ajax():
 		TASK = request.GET.get('TASK', None)
@@ -512,6 +545,7 @@ def receptionist_profile(request):
 			email_message = EmailMessage(email_subject, message, settings.EMAIL_HOST_USER, [receptionist.user.email])
 			email_message.send()
 			return HttpResponse(json.dumps({"message": "Verification link has been sent to your email."}), content_type="application/json")
+
 	context = {
 		"receptionist": receptionist
 	}
