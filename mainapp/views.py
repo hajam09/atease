@@ -119,12 +119,31 @@ def create_profile(request):
 	if Receptionist.objects.filter(user=request.user).exists():
 		return redirect('mainapp:receptionist_profile')
 
+	if request.is_ajax():
+		TASK = request.GET.get('TASK', None)
+
+		if TASK == "search_for_gp":
+			gp_code = request.GET.get('gp_code', None)
+			get_gps = GeneralPractice.objects.filter(registration_number=gp_code)
+			if get_gps.exists():
+				gp_object = get_gps[0]
+				the_data = {
+					"gp_name": gp_object.name,
+					"address_1": gp_object.address["address_1"],
+					"address_2": gp_object.address["address_2"],
+					"city": gp_object.address["city"],
+					"postal_zip": gp_object.address["postalZip"],
+					"contact_number": gp_object.contact_number,
+				}
+				return HttpResponse(json.dumps({"found": True, "data": the_data}), content_type="application/json")
+			return HttpResponse(json.dumps({"found": False}), content_type="application/json")
+
 	if request.method == "POST" and "patient_profile" in request.POST:
 		date_of_birth = request.POST['date_of_birth']
 		mobile_number = request.POST['mobile_number']
 		nhs_number = request.POST['nhs_number']
 		blood_group = request.POST['blood_group']
-		list_of_gps = request.POST['list_of_gps']
+		gp_code = request.POST['gp_code']
 
 		country = Countries.objects.get(alpha=request.POST["country"])
 		location = {
@@ -146,13 +165,13 @@ def create_profile(request):
 			mobile = mobile_number,
 			nhs_number = nhs_number,
 			blood_group = blood_group,
-			patient_at = GeneralPractice.objects.get(id=list_of_gps)
+			patient_at = GeneralPractice.objects.get(registration_number=gp_code)
 		)
 		return redirect('mainapp:patient_profile')
 
 	if request.method == "POST" and "staff_profile" in request.POST:
 		role = request.POST['role']
-		list_of_gps = request.POST['list_of_gps']
+		gp_code = request.POST['gp_code_for_staff']
 		weekdays = ['monday', 'tuesday', 'wednesday', 'thursday', 'friday']
 		schedule = ['from', 'to']
 		workingHours = {}
@@ -167,7 +186,7 @@ def create_profile(request):
 			print("creating doctor role")
 			Doctor.objects.create(
 				user = request.user,
-				works_at = GeneralPractice.objects.get(id=list_of_gps),
+				works_at = GeneralPractice.objects.get(registration_number=gp_code),
 				working_hours = workingHours
 			)
 			return redirect('mainapp:doctor_profile')
@@ -176,7 +195,7 @@ def create_profile(request):
 			print("creating nurse role")
 			Nurse.objects.create(
 				user = request.user,
-				works_at = GeneralPractice.objects.get(id=list_of_gps),
+				works_at = GeneralPractice.objects.get(registration_number=gp_code),
 				working_hours = workingHours
 			)
 
@@ -185,7 +204,7 @@ def create_profile(request):
 			print("creating receptionist role")
 			Receptionist.objects.create(
 				user = request.user,
-				works_at = GeneralPractice.objects.get(id=list_of_gps),
+				works_at = GeneralPractice.objects.get(registration_number=gp_code),
 				working_hours = workingHours
 			)
 			return redirect('mainapp:receptionist_profile')

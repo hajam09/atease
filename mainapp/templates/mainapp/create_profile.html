@@ -57,13 +57,24 @@
 							<hr>
 							<div class="form-group">
 								<h4 for="list_of_gps">GP</h4>
-								<select class="form-control" id="list_of_gps" name="list_of_gps">
-									{% if gps %}
-										{% for gp in gps %}
-											<option value="{{gp.id}}">{{gp.name}}</option>
-										{% endfor %}
-									{% endif %}
-								</select>
+								<input type="text" class="form-control" id="gp_code" name="gp_code" style="width: 50%; float:left;" required>
+								&nbsp;&nbsp;<a href="#" onclick="search_for_gp();">Search</a>
+								<br><br>
+								<div>
+									<label id="gp_name"></label>
+									<br>
+									<label id="gp_address_1"></label>
+									<br>
+									<label id="gp_address_2"></label>
+									<br>
+									<label id="gp_city"></label>
+									<br>
+									<label id="gp_postal_zip"></label>
+									<br>
+									<label id="gp_contact"></label>
+									<br>
+								</div>
+								
 							</div>
 							<hr>
 							<div class="form-group">
@@ -138,13 +149,23 @@
 							<hr>
 							<div class="form-group">
 								<h4 for="list_of_gps">I work at</h4>
-								<select class="form-control" id="list_of_gps2" name="list_of_gps">
-									{% if gps %}
-										{% for gp in gps %}
-											<option value="{{gp.id}}">{{gp.name}}</option>
-										{% endfor %}
-									{% endif %}
-								</select>
+								<input type="text" class="form-control" id="gp_code_for_staff" name="gp_code_for_staff" style="width: 50%; float:left;" required>
+								&nbsp;&nbsp;<a href="#" onclick="search_for_gp_for_staff();">Search</a>
+								<br><br>
+								<div>
+									<label id="gp_name_for_staff"></label>
+									<br>
+									<label id="gp_address_1_for_staff"></label>
+									<br>
+									<label id="gp_address_2_for_staff"></label>
+									<br>
+									<label id="gp_city_for_staff"></label>
+									<br>
+									<label id="gp_postal_zip_for_staff"></label>
+									<br>
+									<label id="gp_contact_for_staff"></label>
+									<br>
+								</div>
 							</div>
 							<hr>
 							<div class="form-group">
@@ -199,5 +220,55 @@
     $('#list_of_gps').select2();
     $('#list_of_gps2').select2();
 });
+
+	function search_for_gp() {
+		$.ajax({
+            data: {
+                'TASK': 'search_for_gp',
+                'gp_code': $('#gp_code').val()
+            },
+            dataType: 'json',
+            success: function (response) {
+            	$("#gp_address_1").empty();
+            	$("#gp_address_2").empty();
+            	$("#gp_city").empty();
+            	$("#gp_postal_zip").empty();
+            	$("#gp_contact").empty();
+            	if (response.found) {
+            		$("#gp_address_1").append(response.data.address_1);
+            		$("#gp_address_2").append(response.data.address_2);
+            		$("#gp_city").append(response.data.city);
+            		$("#gp_postal_zip").append(response.data.postal_zip);
+            		$("#gp_contact").append(response.data.contact_number);
+            	}
+            	
+            }
+        });
+	}
+
+	function search_for_gp_for_staff() {
+		$.ajax({
+            data: {
+                'TASK': 'search_for_gp',
+                'gp_code': $('#gp_code_for_staff').val()
+            },
+            dataType: 'json',
+            success: function (response) {
+            	$("#gp_address_1_for_staff").empty();
+            	$("#gp_address_2_for_staff").empty();
+            	$("#gp_city_for_staff").empty();
+            	$("#gp_postal_zip_for_staff").empty();
+            	$("#gp_contact_for_staff").empty();
+            	if (response.found) {
+            		$("#gp_address_1_for_staff").append(response.data.address_1);
+            		$("#gp_address_2_for_staff").append(response.data.address_2);
+            		$("#gp_city_for_staff").append(response.data.city);
+            		$("#gp_postal_zip_for_staff").append(response.data.postal_zip);
+            		$("#gp_contact_for_staff").append(response.data.contact_number);
+            	}
+            	
+            }
+        });
+	}
 </script>
 {% endblock %}
