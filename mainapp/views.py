@@ -489,12 +489,18 @@ def doctor_profile(request):
 			email_message.send()
 			return HttpResponse(json.dumps({"message": "Verification link has been sent to your email."}), content_type="application/json")
 
+		if TASK == 'delete_this_appointment':
+			appointmentId = request.GET.get('appointmentId', None)
+			Appointments.objects.filter(id=int(appointmentId)).delete()
+			return HttpResponse(json.dumps({"status_code": 200}), content_type="application/json")
+
 	appointments = Appointments.objects.filter(doctor=doctor)
 	data = []
 	for a in appointments:
 		startTime = a.time
 		endTime = startTime + datetime.timedelta(minutes = 10)
 		data.append({
+			"pk": a.pk,
 			"title": a.user.get_full_name(),
 			"start": startTime.strftime("%Y-%m-%dT%H:%M:00"),
 			"end": endTime.strftime("%Y-%m-%dT%H:%M:00"),
@@ -619,24 +625,16 @@ def gp_view(request):
 		return redirect('mainapp:gp_view')
 
 	if request.method == 'POST' and "search_for_patients" in request.POST:
-		patient_name = request.POST['patient_name']
-		patient_name = patient_name.split(" ")
-		first_name = ""
-		last_name = ""
-		
-		if len(patient_name) == 1:
-			first_name = patient_name[0]
-
-		if len(patient_name) >= 2:
-			first_name = patient_name[0]
-			last_name = " ".join(patient_name[1:])
+		patient_name = request.POST['patient_name'].title().split(" ")
 
 		# Get all the patients within the gp of the authenticated user.
 		if account_object:
 			the_gp = account_object.works_at
-			patients_of_this_gp = Patient.objects.filter(patient_at=the_gp, user__first_name__icontains=first_name) | Patient.objects.filter(patient_at=the_gp, user__last_name__icontains=last_name)
-
-		context["patients"] = patients_of_this_gp
+			if patient_name[0] != '':
+				patients_of_this_gp = Patient.objects.filter(patient_at=the_gp, user__first_name__in=patient_name) | Patient.objects.filter(patient_at=the_gp, user__last_name__in=patient_name)
+				context["patients"] = patients_of_this_gp
+			else:
+				context["patients"] = Patient.objects.filter(patient_at=the_gp)
 	return render(request,"mainapp/gp_view.html", context)
 
 def patient_view(request, patient_id):
