@@ -650,8 +650,18 @@
             mm='0'+mm
         }
 
+        _today = yyyy+'-'+mm+'-'+dd;
+        document.getElementById("start_date").setAttribute("min", _today);
+
+        dd = today.getDate();
+        dd = dd + 1;
+
+        if(dd<10) {
+            dd='0'+dd
+        }
+
         today = yyyy+'-'+mm+'-'+dd;
-        document.getElementById("start_date").setAttribute("min", today);
+        document.getElementById("appointmentDate").setAttribute("min", today);
     };
 
     function Add_My_Medication() {
@@ -960,7 +970,6 @@
 
         $("#cancelAppointmentList").append('<li id="appoinement_object_{{a.pk}}">'+date+' at '+time+' <a href="#" onclick="deleteThisAppointment({{a.pk}});" >Delete</a></li>');
 
-
         {% endfor %}
         {% endif %}
    }
@@ -985,7 +994,7 @@
         });
    }
 
-   renderCalenderView();
+    renderCalenderView();
     Add_GP_Medication();
     Add_My_Medication();
     CancelAppoinementList();
