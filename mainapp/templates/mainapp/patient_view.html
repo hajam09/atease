@@ -53,9 +53,11 @@
 		<li class="nav-item">
 			<a class="nav-link" data-toggle="tab" href="#mymedicalrecords" role="tab" aria-controls="mymedicalrecords">Medical Records</a>
 		</li>
+		{% if account_type == "doctor" %}
 		<li class="nav-item">
 			<a class="nav-link" data-toggle="tab" href="#medication" role="tab" aria-controls="medication">Medication</a>
 		</li>
+		{% endif %}
 	</ul>
 	<div class="tab-content">
 		<div class="tab-pane active" id="profile" role="tabpanel">
@@ -207,6 +209,7 @@
 							<p>No documents.</p>
 							{% endif %}
 							<!-- Upload form. Note enctype attribute! -->
+							{% if account_type == "doctor" %}
 							<form method="post" enctype="multipart/form-data">
 								{% csrf_token %}
 								<input type="text" name="UPLOADMYMEDICALRECORDDOCUMENTS" hidden>
@@ -218,6 +221,7 @@
 								</p>
 								<p><input type="submit" value="Upload"/></p>
 							</form>
+							{% endif %}
 						</div>
 					</div>
 				</div>

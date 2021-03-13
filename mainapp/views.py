@@ -563,7 +563,7 @@ def receptionist_profile(request):
 		receptionist.user.email = email
 		receptionist.save()
 		receptionist.user.save()
-		return redirect('mainapp:doctor_profile')
+		return redirect('mainapp:receptionist_profile')
 
 	if request.is_ajax():
 		TASK = request.GET.get('TASK', None)
@@ -588,8 +588,28 @@ def receptionist_profile(request):
 			email_message.send()
 			return HttpResponse(json.dumps({"message": "Verification link has been sent to your email."}), content_type="application/json")
 
+		if TASK == 'delete_this_appointment':
+			appointmentId = request.GET.get('appointmentId', None)
+			Appointments.objects.filter(id=int(appointmentId)).delete()
+			return HttpResponse(json.dumps({"status_code": 200}), content_type="application/json")
+
+	data = []
+	doctors = Doctor.objects.filter(works_at=receptionist.works_at)
+	appointments = Appointments.objects.filter(doctor__in=doctors)
+	for a in appointments:
+		startTime = a.time
+		endTime = startTime + datetime.timedelta(minutes = 10)
+		data.append({
+			"pk": a.pk,
+			"title": a.user.get_full_name(),
+			"doctor": a.doctor.user.get_full_name(),
+			"start": startTime.strftime("%Y-%m-%dT%H:%M:00"),
+			"end": endTime.strftime("%Y-%m-%dT%H:%M:00"),
+		})
+	
 	context = {
-		"receptionist": receptionist
+		"receptionist": receptionist,
+		"appointments": data
 	}
 	return render(request,"mainapp/receptionist_profile.html", context)
 
@@ -713,12 +733,21 @@ def patient_view(request, patient_id):
 			instance.save()
 			return HttpResponse(json.dumps({}), content_type="application/json")
 
+	account_type = None
+	if isinstance(account_object, Doctor):
+		account_type = "doctor"
+	elif isinstance(account_object, Nurse):
+		account_type = "nurse"
+	elif isinstance(account_object, Receptionist):
+		account_type = "receptionist"
+		
 	context = {
 		"patient": patient,
 		"countries": Countries.objects.all(),
 		"form": form,
 		"documents": GPMedicalRecords.objects.filter(prescribed_to=patient),
 		"gp_medication": GPCurrentMedication.objects.filter(prescribed_to=patient),
+		"account_type": account_type
 	}
 	return render(request,"mainapp/patient_view.html", context)
 

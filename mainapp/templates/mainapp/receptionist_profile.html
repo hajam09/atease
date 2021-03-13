@@ -54,7 +54,7 @@
          <a class="nav-link" data-toggle="tab" href="#mygp" role="tab" aria-controls="mygp">My GP</a>
       </li>
       <li class="nav-item">
-         <a class="nav-link" data-toggle="tab" href="#appointments" role="tab" aria-controls="appointments">My Appointments</a>
+         <a class="nav-link" data-toggle="tab" href="#appointments" role="tab" aria-controls="appointments">Upcoming Appointments</a>
       </li>
       
       
@@ -203,7 +203,33 @@
             </div>
          </div>
       </div>
-      <div class="tab-pane" id="messages" role="tabpanel">.3..</div>
+      <div class="tab-pane" id="appointments" role="tabpanel">
+         <div class="card-body">
+            <div class="row">
+               <div class="col-md-12">
+                  <h4>Upcoming appointments for {{receptionist.works_at.name}}</h4>
+                  <hr>
+               </div>
+            </div>
+            <div class="row">
+               <div class="col-md-12">
+                  <table class="table">
+                     <thead class="thead-dark">
+                        <tr>
+                           <th scope="col">Name</th>
+                           <th scope="col">Doctor</th>
+                           <th scope="col">Date</th>
+                           <th scope="col">Time</th>
+                           <th scope="col">Action</th>
+                        </tr>
+                     </thead>
+                     <tbody id="cancelAppointmentList">
+                     </tbody>
+                  </table>
+               </div>
+            </div>
+         </div>
+      </div>
       
    </div>
 </div>
@@ -233,5 +259,41 @@ function verify_email() {
          }
       });
    }
+
+   function CancelAppoinementList() {
+        {% if appointments %}
+        {% for a in appointments %}
+
+        var appointmentTime = '{{a.start}}'.split('T');
+        var date = appointmentTime[0];
+        var time = appointmentTime[1].substring(0, 5);
+
+        $("#cancelAppointmentList").append('<tr id="appoinement_object_{{a.pk}}"> <td scope="row">{{a.title}}</td> <td>{{a.doctor}}</td> <td>'+date+'</td> <td>'+time+'</td> <td><a href="#" onclick="deleteThisAppointment({{a.pk}});" >Delete</a></td> </tr>');
+
+        {% endfor %}
+        {% endif %}
+   }
+
+   function deleteThisAppointment(appointmentId) {
+        if (!confirm("Are you sure you want to cancel this appointment? There's no going back!")) {
+            return;
+        }
+        $.ajax({
+            data: {
+                'TASK': 'delete_this_appointment',
+                'appointmentId': appointmentId,
+            },
+            dataType: 'json',
+            success: function (response) {
+                console.log(response);
+                if(response.status_code == 200) {
+                    console.log("sss");
+                    $( "#appoinement_object_"+appointmentId ).remove();
+                }
+            }
+        });
+   }
+
+   CancelAppoinementList();
 </script>
 {% endblock %}
