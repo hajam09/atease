@@ -413,6 +413,11 @@ def patient_profile(request):
 					free_doctor.append({"doctor_name": doc.user.get_full_name(), "doctor_object_id": doc.id})
 			return HttpResponse(json.dumps({"free_doctors": free_doctor }), content_type="application/json")
 
+		if TASK == 'delete_this_appointment':
+			appointmentId = request.GET.get('appointmentId', None)
+			Appointments.objects.filter(id=int(appointmentId)).delete()
+			return HttpResponse(json.dumps({"status_code": 200}), content_type="application/json")
+
 	# this user's appointment
 	appointments = Appointments.objects.filter(user=request.user)
 	appointments_data = []
@@ -420,6 +425,7 @@ def patient_profile(request):
 		startTime = a.time
 		endTime = startTime + datetime.timedelta(minutes = 10)
 		appointments_data.append({
+			"pk": a.pk,
 			"title": a.doctor.user.get_full_name(),
 			"start": startTime.strftime("%Y-%m-%dT%H:%M:00"),
 			"end": endTime.strftime("%Y-%m-%dT%H:%M:00"),
