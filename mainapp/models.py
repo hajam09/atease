@@ -13,6 +13,9 @@ class GeneralPractice(models.Model):
 	class Meta:
 		verbose_name_plural = "GeneralPractice"
 
+	def __str__(self):
+		return self.name
+
 class Patient(models.Model):
 	user = models.OneToOneField(User, on_delete=models.CASCADE)
 	date_of_birth = models.DateField() 
@@ -26,6 +29,9 @@ class Patient(models.Model):
 
 	class Meta:
 		verbose_name_plural = "Patient"
+
+	def __str__(self):
+		return self.user.get_full_name()
 
 class Doctor(models.Model):
 	user = models.OneToOneField(User, on_delete=models.CASCADE)

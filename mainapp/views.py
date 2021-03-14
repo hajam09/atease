@@ -295,8 +295,10 @@ def patient_profile(request):
 		form = MyMedicalRecordsForm(request.POST, request.FILES)
 		if form.is_valid():
 			newdoc = MyMedicalRecords(user=request.user,document = request.FILES['docfile'])
-			newdoc.save()
-
+			if newdoc.document.size > 20971520:
+				messages.add_message(request,messages.SUCCESS, "File size exceeds max limit.")
+			else:
+				newdoc.save()
 			# Redirect to the document list after POST
 			return redirect('mainapp:patient_profile')
 	else:
@@ -684,8 +686,10 @@ def patient_view(request, patient_id):
 		form = GPMedicalRecordsForm(request.POST, request.FILES)
 		if form.is_valid():
 			newdoc = GPMedicalRecords(prescribed_by=account_object,prescribed_to=patient,document = request.FILES['docfile'])
-			newdoc.save()
-
+			if newdoc.document.size > 20971520:
+				messages.add_message(request,messages.SUCCESS, "File size exceeds max limit.")
+			else:
+				newdoc.save()
 			# Redirect to the document list after POST
 			return redirect('mainapp:patient_view', patient_id=patient_id)
 	else:
